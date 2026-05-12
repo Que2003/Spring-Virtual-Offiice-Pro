@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — Spring Virtual Office</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --sage: #7a9e7e; --sage-light: #a8c5ab; --sage-dark: #4a6e50;
+    --cream: #f8f5ef; --warm-white: #fdfcfa;
+    --charcoal: #1e2220; --mist: #e8ede9; --gold: #c4a85a;
+    --text: #2c3328; --text-muted: #6b7568;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-mono: 'DM Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--cream); color: var(--text); min-height: 100vh; }
+
+  /* ── LOGIN ── */
+  .login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+  }
+  .login-screen::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(122,158,126,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .login-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    width: 380px;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(10px);
+  }
+  .login-logo {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 2rem;
+    display: block;
+  }
+  .login-logo span { color: var(--gold); }
+  .login-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: white;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+  .login-desc {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  .login-field { margin-bottom: 1rem; }
+  .login-field label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 0.4rem;
+  }
+  .login-field input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.6rem;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: white;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .login-field input:focus {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--sage-light);
+    box-shadow: 0 0 0 3px rgba(122,158,126,0.1);
+  }
+  .login-btn {
+    width: 100%;
+    background: var(--sage-dark);
+    color: white;
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.85rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1.5rem;
+  }
+  .login-btn:hover { background: var(--sage); }
+  .login-error {
+    color: #c0392b;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+  .login-error.show { display: block; }
+
+  /* ── ADMIN DASHBOARD ── */
+  .admin-wrapper {
+    display: none;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .admin-sidebar {
+    background: var(--charcoal);
+    padding: 2rem 1.5rem;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .admin-logo {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 2.5rem;
+    display: block;
+  }
+  .admin-logo span { color: var(--gold); }
+  .admin-nav { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 3rem; }
+  .admin-nav-item {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    background: none;
+    text-align: left;
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .admin-nav-item:hover { color: var(--sage-light); }
+  .admin-nav-item.active {
+    background: rgba(122,158,126,0.15);
+    color: var(--sage-light);
+    border-left: 3px solid var(--sage);
+    padding-left: calc(1rem - 3px);
+  }
+  .admin-user {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.3);
+  }
+  .admin-user strong { display: block; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem; }
+  .logout-btn {
+    width: 100%;
+    background: rgba(192,57,43,0.15);
+    color: #c0392b;
+    border: 1px solid rgba(192,57,43,0.3);
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-top: 0.8rem;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+  }
+  .logout-btn:hover { background: rgba(192,57,43,0.25); }
+
+  /* Main content */
+  .admin-main {
+    padding: 2.5rem;
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+  .admin-header {
+    margin-bottom: 2.5rem;
+  }
+  .admin-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+  }
+  .admin-subtitle {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  /* Appointments table */
+  .appointments-container { background: white; border-radius: 1.2rem; border: 1px solid var(--mist); overflow: hidden; }
+  .appointments-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--mist);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .appointments-title { font-weight: 500; font-size: 1rem; }
+  .filter-controls { display: flex; gap: 0.8rem; }
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--mist);
+    background: white;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-muted);
+  }
+  .filter-btn:hover { border-color: var(--sage-light); color: var(--sage-dark); }
+  .filter-btn.active { background: var(--sage-dark); color: white; border-color: var(--sage-dark); }
+
+  .appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .appointments-table thead { background: var(--cream); }
+  .appointments-table th {
+    padding: 0.9rem 2rem;
+    text-align: left;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .appointments-table td {
+    padding: 1.2rem 2rem;
+    border-top: 1px solid var(--mist);
+    font-size: 0.88rem;
+  }
+  .appointments-table tr:hover { background: rgba(122,158,126,0.02); }
+
+  .appt-name { font-weight: 500; color: var(--charcoal); }
+  .appt-email { color: var(--text-muted); font-size: 0.8rem; }
+  .appt-reason { color: var(--text-muted); max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .status-pending { background: rgba(230,200,100,0.2); color: #d4a000; }
+  .status-confirmed { background: rgba(122,158,126,0.2); color: var(--sage-dark); }
+  .status-completed { background: rgba(100,200,150,0.2); color: #2d8860; }
+  .status-cancelled { background: rgba(192,57,43,0.2); color: #c0392b; }
+
+  .appt-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .action-btn {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--mist);
+    background: white;
+    border-radius: 0.4rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .action-btn:hover { border-color: var(--sage-light); color: var(--sage-dark); }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-muted);
+  }
+  .empty-state-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .empty-state-text { font-size: 0.9rem; }
+
+  .loading { text-align: center; padding: 2rem; color: var(--text-muted); }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal.show { display: flex; }
+  .modal-card {
+    background: white;
+    border-radius: 1.2rem;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+  }
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+  }
+  .modal-content { color: var(--text-muted); line-height: 1.65; margin-bottom: 1.5rem; }
+  .modal-field { margin-bottom: 1rem; }
+  .modal-field label { display: block; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
+  .modal-field select {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid var(--mist);
+    border-radius: 0.6rem;
+    font-family: var(--font-body);
+    outline: none;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+  }
+  .modal-btn {
+    padding: 0.7rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .modal-btn-cancel { background: var(--mist); color: var(--text-muted); }
+  .modal-btn-cancel:hover { background: #ddd; }
+  .modal-btn-confirm { background: var(--sage-dark); color: white; }
+  .modal-btn-confirm:hover { background: var(--sage); }
+
+  @media (max-width: 800px) {
+    .admin-wrapper { grid-template-columns: 1fr; }
+    .admin-sidebar { display: none; }
+    .admin-main { padding: 1.5rem; }
+    .appointments-table { font-size: 0.75rem; }
+    .appointments-table th, .appointments-table td { padding: 0.7rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <a href="/" class="login-logo">Spring<span>✦</span>Office</a>
+    <h1 class="login-title">Admin Access</h1>
+    <p class="login-desc">Manage appointments, view analytics, and respond to requests.</p>
+    <div class="login-field">
+      <label>Admin Secret</label>
+      <input type="password" id="admin-secret" placeholder="Enter admin secret" onkeydown="if(event.key==='Enter')adminLogin()" />
+      <div class="login-error" id="login-error">Invalid secret</div>
+    </div>
+    <button class="login-btn" onclick="adminLogin()">Access Admin Panel</button>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="admin-wrapper" id="admin-wrapper">
+  <aside class="admin-sidebar">
+    <a href="/" class="admin-logo">Spring<span>✦</span>Office</a>
+    <nav class="admin-nav">
+      <button class="admin-nav-item active" onclick="switchTab('appointments')">📋 Appointments</button>
+      <button class="admin-nav-item" onclick="switchTab('analytics')">📊 Analytics</button>
+      <button class="admin-nav-item" onclick="switchTab('settings')">⚙️ Settings</button>
+    </nav>
+    <div class="admin-user">
+      <strong>Administrator</strong>
+      <small>spring-virtual-office</small>
+      <button class="logout-btn" onclick="adminLogout()">Log Out</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <!-- Appointments Tab -->
+    <div id="appointments-tab">
+      <div class="admin-header">
+        <h1 class="admin-title">Appointments</h1>
+        <p class="admin-subtitle">Manage and track all appointment requests</p>
+      </div>
+
+      <div class="appointments-container">
+        <div class="appointments-header">
+          <span class="appointments-title">All Requests</span>
+          <div class="filter-controls">
+            <button class="filter-btn active" onclick="filterAppts('all')">All</button>
+            <button class="filter-btn" onclick="filterAppts('pending')">Pending</button>
+            <button class="filter-btn" onclick="filterAppts('confirmed')">Confirmed</button>
+            <button class="filter-btn" onclick="filterAppts('completed')">Completed</button>
+          </div>
+        </div>
+
+        <div id="appts-content">
+          <div class="loading">Loading appointments…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div id="analytics-tab" style="display:none">
+      <div class="admin-header">
+        <h1 class="admin-title">Analytics</h1>
+        <p class="admin-subtitle">Performance metrics and insights</p>
+      </div>
+      <div style="background:white;border-radius:1rem;padding:2rem;text-align:center;color:var(--text-muted)">
+        <p style="margin-bottom:1rem">📊 Analytics dashboard coming soon</p>
+        <small>Track conversation volume, response times, and appointment conversion rates</small>
+      </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settings-tab" style="display:none">
+      <div class="admin-header">
+        <h1 class="admin-title">Settings</h1>
+        <p class="admin-subtitle">Configure your virtual office</p>
+      </div>
+      <div style="background:white;border-radius:1rem;padding:2rem;color:var(--text-muted)">
+        <div style="margin-bottom:2rem">
+          <h3 style="color:var(--charcoal);margin-bottom:0.5rem">Business Name</h3>
+          <p style="font-size:0.85rem;margin-bottom:1rem">Customized in your .env file</p>
+          <p style="padding:0.8rem;background:var(--cream);border-radius:0.6rem;font-family:var(--font-mono);font-size:0.8rem">Spring Virtual Office</p>
+        </div>
+        <div>
+          <h3 style="color:var(--charcoal);margin-bottom:0.5rem">Owner Email</h3>
+          <p style="font-size:0.85rem">Configured for appointment notifications</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Status Update Modal -->
+<div class="modal" id="status-modal">
+  <div class="modal-card">
+    <h2 class="modal-title">Update Status</h2>
+    <p class="modal-content" id="modal-appt-info"></p>
+    <div class="modal-field">
+      <label>New Status</label>
+      <select id="status-select">
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="completed">Completed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn modal-btn-confirm" onclick="updateStatus()">Update</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let adminSecret = '';
+  let currentApptId = null;
+  let apptFilter = 'all';
+  let appointments = [];
+
+  // ─── AUTH ─────────────────────────────────────────────────────────────
+  function adminLogin() {
+    const secret = document.getElementById('admin-secret').value.trim();
+    if (!secret) {
+      showLoginError();
+      return;
+    }
+    adminSecret = secret;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-wrapper').style.display = 'grid';
+    loadAppointments();
+  }
+
+  function adminLogout() {
+    if (confirm('Log out of admin panel?')) {
+      adminSecret = '';
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('admin-wrapper').style.display = 'none';
+      document.getElementById('admin-secret').value = '';
+    }
+  }
+
+  function showLoginError() {
+    const err = document.getElementById('login-error');
+    err.classList.add('show');
+    setTimeout(() => err.classList.remove('show'), 3000);
+  }
+
+  // ─── APPOINTMENTS ──────────────────────────────────────────────────────
+  async function loadAppointments() {
+    const content = document.getElementById('appts-content');
+    content.innerHTML = '<div class="loading">Loading…</div>';
+
+    try {
+      const res = await fetch(`/api/appointments?secret=${adminSecret}`);
+      if (!res.ok) throw new Error('Failed to load');
+      const data = await res.json();
+      appointments = data.appointments || [];
+      renderAppointments();
+    } catch (err) {
+      content.innerHTML = '<div class="loading" style="color:#c0392b">Error loading appointments</div>';
+    }
+  }
+
+  function renderAppointments() {
+    const filtered = appointments.filter(a => apptFilter === 'all' || a.status === apptFilter);
+
+    if (filtered.length === 0) {
+      document.getElementById('appts-content').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📭</div>
+          <div class="empty-state-text">No ${apptFilter === 'all' ? '' : apptFilter + ' '}appointments</div>
+        </div>`;
+      return;
+    }
+
+    let html = '<table class="appointments-table"><thead><tr>';
+    html += '<th>Name</th><th>Email</th><th>Preferred Time</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+
+    for (const a of filtered) {
+      const statusClass = `status-${a.status}`;
+      const created = new Date(a.created_at).toLocaleDateString();
+      html += `<tr>
+        <td><div class="appt-name">${escapeHtml(a.name)}</div><div class="appt-email">${escapeHtml(a.email)}</div></td>
+        <td style="color:var(--text-muted);font-size:0.85rem">${escapeHtml(a.email)}</td>
+        <td>${escapeHtml(a.preferred_time)}</td>
+        <td><div class="appt-reason">${escapeHtml(a.reason)}</div></td>
+        <td><span class="status-badge ${statusClass}" onclick="openStatusModal(${a.id},'${escapeAttr(a.name)}')">${a.status.toUpperCase()}</span></td>
+        <td><div class="appt-actions">
+          <button class="action-btn" onclick="openStatusModal(${a.id},'${escapeAttr(a.name)}')">Change</button>
+          <button class="action-btn" onclick="copyApptEmail('${escapeAttr(a.email)}')">Email</button>
+        </div></td>
+      </tr>`;
+    }
+    html += '</tbody></table>';
+    document.getElementById('appts-content').innerHTML = html;
+  }
+
+  function filterAppts(status) {
+    apptFilter = status;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderAppointments();
+  }
+
+  function openStatusModal(id, name) {
+    currentApptId = id;
+    const appt = appointments.find(a => a.id === id);
+    if (!appt) return;
+    document.getElementById('modal-appt-info').textContent = `Update appointment for ${name}. Scheduled: ${appt.preferred_time}`;
+    document.getElementById('status-select').value = appt.status;
+    document.getElementById('status-modal').classList.add('show');
+  }
+
+  async function updateStatus() {
+    if (!currentApptId || !adminSecret) return;
+    const status = document.getElementById('status-select').value;
+
+    try {
+      const res = await fetch(`/api/appointments/${currentApptId}?secret=${adminSecret}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) {
+        closeModal();
+        loadAppointments();
+      }
+    } catch (err) {
+      alert('Update failed');
+    }
+  }
+
+  function closeModal() {
+    document.getElementById('status-modal').classList.remove('show');
+  }
+
+  function copyApptEmail(email) {
+    navigator.clipboard.writeText(email);
+    alert('Email copied: ' + email);
+  }
+
+  // ─── TABS ─────────────────────────────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('[id$="-tab"]').forEach(t => t.style.display = 'none');
+    document.getElementById(tab + '-tab').style.display = 'block';
+    document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // ─── HELPERS ──────────────────────────────────────────────────────────
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function escapeAttr(s) {
+    return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+
+  // Focus on load
+  document.getElementById('admin-secret').focus();
+</script>
+</body>
+</html>

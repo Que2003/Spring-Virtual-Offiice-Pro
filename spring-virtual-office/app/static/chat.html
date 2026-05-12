@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chat — Spring Virtual Office</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --sage: #7a9e7e;
+    --sage-light: #a8c5ab;
+    --sage-dark: #4a6e50;
+    --cream: #f8f5ef;
+    --warm-white: #fdfcfa;
+    --charcoal: #1e2220;
+    --mist: #e8ede9;
+    --gold: #c4a85a;
+    --text: #2c3328;
+    --text-muted: #6b7568;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-mono: 'DM Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--text);
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--charcoal);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  .sidebar-logo {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 300;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    text-decoration: none;
+  }
+  .sidebar-logo span { color: var(--gold); }
+
+  .sidebar-section-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 0.5rem;
+  }
+
+  .quick-actions { display: flex; flex-direction: column; gap: 0.4rem; }
+  .quick-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.7);
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .quick-btn:hover {
+    background: rgba(122,158,126,0.15);
+    color: var(--sage-light);
+    border-color: rgba(122,158,126,0.25);
+  }
+
+  .sidebar-info {
+    margin-top: auto;
+    background: rgba(122,158,126,0.1);
+    border: 1px solid rgba(122,158,126,0.2);
+    border-radius: 0.8rem;
+    padding: 1rem;
+  }
+  .sidebar-info p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+  }
+  .sidebar-info strong { color: var(--sage-light); display: block; margin-bottom: 0.3rem; font-size: 0.78rem; }
+
+  .back-link {
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--sage-light); }
+
+  /* ── CHAT MAIN ── */
+  .chat-main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--warm-white);
+  }
+
+  /* Header */
+  .chat-header {
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid var(--mist);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+  }
+  .chat-header-left { display: flex; align-items: center; gap: 0.8rem; }
+  .chat-avatar-lg {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+  }
+  .chat-header-name { font-weight: 500; font-size: 0.95rem; color: var(--charcoal); }
+  .chat-header-status {
+    font-size: 0.72rem;
+    color: var(--sage);
+    font-family: var(--font-mono);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--sage);
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .clear-btn {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: none;
+    border: 1px solid var(--mist);
+    padding: 0.4rem 0.9rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+  }
+  .clear-btn:hover { border-color: var(--sage-light); color: var(--sage-dark); }
+
+  /* Messages */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    scroll-behavior: smooth;
+  }
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
+
+  /* Message bubbles */
+  .msg-row { display: flex; gap: 0.8rem; max-width: 680px; }
+  .msg-row.user { flex-direction: row-reverse; margin-left: auto; }
+
+  .msg-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .ai-icon { background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); }
+  .user-icon { background: var(--mist); }
+
+  .msg-content { display: flex; flex-direction: column; gap: 0.3rem; }
+  .msg-sender { font-size: 0.68rem; font-family: var(--font-mono); color: var(--text-muted); letter-spacing: 0.06em; }
+  .msg-row.user .msg-sender { text-align: right; }
+
+  .bubble {
+    padding: 0.85rem 1.1rem;
+    border-radius: 1rem;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    max-width: 520px;
+  }
+  .ai-bubble {
+    background: white;
+    border: 1px solid var(--mist);
+    color: var(--text);
+    border-radius: 0.25rem 1rem 1rem 1rem;
+    box-shadow: 0 2px 8px rgba(30,34,32,0.04);
+  }
+  .user-bubble {
+    background: var(--sage-dark);
+    color: white;
+    border-radius: 1rem 0.25rem 1rem 1rem;
+    margin-left: auto;
+  }
+
+  /* Crisis bubble */
+  .crisis-bubble {
+    background: linear-gradient(135deg, #1a2040 0%, #0f1525 100%);
+    border: 1px solid rgba(88,101,242,0.3);
+    color: white;
+    border-radius: 0.25rem 1rem 1rem 1rem;
+  }
+
+  /* Typing indicator */
+  .typing-row { display: flex; gap: 0.8rem; align-items: center; }
+  .typing-bubble {
+    background: white;
+    border: 1px solid var(--mist);
+    border-radius: 0.25rem 1rem 1rem 1rem;
+    padding: 0.85rem 1.1rem;
+    display: flex; gap: 5px; align-items: center;
+    box-shadow: 0 2px 8px rgba(30,34,32,0.04);
+  }
+  .typing-dot {
+    width: 7px; height: 7px;
+    background: var(--sage-light);
+    border-radius: 50%;
+    animation: typeBounce 1.2s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typeBounce { 0%,60%,100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+  /* Welcome card */
+  .welcome-card {
+    background: linear-gradient(135deg, rgba(122,158,126,0.08) 0%, rgba(196,168,90,0.05) 100%);
+    border: 1px solid rgba(122,158,126,0.15);
+    border-radius: 1.2rem;
+    padding: 2rem;
+    text-align: center;
+    margin: auto;
+    max-width: 440px;
+  }
+  .welcome-card .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .welcome-card h2 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+  }
+  .welcome-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; }
+
+  /* Input area */
+  .input-area {
+    padding: 1.2rem 2rem 1.5rem;
+    background: white;
+    border-top: 1px solid var(--mist);
+  }
+  .input-wrap {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-end;
+    background: var(--cream);
+    border: 1.5px solid var(--mist);
+    border-radius: 1.2rem;
+    padding: 0.6rem 0.6rem 0.6rem 1.2rem;
+    transition: border-color 0.2s;
+  }
+  .input-wrap:focus-within { border-color: var(--sage-light); }
+
+  #user-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text);
+    resize: none;
+    min-height: 24px;
+    max-height: 120px;
+    line-height: 1.5;
+    padding: 0.3rem 0;
+  }
+  #user-input::placeholder { color: var(--text-muted); }
+
+  .send-btn {
+    width: 40px; height: 40px;
+    background: var(--sage-dark);
+    border: none;
+    border-radius: 0.8rem;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .send-btn:hover { background: var(--sage); transform: scale(1.05); }
+  .send-btn:disabled { background: var(--mist); color: var(--text-muted); cursor: not-allowed; transform: none; }
+
+  .input-hint { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.6rem; text-align: center; font-family: var(--font-mono); }
+
+  /* Mobile */
+  @media (max-width: 700px) {
+    body { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .messages { padding: 1rem; }
+    .input-area { padding: 0.8rem 1rem 1rem; }
+    .chat-header { padding: 0.8rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a href="/" class="sidebar-logo">Spring<span>✦</span>Office</a>
+
+  <div>
+    <div class="sidebar-section-label">Quick Prompts</div>
+    <div class="quick-actions">
+      <button class="quick-btn" onclick="sendQuick('What services do you offer?')">🌿 Our services</button>
+      <button class="quick-btn" onclick="sendQuick('I\'d like to book an appointment')">📅 Book appointment</button>
+      <button class="quick-btn" onclick="sendQuick('What are your hours?')">🕐 Business hours</button>
+      <button class="quick-btn" onclick="sendQuick('How can I contact the team?')">📧 Contact info</button>
+      <button class="quick-btn" onclick="sendQuick('I need some help, I\'m feeling overwhelmed')">💙 I need support</button>
+    </div>
+  </div>
+
+  <div class="sidebar-info">
+    <strong>⚠️ Safety Note</strong>
+    <p>Spring Virtual Office is not a therapist, doctor, or emergency service. If you're in crisis, please call or text <strong>988</strong>.</p>
+  </div>
+
+  <a href="/" class="back-link">← Back to home</a>
+</aside>
+
+<!-- CHAT MAIN -->
+<main class="chat-main">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <div class="chat-avatar-lg">🌿</div>
+      <div>
+        <div class="chat-header-name">Spring Virtual Office</div>
+        <div class="chat-header-status"><span class="status-dot"></span> AI Assistant · Online</div>
+      </div>
+    </div>
+    <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="welcome-card" id="welcome-card">
+      <div class="icon">🌿</div>
+      <h2>Welcome to Spring Virtual Office</h2>
+      <p>I'm your AI assistant. Ask me anything — about our services, book an appointment, or just chat. I'm here to help.</p>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-wrap">
+      <textarea id="user-input" placeholder="Type your message…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">→</button>
+    </div>
+    <div class="input-hint">Press Enter to send · Shift+Enter for new line</div>
+  </div>
+</main>
+
+<script>
+  // ─── State ─────────────────────────────────────────────────────────────────
+  const SESSION_ID = 'sess_' + Math.random().toString(36).slice(2, 11);
+  let isLoading = false;
+
+  const messagesEl = document.getElementById('messages');
+  const inputEl    = document.getElementById('user-input');
+  const sendBtn    = document.getElementById('send-btn');
+
+  // ─── Send helpers ──────────────────────────────────────────────────────────
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text || isLoading) return;
+
+    // Remove welcome card
+    const wc = document.getElementById('welcome-card');
+    if (wc) wc.remove();
+
+    appendMsg('user', text);
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+    setLoading(true);
+
+    const typingId = showTyping();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: SESSION_ID, message: text })
+      });
+      const data = await res.json();
+      removeTyping(typingId);
+      appendMsg('ai', data.reply, data.is_crisis);
+    } catch (err) {
+      removeTyping(typingId);
+      appendMsg('ai', '⚠️ Connection issue — please try again in a moment.');
+    }
+
+    setLoading(false);
+  }
+
+  function sendQuick(text) {
+    inputEl.value = text;
+    sendMessage();
+  }
+
+  // ─── DOM helpers ───────────────────────────────────────────────────────────
+  function appendMsg(role, text, isCrisis = false) {
+    const row = document.createElement('div');
+    row.className = 'msg-row' + (role === 'user' ? ' user' : '');
+
+    const icon = document.createElement('div');
+    icon.className = 'msg-icon ' + (role === 'ai' ? 'ai-icon' : 'user-icon');
+    icon.textContent = role === 'ai' ? '🌿' : '👤';
+
+    const content = document.createElement('div');
+    content.className = 'msg-content';
+
+    const sender = document.createElement('div');
+    sender.className = 'msg-sender';
+    sender.textContent = role === 'ai' ? 'Spring Office' : 'You';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble ' + (role === 'ai' ? (isCrisis ? 'crisis-bubble' : 'ai-bubble') : 'user-bubble');
+    bubble.innerHTML = linkify(escapeHtml(text));
+
+    content.appendChild(sender);
+    content.appendChild(bubble);
+    row.appendChild(icon);
+    row.appendChild(content);
+
+    messagesEl.appendChild(row);
+    scrollBottom();
+  }
+
+  function showTyping() {
+    const id = 'typing_' + Date.now();
+    const row = document.createElement('div');
+    row.className = 'typing-row';
+    row.id = id;
+    row.innerHTML = `
+      <div class="msg-icon ai-icon">🌿</div>
+      <div class="typing-bubble">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>`;
+    messagesEl.appendChild(row);
+    scrollBottom();
+    return id;
+  }
+
+  function removeTyping(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function setLoading(state) {
+    isLoading = state;
+    sendBtn.disabled = state;
+    inputEl.disabled = state;
+  }
+
+  function scrollBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  async function clearHistory() {
+    if (!confirm('Clear your conversation history?')) return;
+    messagesEl.innerHTML = `
+      <div class="welcome-card" id="welcome-card">
+        <div class="icon">🌿</div>
+        <h2>Welcome to Spring Virtual Office</h2>
+        <p>History cleared. I'm ready to help — ask me anything!</p>
+      </div>`;
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+
+  function linkify(s) {
+    return s.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" style="color:inherit;text-decoration:underline;opacity:0.8">$1</a>');
+  }
+
+  // Focus input on load
+  inputEl.focus();
+</script>
+</body>
+</html>
