@@ -1,257 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Spring Virtual Office</title>
+<style>
+  * { box-sizing: border-box; }
 
-  <style>
-    * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f8faf7;
+    color: #1f2933;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f8faf7;
-      color: #1f2933;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-    }
+  header {
+    padding: 18px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
 
-    header {
-      padding: 18px;
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+  }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-    }
+  .logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #5f8f62;
+    color: white;
+    font-size: 24px;
+  }
 
-    .logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: #5f8f62;
-      color: white;
-      font-size: 24px;
-    }
+  .status {
+    color: #6b8f71;
+    font-size: 14px;
+  }
 
-    .status {
-      color: #6b8f71;
-      font-size: 14px;
-    }
+  .clear {
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 600;
+  }
 
-    .clear {
-      border: 1px solid #d1d5db;
-      background: white;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 600;
-    }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-bottom: 150px;
+    gap: 14px;
+    overflow-y: auto;
+  }
 
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      gap: 14px;
-      overflow: hidden;
-    }
+  #log {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
-    #log {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding-bottom: 8px;
-    }
+  .welcome {
+    margin-top: 40px;
+    padding: 28px 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    text-align: center;
+    background: white;
+  }
 
-    .welcome {
-      margin: auto 0;
-      padding: 28px 18px;
-      border: 1px solid #e5e7eb;
-      border-radius: 24px;
-      text-align: center;
-      background: white;
+  .welcome h1 {
+    font-size: 30px;
+    margin: 10px 0;
+  }
+
+  .welcome p {
+    color: #6b7280;
+    line-height: 1.5;
+    font-size: 16px;
+  }
+
+  .bubble {
+    max-width: 85%;
+    padding: 12px 14px;
+    border-radius: 18px;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+
+  .user {
+    align-self: flex-end;
+    background: #dbeafe;
+  }
+
+  .bot {
+    align-self: flex-start;
+    background: white;
+    border: 1px solid #e5e7eb;
+  }
+
+  form {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 75px;
+    z-index: 999;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  button {
+    border: 0;
+    border-radius: 14px;
+    padding: 0 18px;
+    background: #5f8f62;
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+  }
+
+  @media (max-width: 520px) {
+
+    form {
+      bottom: 85px;
     }
 
     .welcome h1 {
-      font-size: 30px;
-      margin: 10px 0;
-    }
-
-    .welcome p {
-      color: #6b7280;
-      line-height: 1.5;
-      font-size: 16px;
-    }
-
-    .bubble {
-      max-width: 85%;
-      padding: 12px 14px;
-      border-radius: 18px;
-      line-height: 1.4;
-    }
-
-    .user {
-      align-self: flex-end;
-      background: #dbeafe;
-    }
-
-    .bot {
-      align-self: flex-start;
-      background: white;
-      border: 1px solid #e5e7eb;
-    }
-
-    form {
-      display: flex;
-      gap: 10px;
-      padding: 10px;
-      background: white;
-      border-top: 1px solid #e5e7eb;
-      position: sticky;
-      bottom: 0;
-    }
-
-    input {
-      flex: 1;
-      min-width: 0;
-      border: 1px solid #d1d5db;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 16px;
+      font-size: 26px;
     }
 
     button {
-      border: 0;
-      border-radius: 14px;
-      padding: 0 18px;
-      background: #5f8f62;
-      color: white;
-      font-weight: 800;
-      font-size: 16px;
+      min-width: 70px;
     }
-
-    @media (max-width: 520px) {
-      header {
-        padding: 14px;
-      }
-
-      .brand-text strong {
-        font-size: 17px;
-      }
-
-      .clear {
-        padding: 9px 11px;
-        font-size: 13px;
-      }
-
-      .welcome h1 {
-        font-size: 26px;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <div class="brand">
-      <div class="logo">🌿</div>
-      <div class="brand-text">
-        <strong>Spring Virtual Office</strong>
-        <div class="status">● AI Assistant · Online</div>
-      </div>
-    </div>
-
-    <button class="clear" onclick="clearChat()">Clear</button>
-  </header>
-
-  <main>
-    <div id="log">
-      <div class="welcome" id="welcome">
-        <div style="font-size:42px;">🌿</div>
-        <h1>Welcome to Spring Virtual Office</h1>
-        <p>
-          I'm your AI assistant. Ask me anything, book an appointment,
-          request support, or just chat.
-        </p>
-      </div>
-    </div>
-  </main>
-
-  <form id="form">
-    <input
-      id="message"
-      type="text"
-      placeholder="Type your message..."
-      autocomplete="off"
-      aria-label="Type your message"
-    />
-    <button type="submit">Send</button>
-  </form>
-
-  <script>
-    const form = document.getElementById("form");
-    const input = document.getElementById("message");
-    const log = document.getElementById("log");
-    const welcome = document.getElementById("welcome");
-
-    function addBubble(text, type) {
-      if (welcome) welcome.style.display = "none";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble " + type;
-      bubble.textContent = text;
-      log.appendChild(bubble);
-      log.scrollTop = log.scrollHeight;
-    }
-
-    function clearChat() {
-      log.innerHTML = "";
-      const card = document.createElement("div");
-      card.className = "welcome";
-      card.id = "welcome";
-      card.innerHTML = `
-        <div style="font-size:42px;">🌿</div>
-        <h1>Welcome to Spring Virtual Office</h1>
-        <p>I'm your AI assistant. Ask me anything, book an appointment, request support, or just chat.</p>
-      `;
-      log.appendChild(card);
-    }
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const message = input.value.trim();
-      if (!message) return;
-
-      addBubble(message, "user");
-      input.value = "";
-
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
-        });
-
-        const data = await res.json();
-        addBubble(data.reply || "SpringBot is online, but I could not read that response.", "bot");
-      } catch {
-        addBubble("Connection issue. Please try again.", "bot");
-      }
-    });
-  </script>
-</body>
-</html>
+  }
+</style>
