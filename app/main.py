@@ -13,7 +13,7 @@ try:
 except Exception:
     OpenAI = None
 
-app = FastAPI(title="Spring Virtual Office Pro")
+app = FastAPI(title="Spring Virtual Office")
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,10 +24,8 @@ app.add_middleware(
 )
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-ROOT_INDEX = ROOT_DIR / "index.html"
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
-# MOBILE / CSS SUPPORT
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
@@ -37,59 +35,48 @@ class ChatRequest(BaseModel):
 
 
 SYSTEM_PROMPT = """
-You are SpringBot, the AI assistant for Spring Virtual Office Pro.
-You help users with office questions, scheduling guidance, support requests,
-calming conversation, and clear next steps. Keep answers helpful, warm, and concise.
-If someone sounds distressed or says they need emotional help, encourage them to reach
-out to a trusted person or emergency services if they are in immediate danger, and say
-that a human follow-up can be scheduled.
+You are SpringBot, the AI assistant for Spring Virtual Office.
+You are futuristic, intelligent, calm, professional, and conversational.
+Keep answers concise, helpful, emotionally intelligent, and useful.
 """.strip()
 
 
 def fallback_reply(message: str) -> str:
+
     lower = message.lower()
 
     if any(word in lower for word in [
         "sad", "depressed", "anxious",
-        "stressed", "overwhelmed",
-        "lonely", "hurt"
+        "stressed", "hurt", "lonely"
     ]):
         return (
-            "I hear you. I can help you slow down and explain what is going on. "
-            "If this feels urgent or unsafe, please contact emergency services "
-            "or someone you trust right now. "
-            "For Spring Office, I can also help you request a follow-up conversation."
+            "I hear you. Take a moment to breathe and slow things down. "
+            "I'm here with you. If this feels urgent or unsafe, "
+            "please contact someone you trust or emergency services."
         )
 
     if any(word in lower for word in [
-        "appointment", "schedule", "book", "meeting"
+        "appointment", "schedule", "meeting"
     ]):
         return (
-            "I can help with scheduling. "
-            "Tell me the best day, time, and what the appointment is for."
-        )
-
-    if any(word in lower for word in [
-        "music", "song", "play"
-    ]):
-        return (
-            "Music support is part of the SpringBot plan. "
-            "Tell me the vibe you want, like calm, focus, or uplifting."
+            "I can help schedule that. "
+            "Tell me the day, time, and what the appointment is for."
         )
 
     return (
-        "SpringBot is connected. "
-        "I can help with questions, scheduling, office support, and next steps."
+        "SpringBot is online and ready to help."
     )
 
 
 async def generate_reply(message: str) -> str:
+
     api_key = os.getenv("OPENAI_API_KEY")
 
     if not api_key or OpenAI is None:
         return fallback_reply(message)
 
     try:
+
         client = OpenAI(api_key=api_key)
 
         response = client.chat.completions.create(
@@ -102,10 +89,10 @@ async def generate_reply(message: str) -> str:
                 {
                     "role": "user",
                     "content": message
-                },
+                }
             ],
-            temperature=0.6,
-            max_tokens=220,
+            temperature=0.7,
+            max_tokens=250
         )
 
         return (
@@ -117,259 +104,729 @@ async def generate_reply(message: str) -> str:
         return fallback_reply(message)
 
 
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "service": "Spring Virtual Office Pro"
+@app.get("/")
+def home():
+
+    return HTMLResponse("""
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8" />
+
+<meta
+  name="viewport"
+  content="width=device-width,
+  initial-scale=1.0,
+  viewport-fit=cover"
+/>
+
+<title>
+Spring Virtual Office
+</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+
+  --bg:
+    radial-gradient(circle at top left,
+    rgba(74,222,128,0.14),
+    transparent 25%),
+
+    radial-gradient(circle at bottom right,
+    rgba(56,189,248,0.12),
+    transparent 25%),
+
+    linear-gradient(
+      135deg,
+      #050816 0%,
+      #0b1120 45%,
+      #020617 100%
+    );
+
+  --panel:
+    rgba(15,23,42,0.68);
+
+  --text:#f8fafc;
+
+  --muted:#94a3b8;
+
+  --border:
+    rgba(255,255,255,0.12);
+
+  --accent:#4ade80;
+
+  --accent2:#38bdf8;
+
+}
+
+body{
+
+  margin:0;
+
+  font-family:
+    Inter,
+    Arial,
+    sans-serif;
+
+  background:var(--bg);
+
+  color:var(--text);
+
+  height:100dvh;
+
+  overflow:hidden;
+
+  display:flex;
+
+  flex-direction:column;
+
+}
+
+header{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:12px;
+
+  padding:16px;
+
+  border-bottom:
+    1px solid var(--border);
+
+  background:
+    rgba(2,6,23,0.7);
+
+  backdrop-filter:blur(20px);
+
+}
+
+.brand{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+}
+
+.logo{
+
+  width:52px;
+
+  height:52px;
+
+  border-radius:18px;
+
+  display:grid;
+
+  place-items:center;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(74,222,128,0.25),
+      rgba(56,189,248,0.14)
+    );
+
+  border:
+    1px solid rgba(255,255,255,0.15);
+
+  font-size:26px;
+
+}
+
+.title{
+
+  font-size:22px;
+
+  font-weight:800;
+
+}
+
+.status{
+
+  color:var(--accent);
+
+  font-size:14px;
+
+}
+
+.header-actions{
+
+  display:flex;
+
+  gap:10px;
+
+}
+
+.theme-select,
+.clear{
+
+  border:
+    1px solid var(--border);
+
+  background:
+    rgba(255,255,255,0.06);
+
+  color:var(--text);
+
+  border-radius:999px;
+
+  padding:10px 14px;
+
+  font-weight:700;
+
+}
+
+main{
+
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:18px;
+
+  padding-bottom:240px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:14px;
+
+}
+
+.welcome{
+
+  margin-top:40px;
+
+  padding:36px 22px;
+
+  border-radius:30px;
+
+  border:
+    1px solid var(--border);
+
+  background:var(--panel);
+
+  backdrop-filter:blur(25px);
+
+  text-align:center;
+
+}
+
+.welcome h1{
+
+  margin:0;
+
+  font-size:42px;
+
+}
+
+.welcome p{
+
+  color:var(--muted);
+
+  margin-top:16px;
+
+  line-height:1.7;
+
+}
+
+.bubble{
+
+  max-width:85%;
+
+  padding:14px 16px;
+
+  border-radius:22px;
+
+  line-height:1.5;
+
+  word-wrap:break-word;
+
+}
+
+.user{
+
+  align-self:flex-end;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(74,222,128,0.22),
+      rgba(56,189,248,0.18)
+    );
+
+}
+
+.bot{
+
+  align-self:flex-start;
+
+  background:var(--panel);
+
+  border:
+    1px solid var(--border);
+
+}
+
+form{
+
+  position:fixed;
+
+  left:0;
+
+  right:0;
+
+  bottom:120px;
+
+  z-index:99999;
+
+  display:flex;
+
+  gap:12px;
+
+  padding:14px;
+
+  background:
+    rgba(2,6,23,0.78);
+
+  backdrop-filter:blur(25px);
+
+  border-top:
+    1px solid var(--border);
+
+}
+
+input{
+
+  flex:1;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:18px;
+
+  padding:16px;
+
+  font-size:16px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  color:var(--text);
+
+  outline:none;
+
+}
+
+input::placeholder{
+
+  color:var(--muted);
+
+}
+
+button{
+
+  border:0;
+
+  border-radius:18px;
+
+  padding:0 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
+    );
+
+  color:white;
+
+  font-weight:800;
+
+  font-size:16px;
+
+}
+
+@media (max-width:700px){
+
+  form{
+    bottom:150px;
+  }
+
+  .welcome h1{
+    font-size:28px;
+  }
+
+  .header-actions{
+    flex-direction:column;
+  }
+
+}
+
+body[data-theme="light"]{
+
+  --bg:#f8faf7;
+  --panel:#ffffff;
+  --text:#1f2933;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --accent:#5f8f62;
+  --accent2:#38bdf8;
+
+}
+
+body[data-theme="emerald"]{
+
+  --bg:
+    linear-gradient(
+      135deg,
+      #03120d,
+      #071a14,
+      #020617
+    );
+
+  --panel:
+    rgba(6,78,59,0.28);
+
+  --text:#ecfdf5;
+
+  --muted:#a7f3d0;
+
+  --border:
+    rgba(74,222,128,0.18);
+
+  --accent:#34d399;
+
+  --accent2:#4ade80;
+
+}
+
+body[data-theme="cyber"]{
+
+  --bg:
+    linear-gradient(
+      135deg,
+      #020617,
+      #081120,
+      #071a2f
+    );
+
+  --panel:
+    rgba(8,47,73,0.4);
+
+  --text:#e0f2fe;
+
+  --muted:#7dd3fc;
+
+  --border:
+    rgba(56,189,248,0.25);
+
+  --accent:#38bdf8;
+
+  --accent2:#22d3ee;
+
+}
+
+body[data-theme="luxury"]{
+
+  --bg:
+    linear-gradient(
+      135deg,
+      #050505,
+      #111111,
+      #050505
+    );
+
+  --panel:
+    rgba(24,24,27,0.78);
+
+  --text:#fafaf9;
+
+  --muted:#a8a29e;
+
+  --border:#292524;
+
+  --accent:#d4af37;
+
+  --accent2:#facc15;
+
+}
+
+</style>
+
+</head>
+
+<body data-theme="black-glass">
+
+<header>
+
+<div class="brand">
+
+<div class="logo">
+🌿
+</div>
+
+<div>
+
+<div class="title">
+Spring Virtual Office
+</div>
+
+<div class="status">
+● AI Assistant · Online
+</div>
+
+</div>
+
+</div>
+
+<div class="header-actions">
+
+<select
+  id="themeSelect"
+  class="theme-select"
+>
+
+<option value="black-glass">
+Black Glass
+</option>
+
+<option value="light">
+Light
+</option>
+
+<option value="emerald">
+Emerald
+</option>
+
+<option value="cyber">
+Cyber
+</option>
+
+<option value="luxury">
+Luxury
+</option>
+
+</select>
+
+<button
+  class="clear"
+  onclick="clearChat()"
+>
+Clear
+</button>
+
+</div>
+
+</header>
+
+<main id="log">
+
+<div
+  class="welcome"
+  id="welcome"
+>
+
+<h1>
+Welcome to Spring Virtual Office
+</h1>
+
+<p>
+Your futuristic AI workspace is online.
+Ask questions, request support,
+book appointments,
+or chat with SpringBot.
+</p>
+
+</div>
+
+</main>
+
+<form id="chatForm">
+
+<input
+  id="message"
+  type="text"
+  placeholder="Type your message..."
+  autocomplete="off"
+/>
+
+<button type="submit">
+Send
+</button>
+
+</form>
+
+<script>
+
+const form =
+  document.getElementById("chatForm");
+
+const input =
+  document.getElementById("message");
+
+const log =
+  document.getElementById("log");
+
+const themeSelect =
+  document.getElementById("themeSelect");
+
+const savedTheme =
+  localStorage.getItem("springTheme")
+  || "black-glass";
+
+document.body.setAttribute(
+  "data-theme",
+  savedTheme
+);
+
+themeSelect.value =
+  savedTheme;
+
+themeSelect.addEventListener(
+  "change",
+  () => {
+
+    const theme =
+      themeSelect.value;
+
+    document.body.setAttribute(
+      "data-theme",
+      theme
+    );
+
+    localStorage.setItem(
+      "springTheme",
+      theme
+    );
+
+  }
+);
+
+function addBubble(text,type){
+
+  const welcome =
+    document.getElementById("welcome");
+
+  if(welcome){
+    welcome.remove();
+  }
+
+  const bubble =
+    document.createElement("div");
+
+  bubble.className =
+    "bubble " + type;
+
+  bubble.textContent =
+    text;
+
+  log.appendChild(bubble);
+
+  log.scrollTop =
+    log.scrollHeight;
+
+}
+
+function clearChat(){
+
+  log.innerHTML = `
+    <div class="welcome" id="welcome">
+
+      <h1>
+        Welcome to Spring Virtual Office
+      </h1>
+
+      <p>
+        History cleared.
+        I'm ready to help.
+      </p>
+
+    </div>
+  `;
+
+}
+
+form.addEventListener(
+  "submit",
+  async function(e){
+
+    e.preventDefault();
+
+    const message =
+      input.value.trim();
+
+    if(!message) return;
+
+    addBubble(
+      message,
+      "user"
+    );
+
+    input.value = "";
+
+    try{
+
+      const response =
+        await fetch(
+          "/api/chat",
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+              "application/json"
+            },
+
+            body:JSON.stringify({
+              message:message
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      addBubble(
+        data.reply ||
+        "SpringBot could not respond.",
+        "bot"
+      );
+
+    }catch(error){
+
+      addBubble(
+        "Connection issue. Please try again.",
+        "bot"
+      );
+
     }
 
+  }
+);
 
-@app.get("/", response_class=HTMLResponse)
-def home():
-    if ROOT_INDEX.exists():
-        return FileResponse(ROOT_INDEX)
+</script>
 
-    return HTMLResponse("""
-    <h1>Spring Virtual Office Pro</h1>
-    <p>SpringBot backend is online.</p>
-    """)
+</body>
+</html>
 
-
-@app.get("/chat", response_class=HTMLResponse)
-def chat_page():
-
-    chat_html = STATIC_DIR / "chat.html"
-
-    if chat_html.exists():
-        return FileResponse(chat_html)
-
-    return HTMLResponse("""
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-      <meta charset="UTF-8" />
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-      />
-
-      <title>SpringBot Chat</title>
-
-      <style>
-
-        *{
-          box-sizing:border-box;
-        }
-
-        body{
-          margin:0;
-          min-height:100vh;
-          font-family:Segoe UI,Arial,sans-serif;
-          color:#eef7ff;
-          background:linear-gradient(135deg,#07111f,#0b2740);
-          display:grid;
-          place-items:center;
-          padding:16px;
-        }
-
-        .card{
-          width:min(760px,100%);
-          background:rgba(255,255,255,.12);
-          border:1px solid rgba(255,255,255,.22);
-          border-radius:28px;
-          padding:24px;
-          box-shadow:0 30px 80px rgba(0,0,0,.35);
-          backdrop-filter:blur(18px);
-        }
-
-        h1{
-          font-size:clamp(2rem,5vw,4rem);
-          margin:0 0 8px;
-          letter-spacing:-.05em;
-        }
-
-        .muted{
-          color:#aac3d9;
-          line-height:1.6;
-          margin-bottom:20px;
-        }
-
-        #log{
-          display:grid;
-          gap:12px;
-          margin:18px 0;
-          max-height:420px;
-          overflow:auto;
-        }
-
-        .bubble{
-          padding:13px 15px;
-          border-radius:18px;
-          background:rgba(255,255,255,.1);
-          line-height:1.5;
-          word-wrap:break-word;
-        }
-
-        .user{
-          justify-self:end;
-          background:rgba(102,217,255,.18);
-        }
-
-        .bot{
-          justify-self:start;
-          background:rgba(141,255,203,.14);
-        }
-
-        form{
-          display:flex;
-          gap:10px;
-          background:rgba(0,0,0,.18);
-          border:1px solid rgba(255,255,255,.18);
-          border-radius:18px;
-          padding:10px;
-        }
-
-        input{
-          flex:1;
-          background:transparent;
-          border:0;
-          outline:0;
-          color:#fff;
-          padding:12px;
-          font-size:1rem;
-        }
-
-        button{
-          border:0;
-          border-radius:14px;
-          padding:14px 18px;
-          font-weight:800;
-          background:linear-gradient(135deg,#66d9ff,#8dffcb);
-          color:#03111c;
-          cursor:pointer;
-        }
-
-        @media (max-width: 600px){
-
-          .card{
-            padding:18px;
-            border-radius:20px;
-          }
-
-          form{
-            flex-direction:column;
-          }
-
-          button{
-            width:100%;
-          }
-
-        }
-
-      </style>
-    </head>
-
-    <body>
-
-      <main class="card">
-
-        <h1>Spring Office</h1>
-
-        <p class="muted">
-          SpringBot is online.
-          Ask a question, request support,
-          or start a scheduling conversation.
-        </p>
-
-        <div id="log">
-          <div class="bubble bot">
-            Hey, I’m SpringBot. How can I help today?
-          </div>
-        </div>
-
-        <form id="form">
-
-          <input
-            id="message"
-            placeholder="Type your message..."
-            autocomplete="off"
-            aria-label="Message SpringBot"
-          />
-
-          <button>
-            Send
-          </button>
-
-        </form>
-
-      </main>
-
-      <script>
-
-        const form = document.getElementById('form');
-        const input = document.getElementById('message');
-        const log = document.getElementById('log');
-
-        function add(text, cls){
-
-          const b = document.createElement('div');
-
-          b.className = 'bubble ' + cls;
-
-          b.textContent = text;
-
-          log.appendChild(b);
-
-          log.scrollTop = log.scrollHeight;
-        }
-
-        form.addEventListener('submit', async e => {
-
-          e.preventDefault();
-
-          const message = input.value.trim();
-
-          if(!message) return;
-
-          add(message, 'user');
-
-          input.value='';
-
-          try{
-
-            const res = await fetch('/api/chat', {
-              method:'POST',
-              headers:{
-                'Content-Type':'application/json'
-              },
-              body:JSON.stringify({message})
-            });
-
-            const data = await res.json();
-
-            add(
-              data.reply ||
-              'SpringBot is online, but I could not read that response.',
-              'bot'
-            );
-
-          }catch(err){
-
-            add(
-              'Connection issue — please try again in a moment.',
-              'bot'
-            );
-
-          }
-
-        });
-
-      </script>
-
-    </body>
-    </html>
     """)
 
 
@@ -379,9 +836,14 @@ async def api_chat(payload: ChatRequest):
     message = payload.message.strip()
 
     if not message:
-        return JSONResponse({
-            "reply": "Send me a message and I’ll help."
-        })
+        return {
+            "reply": "Send me a message."
+        }
+
+    if len(message) > 1000:
+        return {
+            "reply": "Message too long."
+        }
 
     reply = await generate_reply(message)
 
@@ -390,6 +852,9 @@ async def api_chat(payload: ChatRequest):
     }
 
 
-@app.post("/chat")
-async def chat_alias(payload: ChatRequest):
-    return await api_chat(payload)
+@app.get("/health")
+def health():
+
+    return {
+        "status": "online"
+    }
