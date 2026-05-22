@@ -232,541 +232,435 @@ async def home():
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,
-  initial-scale=1.0,
-  viewport-fit=cover"
-/>
-
-<title>
-Spring Virtual Office
-</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Spring Virtual Office</title>
 <style>
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
 }
 
-:root{
-
-  --bg:
-    linear-gradient(
-      135deg,
-      #050816,
-      #0b1120,
-      #020617
-    );
-
-  --panel:
-    rgba(15,23,42,0.72);
-
-  --text:#f8fafc;
-
-  --muted:#94a3b8;
-
-  --border:
-    rgba(255,255,255,0.12);
-
-  --accent:#4ade80;
-
-  --accent2:#38bdf8;
-
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-body{
-
-  margin:0;
-
-  font-family:
-    Arial,
-    sans-serif;
-
-  background:var(--bg);
-
-  color:var(--text);
-
-  height:100dvh;
-
-  overflow:hidden;
-
-  display:flex;
-
-  flex-direction:column;
-
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  color: #ffffff;
+  background: #000000;
+  line-height: 1.6;
 }
 
-header{
+/* ==================== ANIMATED BACKGROUND ==================== */
 
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  padding:16px;
-
-  background:
-    rgba(2,6,23,0.78);
-
-  border-bottom:
-    1px solid var(--border);
-
-  backdrop-filter:blur(20px);
-
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  z-index: -1;
 }
 
-.brand{
+/* ==================== SPRINGBOT ANIMATION ==================== */
 
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-
+.springbot-container {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 500;
 }
 
-.logo{
-
-  width:52px;
-
-  height:52px;
-
-  border-radius:16px;
-
-  display:grid;
-
-  place-items:center;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(74,222,128,0.3),
-      rgba(56,189,248,0.2)
-    );
-
-  font-size:28px;
-
+.springbot {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  animation: float 3s ease-in-out infinite;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
-.title{
-
-  font-size:22px;
-
-  font-weight:800;
-
+.springbot:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-.status{
-
-  color:var(--accent);
-
-  margin-top:3px;
-
-  font-size:14px;
-
+.springbot-emoji {
+  font-size: 48px;
+  animation: bounce 1s ease-in-out infinite;
 }
 
-.right{
-
-  display:flex;
-
-  gap:10px;
-
-  align-items:center;
-
+.springbot-text {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
-select,
-.clear{
-
-  border:
-    1px solid var(--border);
-
-  background:
-    rgba(255,255,255,0.06);
-
-  color:var(--text);
-
-  border-radius:999px;
-
-  padding:10px 14px;
-
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 }
 
-main{
-
-  flex:1;
-
-  overflow-y:auto;
-
-  padding:20px;
-
-  padding-bottom:220px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:14px;
-
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
 
-.welcome{
-
-  margin-top:30px;
-
-  background:var(--panel);
-
-  border:
-    1px solid var(--border);
-
-  border-radius:30px;
-
-  padding:40px 24px;
-
-  text-align:center;
-
-  backdrop-filter:blur(25px);
-
+.pulse-ring {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  animation: pulse 2s ease-out infinite;
+  pointer-events: none;
 }
 
-.welcome h1{
-
-  margin:0;
-
-  font-size:42px;
-
-}
-
-.welcome p{
-
-  color:var(--muted);
-
-  line-height:1.7;
-
-  margin-top:16px;
-
-}
-
-.bubble{
-
-  max-width:85%;
-
-  padding:14px 16px;
-
-  border-radius:22px;
-
-  line-height:1.5;
-
-  word-wrap:break-word;
-
-}
-
-.user{
-
-  align-self:flex-end;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(74,222,128,0.25),
-      rgba(56,189,248,0.2)
-    );
-
-}
-
-.bot{
-
-  align-self:flex-start;
-
-  background:var(--panel);
-
-  border:
-    1px solid var(--border);
-
-}
-
-form{
-
-  position:fixed;
-
-  left:0;
-
-  right:0;
-
-  bottom:120px;
-
-  display:flex;
-
-  gap:12px;
-
-  padding:14px;
-
-  background:
-    rgba(2,6,23,0.82);
-
-  border-top:
-    1px solid var(--border);
-
-  backdrop-filter:blur(25px);
-
-}
-
-input{
-
-  flex:1;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:18px;
-
-  padding:16px;
-
-  font-size:16px;
-
-  background:
-    rgba(255,255,255,0.06);
-
-  color:var(--text);
-
-  outline:none;
-
-}
-
-button{
-
-  border:0;
-
-  border-radius:18px;
-
-  padding:0 20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--accent),
-      var(--accent2)
-    );
-
-  color:white;
-
-  font-weight:800;
-
-  font-size:16px;
-
-}
-
-@media (max-width:700px){
-
-  form{
-    bottom:140px;
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
   }
-
-  .welcome h1{
-    font-size:28px;
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
   }
+}
 
-  .right{
-    flex-direction:column;
-  }
+/* ==================== HEADER ==================== */
 
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.theme-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f5f7fa;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.theme-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.theme-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  min-width: 150px;
+  max-height: 300px;
+  overflow-y: auto;
+  backdrop-filter: blur(20px);
+  display: none;
+  z-index: 2000;
+}
+
+.theme-menu.active {
+  display: block;
+}
+
+.theme-option {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  font-weight: 500;
+  border-left: 2px solid transparent;
+}
+
+.theme-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-option.active {
+  background: rgba(255, 255, 255, 0.12);
+  border-left-color: #ffffff;
+}
+
+/* ==================== MAIN CONTENT ==================== */
+
+main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 60px;
+  text-align: center;
+}
+
+.content {
+  max-width: 800px;
+  padding: 0 40px;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+h1 {
+  font-size: 64px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  animation: slideInDown 1s ease-out 0.1s both;
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #a1a1a1;
+  margin-bottom: 50px;
+  font-weight: 300;
+  animation: slideInUp 1s ease-out 0.2s both;
+  letter-spacing: 0.3px;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 100px;
+  animation: slideInUp 1s ease-out 0.3s both;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 14px 40px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  background: #ffffff;
+  color: #000000;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.15);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5f7fa;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 500px;
+  margin: 0 auto;
+  animation: slideInUp 1s ease-out 0.4s both;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #707070;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 42px; }
+  .subtitle { font-size: 16px; margin-bottom: 40px; }
+  header { padding: 0 24px; }
+  .cta-buttons { gap: 12px; margin-bottom: 60px; }
+  .btn { padding: 12px 28px; font-size: 12px; }
+  .stats { grid-template-columns: 1fr; gap: 24px; }
+  .springbot-container { bottom: 24px; right: 24px; }
+  .springbot { width: 100px; height: 100px; }
+  .springbot-emoji { font-size: 40px; }
 }
 
 </style>
-
 </head>
-
 <body>
 
+<div class="bg"></div>
+
 <header>
-
-<div class="brand">
-
-<div class="logo">
-🌿
-</div>
-
-<div>
-
-<div class="title">
-Spring Virtual Office
-</div>
-
-<div class="status">
-● AI Assistant · Online
-</div>
-
-</div>
-
-</div>
-
-<button
-  class="clear"
-  onclick="clearChat()"
->
-Clear
-</button>
-
+  <div class="logo">Spring</div>
+  <div style="position: relative;">
+    <button class="theme-btn" onclick="toggleThemeMenu()">Themes</button>
+    <div class="theme-menu" id="themeMenu">
+      <div class="theme-option active" onclick="switchTheme('dark')">Dark</div>
+      <div class="theme-option" onclick="switchTheme('light')">Light</div>
+    </div>
+  </div>
 </header>
 
-<main id="log">
+<main>
+  <div class="content">
+    <h1>Spring Virtual Office</h1>
+    <p class="subtitle">The intelligent workspace for modern teams</p>
+    
+    <div class="cta-buttons">
+      <button class="btn btn-primary" onclick="window.location.href='/chat'">Start Now</button>
+      <button class="btn btn-secondary" onclick="alert('Coming soon!')">Learn More</button>
+    </div>
 
-<div
-  class="welcome"
-  id="welcome"
->
-
-<h1>
-Welcome to Spring Virtual Office
-</h1>
-
-<p>
-Your futuristic AI workspace is online.
-Ask questions, request support,
-book appointments,
-or chat with SpringBot.
-</p>
-
-</div>
-
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Available</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">AI</div>
+        <div class="stat-label">Powered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Scalable</div>
+      </div>
+    </div>
+  </div>
 </main>
 
-<form id="chatForm">
-
-<input
-  id="message"
-  type="text"
-  placeholder="Type your message..."
-  autocomplete="off"
-/>
-
-<button type="submit">
-Send
-</button>
-
-</form>
+<div class="springbot-container" onclick="window.location.href='/chat'">
+  <div class="pulse-ring"></div>
+  <div class="springbot">
+    <div class="springbot-emoji">🌿</div>
+    <div class="springbot-text">SpringBot</div>
+  </div>
+</div>
 
 <script>
 
-const form =
-  document.getElementById("chatForm");
-
-const input =
-  document.getElementById("message");
-
-const log =
-  document.getElementById("log");
-
-function addBubble(text,type){
-
-  const welcome =
-    document.getElementById("welcome");
-
-  if(welcome){
-    welcome.remove();
-  }
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "bubble " + type;
-
-  bubble.textContent =
-    text;
-
-  log.appendChild(bubble);
-
-  log.scrollTop =
-    log.scrollHeight;
-
+function toggleThemeMenu() {
+  const menu = document.getElementById('themeMenu');
+  menu.classList.toggle('active');
 }
 
-function clearChat(){
-
-  log.innerHTML = `
-    <div class="welcome" id="welcome">
-
-      <h1>
-        Welcome to Spring Virtual Office
-      </h1>
-
-      <p>
-        History cleared.
-        I'm ready to help.
-      </p>
-
-    </div>
-  `;
-
+function switchTheme(theme) {
+  if (theme === 'light') {
+    document.body.style.background = '#ffffff';
+    document.body.style.color = '#000000';
+    document.querySelector('header').style.background = 'rgba(255, 255, 255, 0.5)';
+    document.querySelector('header').style.borderBottomColor = 'rgba(0, 0, 0, 0.08)';
+    document.querySelector('.subtitle').style.color = '#656565';
+    document.querySelector('.stat-label').style.color = '#929292';
+  } else {
+    document.body.style.background = '#000000';
+    document.body.style.color = '#ffffff';
+    document.querySelector('header').style.background = 'rgba(0, 0, 0, 0.5)';
+    document.querySelector('header').style.borderBottomColor = 'rgba(255, 255, 255, 0.08)';
+    document.querySelector('.subtitle').style.color = '#a1a1a1';
+    Array.from(document.querySelectorAll('.stat-label')).forEach(el => el.style.color = '#707070');
+  }
+  
+  localStorage.setItem('springTheme', theme);
+  
+  const options = document.querySelectorAll('.theme-option');
+  options.forEach(opt => opt.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  document.getElementById('themeMenu').classList.remove('active');
 }
 
-form.addEventListener(
-  "submit",
-  async function(e){
+// Load saved theme
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('springTheme') || 'dark';
+  switchTheme(savedTheme);
+});
 
-    e.preventDefault();
-
-    const message =
-      input.value.trim();
-
-    if(!message) return;
-
-    addBubble(
-      message,
-      "user"
-    );
-
-    input.value = "";
-
-    try{
-
-      const response =
-        await fetch(
-          "/api/chat",
-          {
-            method:"POST",
-
-            headers:{
-              "Content-Type":
-              "application/json"
-            },
-
-            body:JSON.stringify({
-              message:message
-            })
-          }
-        );
-
-      const data =
-        await response.json();
-
-      addBubble(
-        data.reply ||
-        "SpringBot could not respond.",
-        "bot"
-      );
-
-    }catch(error){
-
-      addBubble(
-        "Connection issue. Please try again.",
-        "bot"
-      );
-
-    }
-
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('themeMenu');
+  const btn = e.target.closest('.theme-btn');
+  if (!btn && menu.classList.contains('active')) {
+    menu.classList.remove('active');
   }
-);
+});
 
 </script>
 
