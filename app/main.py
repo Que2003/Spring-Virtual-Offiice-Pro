@@ -258,8 +258,6 @@ body {
   line-height: 1.6;
 }
 
-/* ==================== ANIMATED BACKGROUND ==================== */
-
 .bg {
   position: fixed;
   top: 0;
@@ -270,7 +268,7 @@ body {
   z-index: -1;
 }
 
-/* ==================== SPRINGBOT ANIMATION ==================== */
+/* ==================== SPRINGBOT ENHANCED ==================== */
 
 .springbot-container {
   position: fixed;
@@ -280,58 +278,105 @@ body {
 }
 
 .springbot {
-  width: 120px;
-  height: 120px;
-  background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
-  border-radius: 30px;
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, rgba(60, 60, 60, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+  border-radius: 35px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: float 3s ease-in-out infinite;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.springbot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
 }
 
 .springbot:hover {
-  transform: translateY(-10px);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: translateY(-15px) scale(1.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(80, 80, 80, 0.9) 0%, rgba(30, 30, 30, 0.95) 100%);
 }
 
 .springbot-emoji {
-  font-size: 48px;
-  animation: bounce 1s ease-in-out infinite;
+  font-size: 56px;
+  animation: bounce 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  position: relative;
+  z-index: 2;
 }
 
 .springbot-text {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.springbot-status {
+  width: 8px;
+  height: 8px;
+  background: #4ade80;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.15) translateY(-10px); }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  50% { transform: translateY(-25px); }
 }
 
-@keyframes bounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+@keyframes pulse-dot {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
+    transform: scale(1.1);
+  }
 }
 
 .pulse-ring {
   position: absolute;
-  width: 140px;
-  height: 140px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 30px;
-  animation: pulse 2s ease-out infinite;
+  width: 160px;
+  height: 160px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  animation: pulse 2.5s ease-out infinite;
   pointer-events: none;
 }
 
@@ -341,9 +386,30 @@ body {
     opacity: 1;
   }
   100% {
-    transform: scale(1.3);
+    transform: scale(1.35);
     opacity: 0;
   }
+}
+
+.springbot-tooltip {
+  position: absolute;
+  bottom: 160px;
+  right: 0;
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  backdrop-filter: blur(15px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.springbot-container:hover .springbot-tooltip {
+  opacity: 1;
 }
 
 /* ==================== HEADER ==================== */
@@ -558,8 +624,10 @@ h1 {
   .btn { padding: 12px 28px; font-size: 12px; }
   .stats { grid-template-columns: 1fr; gap: 24px; }
   .springbot-container { bottom: 24px; right: 24px; }
-  .springbot { width: 100px; height: 100px; }
-  .springbot-emoji { font-size: 40px; }
+  .springbot { width: 120px; height: 120px; }
+  .springbot-emoji { font-size: 48px; }
+  .springbot-text { font-size: 11px; }
+  .pulse-ring { width: 140px; height: 140px; }
 }
 
 </style>
@@ -608,9 +676,13 @@ h1 {
 
 <div class="springbot-container" onclick="window.location.href='/chat'">
   <div class="pulse-ring"></div>
+  <div class="springbot-tooltip">Chat with SpringBot →</div>
   <div class="springbot">
     <div class="springbot-emoji">🌿</div>
-    <div class="springbot-text">SpringBot</div>
+    <div class="springbot-text">
+      <span class="springbot-status"></span>
+      SpringBot
+    </div>
   </div>
 </div>
 
@@ -628,7 +700,7 @@ function switchTheme(theme) {
     document.querySelector('header').style.background = 'rgba(255, 255, 255, 0.5)';
     document.querySelector('header').style.borderBottomColor = 'rgba(0, 0, 0, 0.08)';
     document.querySelector('.subtitle').style.color = '#656565';
-    document.querySelector('.stat-label').style.color = '#929292';
+    Array.from(document.querySelectorAll('.stat-label')).forEach(el => el.style.color = '#929292');
   } else {
     document.body.style.background = '#000000';
     document.body.style.color = '#ffffff';
