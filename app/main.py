@@ -268,36 +268,36 @@ body {
   z-index: -1;
 }
 
-/* ==================== SPRINGBOT ENHANCED ==================== */
+/* ==================== SPRINGBOT SIDEKICK ==================== */
 
-.springbot-container {
+.springbot-sidekick {
   position: fixed;
-  bottom: 40px;
-  right: 40px;
-  z-index: 500;
+  bottom: 30px;
+  right: 30px;
+  z-index: 600;
+  cursor: pointer;
 }
 
-.springbot {
-  width: 140px;
-  height: 140px;
-  background: linear-gradient(135deg, rgba(60, 60, 60, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
-  border-radius: 35px;
+.springbot-avatar {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(60, 60, 60, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(15px);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  animation: float 3s ease-in-out infinite;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
+  animation: float-sidekick 3s ease-in-out infinite;
+  transition: all 0.3s ease;
 }
 
-.springbot::before {
+.springbot-avatar::before {
   content: '';
   position: absolute;
   top: 0;
@@ -314,102 +314,60 @@ body {
   100% { left: 100%; }
 }
 
-.springbot:hover {
-  transform: translateY(-15px) scale(1.05);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 255, 255, 0.1);
-  background: linear-gradient(135deg, rgba(80, 80, 80, 0.9) 0%, rgba(30, 30, 30, 0.95) 100%);
+@keyframes float-sidekick {
+  0%, 100% { transform: translateY(0) rotateZ(0deg); }
+  50% { transform: translateY(-15px) rotateZ(2deg); }
 }
 
-.springbot-emoji {
-  font-size: 56px;
-  animation: bounce 1.2s ease-in-out infinite;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+.springbot-avatar:hover {
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 15px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.sidekick-emoji {
+  font-size: 40px;
+  animation: bounce-sidekick 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   position: relative;
   z-index: 2;
 }
 
-.springbot-text {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  position: relative;
-  z-index: 2;
-}
-
-.springbot-status {
-  width: 8px;
-  height: 8px;
-  background: #4ade80;
-  border-radius: 50%;
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
+@keyframes bounce-sidekick {
   0%, 100% { transform: scale(1) translateY(0); }
-  50% { transform: scale(1.15) translateY(-10px); }
+  50% { transform: scale(1.15) translateY(-8px); }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-25px); }
+.sidekick-status {
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  border-radius: 50%;
+  animation: pulse-sidekick 2s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-@keyframes pulse-dot {
+@keyframes pulse-sidekick {
   0%, 100% { 
     box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
     transform: scale(1);
   }
   50% { 
-    box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
     transform: scale(1.1);
   }
 }
 
-.pulse-ring {
-  position: absolute;
-  width: 160px;
-  height: 160px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 40px;
-  animation: pulse 2.5s ease-out infinite;
-  pointer-events: none;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.35);
-    opacity: 0;
-  }
-}
-
-.springbot-tooltip {
-  position: absolute;
-  bottom: 160px;
-  right: 0;
-  background: rgba(30, 30, 30, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-  backdrop-filter: blur(15px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.springbot-container:hover .springbot-tooltip {
-  opacity: 1;
+.springbot-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 2;
+  color: #a1a1a1;
 }
 
 /* ==================== HEADER ==================== */
@@ -419,7 +377,7 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -434,6 +392,12 @@ header {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.5px;
+}
+
+.theme-selector {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .theme-btn {
@@ -455,21 +419,28 @@ header {
 
 .theme-menu {
   position: absolute;
-  top: 50px;
+  top: 60px;
   right: 0;
   background: rgba(30, 30, 30, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  min-width: 150px;
-  max-height: 300px;
+  min-width: 180px;
+  max-height: 400px;
   overflow-y: auto;
   backdrop-filter: blur(20px);
   display: none;
   z-index: 2000;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 .theme-menu.active {
   display: block;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .theme-option {
@@ -478,7 +449,7 @@ header {
   transition: all 0.2s ease;
   font-size: 12px;
   font-weight: 500;
-  border-left: 2px solid transparent;
+  border-left: 3px solid transparent;
 }
 
 .theme-option:hover {
@@ -487,7 +458,82 @@ header {
 
 .theme-option.active {
   background: rgba(255, 255, 255, 0.12);
-  border-left-color: #ffffff;
+  border-left-color: #4ade80;
+  color: #4ade80;
+}
+
+/* ==================== THEME STYLES ==================== */
+
+/* Black Theme */
+body.theme-black {
+  background: #000000;
+  color: #ffffff;
+}
+
+body.theme-black .bg {
+  background: #000000;
+}
+
+/* Glassmorphism Theme */
+body.theme-glass {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1428 100%);
+  color: #ffffff;
+}
+
+body.theme-glass .bg {
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1428 100%);
+}
+
+/* Light Theme */
+body.theme-light {
+  background: linear-gradient(135deg, #f5f3f0 0%, #f9f7f5 50%, #f0ede8 100%);
+  color: #2a2a2a;
+}
+
+body.theme-light .bg {
+  background: linear-gradient(135deg, #f5f3f0 0%, #f9f7f5 50%, #f0ede8 100%);
+}
+
+body.theme-light header {
+  background: rgba(255, 255, 255, 0.7);
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+body.theme-light .logo {
+  color: #2a2a2a;
+}
+
+body.theme-light .theme-btn {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #2a2a2a;
+}
+
+body.theme-light .theme-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+body.theme-light h1 {
+  color: #2a2a2a;
+}
+
+body.theme-light .subtitle {
+  color: #555;
+}
+
+body.theme-light .btn-primary {
+  background: #5a7c59;
+  color: #ffffff;
+}
+
+body.theme-light .btn-secondary {
+  background: rgba(0, 0, 0, 0.06);
+  color: #2a2a2a;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+body.theme-light .stat-label {
+  color: #999;
 }
 
 /* ==================== MAIN CONTENT ==================== */
@@ -502,19 +548,29 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 60px;
+  padding-top: 70px;
   text-align: center;
+  overflow-y: auto;
 }
 
 .content {
   max-width: 800px;
-  padding: 0 40px;
+  padding: 40px;
   animation: fadeIn 1s ease-out;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+.tag {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 30px;
+  animation: slideInDown 0.8s ease-out 0.1s both;
 }
 
 h1 {
@@ -531,13 +587,22 @@ h1 {
   to { opacity: 1; transform: translateY(0); }
 }
 
+h1 .gold {
+  color: #b8956a;
+  font-style: italic;
+}
+
 .subtitle {
-  font-size: 18px;
+  font-size: 16px;
   color: #a1a1a1;
   margin-bottom: 50px;
   font-weight: 300;
   animation: slideInUp 1s ease-out 0.2s both;
   letter-spacing: 0.3px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.8;
 }
 
 @keyframes slideInUp {
@@ -549,17 +614,17 @@ h1 {
   display: flex;
   gap: 16px;
   justify-content: center;
-  margin-bottom: 100px;
+  margin-bottom: 80px;
   animation: slideInUp 1s ease-out 0.3s both;
   flex-wrap: wrap;
 }
 
 .btn {
-  padding: 14px 40px;
+  padding: 16px 44px;
   border: none;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -574,7 +639,7 @@ h1 {
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 15px 40px rgba(255, 255, 255, 0.15);
 }
 
@@ -586,7 +651,7 @@ h1 {
 
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .stats {
@@ -618,43 +683,44 @@ h1 {
 
 @media (max-width: 768px) {
   h1 { font-size: 42px; }
-  .subtitle { font-size: 16px; margin-bottom: 40px; }
+  .subtitle { font-size: 14px; margin-bottom: 40px; }
   header { padding: 0 24px; }
-  .cta-buttons { gap: 12px; margin-bottom: 60px; }
+  .cta-buttons { gap: 12px; margin-bottom: 50px; }
   .btn { padding: 12px 28px; font-size: 12px; }
   .stats { grid-template-columns: 1fr; gap: 24px; }
-  .springbot-container { bottom: 24px; right: 24px; }
-  .springbot { width: 120px; height: 120px; }
-  .springbot-emoji { font-size: 48px; }
-  .springbot-text { font-size: 11px; }
-  .pulse-ring { width: 140px; height: 140px; }
+  .springbot-sidekick { bottom: 20px; right: 20px; }
+  .springbot-avatar { width: 70px; height: 70px; }
+  .sidekick-emoji { font-size: 32px; }
+  .sidekick-status { width: 10px; height: 10px; }
 }
 
 </style>
 </head>
-<body>
+<body class="theme-black">
 
 <div class="bg"></div>
 
 <header>
   <div class="logo">Spring</div>
   <div style="position: relative;">
-    <button class="theme-btn" onclick="toggleThemeMenu()">Themes</button>
+    <button class="theme-btn" onclick="toggleThemeMenu()">🎨 Themes</button>
     <div class="theme-menu" id="themeMenu">
-      <div class="theme-option active" onclick="switchTheme('dark')">Dark</div>
-      <div class="theme-option" onclick="switchTheme('light')">Light</div>
+      <div class="theme-option active" onclick="switchTheme('black')">⚫ Black</div>
+      <div class="theme-option" onclick="switchTheme('glass')">🔷 Glassmorphism</div>
+      <div class="theme-option" onclick="switchTheme('light')">☀️ Light</div>
     </div>
   </div>
 </header>
 
 <main>
   <div class="content">
-    <h1>Spring Virtual Office</h1>
-    <p class="subtitle">The intelligent workspace for modern teams</p>
+    <div class="tag">— AI-POWERED VIRTUAL OFFICE</div>
+    <h1>Your business, <span class="gold">always available</span>.</h1>
+    <p class="subtitle">Spring Virtual Office combines intelligent AI, empathetic support, and seamless scheduling — so your clients always feel heard, even when you're not there.</p>
     
     <div class="cta-buttons">
-      <button class="btn btn-primary" onclick="window.location.href='/chat'">Start Now</button>
-      <button class="btn btn-secondary" onclick="alert('Coming soon!')">Learn More</button>
+      <button class="btn btn-primary" onclick="window.location.href='/chat'">Start a Conversation →</button>
+      <button class="btn btn-secondary" onclick="alert('Coming soon!')">Book Appointment</button>
     </div>
 
     <div class="stats">
@@ -674,15 +740,11 @@ h1 {
   </div>
 </main>
 
-<div class="springbot-container" onclick="window.location.href='/chat'">
-  <div class="pulse-ring"></div>
-  <div class="springbot-tooltip">Chat with SpringBot →</div>
-  <div class="springbot">
-    <div class="springbot-emoji">🌿</div>
-    <div class="springbot-text">
-      <span class="springbot-status"></span>
-      SpringBot
-    </div>
+<div class="springbot-sidekick" onclick="window.location.href='/chat'">
+  <div class="springbot-avatar">
+    <div class="sidekick-emoji">🌿</div>
+    <div class="sidekick-status"></div>
+    <div class="springbot-label">Online</div>
   </div>
 </div>
 
@@ -694,35 +756,28 @@ function toggleThemeMenu() {
 }
 
 function switchTheme(theme) {
-  if (theme === 'light') {
-    document.body.style.background = '#ffffff';
-    document.body.style.color = '#000000';
-    document.querySelector('header').style.background = 'rgba(255, 255, 255, 0.5)';
-    document.querySelector('header').style.borderBottomColor = 'rgba(0, 0, 0, 0.08)';
-    document.querySelector('.subtitle').style.color = '#656565';
-    Array.from(document.querySelectorAll('.stat-label')).forEach(el => el.style.color = '#929292');
-  } else {
-    document.body.style.background = '#000000';
-    document.body.style.color = '#ffffff';
-    document.querySelector('header').style.background = 'rgba(0, 0, 0, 0.5)';
-    document.querySelector('header').style.borderBottomColor = 'rgba(255, 255, 255, 0.08)';
-    document.querySelector('.subtitle').style.color = '#a1a1a1';
-    Array.from(document.querySelectorAll('.stat-label')).forEach(el => el.style.color = '#707070');
-  }
-  
+  document.body.className = 'theme-' + theme;
   localStorage.setItem('springTheme', theme);
   
   const options = document.querySelectorAll('.theme-option');
   options.forEach(opt => opt.classList.remove('active'));
-  event.target.classList.add('active');
+  event.target.closest('.theme-option').classList.add('active');
   
   document.getElementById('themeMenu').classList.remove('active');
 }
 
 // Load saved theme
 window.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('springTheme') || 'dark';
-  switchTheme(savedTheme);
+  const savedTheme = localStorage.getItem('springTheme') || 'black';
+  document.body.className = 'theme-' + savedTheme;
+  
+  const options = document.querySelectorAll('.theme-option');
+  options.forEach(opt => {
+    if (opt.textContent.toLowerCase().includes(savedTheme === 'black' ? 'black' : 
+         savedTheme === 'glass' ? 'glass' : 'light')) {
+      opt.classList.add('active');
+    }
+  });
 });
 
 // Close menu when clicking outside
@@ -732,6 +787,18 @@ document.addEventListener('click', (e) => {
   if (!btn && menu.classList.contains('active')) {
     menu.classList.remove('active');
   }
+});
+
+// Interactive Sidekick Follow Effect
+const sidekick = document.querySelector('.springbot-sidekick');
+document.addEventListener('mousemove', (e) => {
+  const mouseX = e.clientX / window.innerWidth;
+  const mouseY = e.clientY / window.innerHeight;
+  
+  const offsetX = (mouseX - 0.5) * 20;
+  const offsetY = (mouseY - 0.5) * 20;
+  
+  sidekick.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
 });
 
 </script>
@@ -754,7 +821,7 @@ async def api_chat(payload: ChatRequest):
     # Check for crisis
     if detect_crisis(message):
         return {
-            "reply": "❤️ I'm concerned about what you're saying. If you're having thoughts of self-harm or harming others, please call 988 - the Suicide & Crisis Lifeline. It's available 24/7 and completely confidential. You deserve professional support."
+            "reply": "❤ I'm concerned about what you're saying. If you're having thoughts of self-harm or harming others, please call 988 - the Suicide & Crisis Lifeline. It's available 24/7 and completely confidential. You deserve professional support."
         }
 
     # Check for sadness
@@ -783,31 +850,4 @@ async def submit_ticket(ticket: TicketRequest):
                 "error": "Missing required fields"
             }, 400
 
-        # Send email and SMS
-        email_sent = send_email(name, email, phone, message)
-        sms_sent = send_sms(name, email, phone, message)
-
-        if email_sent or sms_sent:
-            return {
-                "success": True,
-                "message": "Ticket submitted successfully!",
-                "ticket_id": f"TKT-{datetime.now().strftime('%Y%m%d%H%M%S')}"
-            }
-        else:
-            return {
-                "success": False,
-                "error": "Failed to send notifications"
-            }, 500
-
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return {
-            "success": False,
-            "error": str(e)
-        }, 500
-
-@app.get("/health")
-async def health():
-    return {
-        "status": "online"
-    }
+        # Send email and
