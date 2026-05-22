@@ -69,7 +69,7 @@ async def generate_reply(message: str):
         client = OpenAI(api_key=api_key)
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             messages=[
                 {
                     "role": "system",
@@ -84,9 +84,17 @@ async def generate_reply(message: str):
             max_tokens=200
         )
 
-        return response.choices[0].message.content
+        return (
+            response.choices[0]
+            .message
+            .content
+            or fallback_reply(message)
+        )
 
-    except:
+    except Exception as e:
+
+        print("OPENAI ERROR:", str(e))
+
         return fallback_reply(message)
 
 
@@ -446,100 +454,11 @@ button{
 
 }
 
-body[data-theme="light"]{
-
-  --bg:#f8faf7;
-  --panel:#ffffff;
-  --text:#1f2933;
-  --muted:#6b7280;
-  --border:#e5e7eb;
-  --accent:#5f8f62;
-  --accent2:#38bdf8;
-
-}
-
-body[data-theme="emerald"]{
-
-  --bg:
-    linear-gradient(
-      135deg,
-      #03120d,
-      #071a14,
-      #020617
-    );
-
-  --panel:
-    rgba(6,78,59,0.28);
-
-  --text:#ecfdf5;
-
-  --muted:#a7f3d0;
-
-  --border:
-    rgba(74,222,128,0.18);
-
-  --accent:#34d399;
-
-  --accent2:#4ade80;
-
-}
-
-body[data-theme="cyber"]{
-
-  --bg:
-    linear-gradient(
-      135deg,
-      #020617,
-      #081120,
-      #071a2f
-    );
-
-  --panel:
-    rgba(8,47,73,0.4);
-
-  --text:#e0f2fe;
-
-  --muted:#7dd3fc;
-
-  --border:
-    rgba(56,189,248,0.25);
-
-  --accent:#38bdf8;
-
-  --accent2:#22d3ee;
-
-}
-
-body[data-theme="luxury"]{
-
-  --bg:
-    linear-gradient(
-      135deg,
-      #050505,
-      #111111,
-      #050505
-    );
-
-  --panel:
-    rgba(24,24,27,0.78);
-
-  --text:#fafaf9;
-
-  --muted:#a8a29e;
-
-  --border:#292524;
-
-  --accent:#d4af37;
-
-  --accent2:#facc15;
-
-}
-
 </style>
 
 </head>
 
-<body data-theme="black-glass">
+<body>
 
 <header>
 
@@ -563,40 +482,12 @@ Spring Virtual Office
 
 </div>
 
-<div class="right">
-
-<select id="themeSelect">
-
-<option value="black-glass">
-Black Glass
-</option>
-
-<option value="light">
-Light
-</option>
-
-<option value="emerald">
-Emerald
-</option>
-
-<option value="cyber">
-Cyber
-</option>
-
-<option value="luxury">
-Luxury
-</option>
-
-</select>
-
 <button
   class="clear"
   onclick="clearChat()"
 >
 Clear
 </button>
-
-</div>
 
 </header>
 
@@ -647,41 +538,6 @@ const input =
 
 const log =
   document.getElementById("log");
-
-const themeSelect =
-  document.getElementById("themeSelect");
-
-const savedTheme =
-  localStorage.getItem("springTheme")
-  || "black-glass";
-
-document.body.setAttribute(
-  "data-theme",
-  savedTheme
-);
-
-themeSelect.value =
-  savedTheme;
-
-themeSelect.addEventListener(
-  "change",
-  () => {
-
-    const theme =
-      themeSelect.value;
-
-    document.body.setAttribute(
-      "data-theme",
-      theme
-    );
-
-    localStorage.setItem(
-      "springTheme",
-      theme
-    );
-
-  }
-);
 
 function addBubble(text,type){
 
