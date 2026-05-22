@@ -1,5 +1,6 @@
 import os
 from typing import Optional
+from datetime import datetime
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,6 +11,20 @@ try:
     from openai import OpenAI
 except:
     OpenAI = None
+
+try:
+    from flask_mail import Mail, Message
+except:
+    Mail = None
+
+try:
+    from twilio.rest import Client as TwilioClient
+except:
+    TwilioClient = None
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Spring Virtual Office")
 
@@ -25,6 +40,11 @@ class ChatRequest(BaseModel):
     message: str
     name: Optional[str] = None
 
+class TicketRequest(BaseModel):
+    name: str
+    email: str
+    phone: Optional[str] = None
+    message: str
 
 SYSTEM_PROMPT = """
 You are SpringBot, the AI assistant for Spring Virtual Office.
@@ -32,9 +52,121 @@ You are futuristic, intelligent, professional, calm, and helpful.
 Keep responses concise and useful.
 """.strip()
 
+# Crisis keywords
+CRISIS_KEYWORDS = [
+    'hurt myself', 'kill myself', 'suicide', 'want to die', 'taking my life',
+    'harm myself', 'end it all', 'self harm', 'hurt others', 'hurt someone',
+    'going to hurt', 'want to hurt', 'thinking about harming', 'planning to hurt'
+]
+
+# Sadness keywords
+SAD_KEYWORDS = [
+    'sad', 'depressed', 'depression', 'anxious', 'anxiety', 'lonely',
+    'unhappy', 'miserable', 'worthless', 'hopeless', 'lost', 'stressed',
+    'overwhelmed', 'struggling', 'difficult time', 'hard time', 'breakup',
+    'heartbroken', 'alone', 'isolated', 'scared', 'afraid', 'worried'
+]
+
+def detect_crisis(message: str) -> bool:
+    lower = message.lower()
+    return any(keyword in lower for keyword in CRISIS_KEYWORDS)
+
+def detect_sadness(message: str) -> bool:
+    lower = message.lower()
+    return any(keyword in lower for keyword in SAD_KEYWORDS)
+
+def send_email(name: str, email: str, phone: str, message: str):
+    try:
+        from flask_mail import Mail, Message as FlaskMessage
+        from flask import Flask
+        
+        flask_app = Flask(__name__)
+        flask_app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+        flask_app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+        flask_app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', True)
+        flask_app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+        flask_app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+        
+        mail = Mail(flask_app)
+        
+        with flask_app.app_context():
+            msg = FlaskMessage(
+                subject=f"New Ticket Submitted - {name}",
+                recipients=[os.getenv('ADMIN_EMAIL', 'dillingsq2003@gmail.com')],
+                body=f"""
+A new ticket has been submitted:
+
+Name: {name}
+Email: {email}
+Phone: {phone or 'Not provided'}
+
+Message:
+{message}
+
+Submitted at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+                """
+            )
+            mail.send(msg)
+            
+            confirmation_msg = FlaskMessage(
+                subject="We Received Your Ticket - Spring Virtual Office",
+                recipients=[email],
+                body=f"""
+Hello {name},
+
+Thank you for contacting Spring Virtual Office! We've received your ticket and our team will review it shortly.
+
+Ticket Details:
+{message}
+
+We'll get back to you within 24 hours at this email address.
+
+Best regards,
+Spring Virtual Office Team
+                """
+            )
+            mail.send(confirmation_msg)
+        
+        return True
+    except Exception as e:
+        print(f"Email error: {str(e)}")
+        return False
+
+def send_sms(name: str, email: str, phone: str, message: str):
+    try:
+        if not TwilioClient:
+            return False
+        
+        account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+        auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+        twilio_phone = os.getenv('TWILIO_PHONE_NUMBER')
+        recipient_phone = os.getenv('RECIPIENT_PHONE')
+        
+        if not all([account_sid, auth_token, twilio_phone, recipient_phone]):
+            return False
+        
+        client = TwilioClient(account_sid, auth_token)
+        
+        sms_body = f"""
+New ticket from {name}:
+Email: {email}
+Phone: {phone or 'N/A'}
+
+Message: {message[:100]}...
+        """
+        
+        client.messages.create(
+            body=sms_body,
+            from_=twilio_phone,
+            to=recipient_phone
+        )
+        
+        return True
+    except Exception as e:
+        print(f"SMS error: {str(e)}")
+        return False
 
 def fallback_reply(message: str):
-
     lower = message.lower()
 
     if any(word in lower for word in [
@@ -58,14 +190,12 @@ def fallback_reply(message: str):
 
 
 async def generate_reply(message: str):
-
     api_key = os.getenv("OPENAI_API_KEY")
 
     if not api_key or OpenAI is None:
         return fallback_reply(message)
 
     try:
-
         client = OpenAI(api_key=api_key)
 
         response = client.chat.completions.create(
@@ -92,15 +222,12 @@ async def generate_reply(message: str):
         )
 
     except Exception as e:
-
         print("OPENAI ERROR:", str(e))
-
         return fallback_reply(message)
 
 
 @app.get("/")
 async def home():
-
     return HTMLResponse("""
 
 <!DOCTYPE html>
@@ -651,12 +778,23 @@ form.addEventListener(
 
 @app.post("/api/chat")
 async def api_chat(payload: ChatRequest):
-
     message = payload.message.strip()
 
     if not message:
         return {
             "reply": "Send me a message."
+        }
+
+    # Check for crisis
+    if detect_crisis(message):
+        return {
+            "reply": "❤️ I'm concerned about what you're saying. If you're having thoughts of self-harm or harming others, please call 988 - the Suicide & Crisis Lifeline. It's available 24/7 and completely confidential. You deserve professional support."
+        }
+
+    # Check for sadness
+    if detect_sadness(message):
+        return {
+            "reply": "💙 I notice you're going through a challenging time. If you need professional help, BetterHelp offers licensed therapists available 24/7. Visit https://www.betterhelp.com/get-started/ to get started. You're not alone."
         }
 
     reply = await generate_reply(message)
@@ -665,10 +803,45 @@ async def api_chat(payload: ChatRequest):
         "reply": reply
     }
 
+@app.post("/api/submit-ticket")
+async def submit_ticket(ticket: TicketRequest):
+    try:
+        name = ticket.name.strip()
+        email = ticket.email.strip()
+        phone = ticket.phone.strip() if ticket.phone else ""
+        message = ticket.message.strip()
+
+        if not name or not email or not message:
+            return {
+                "success": False,
+                "error": "Missing required fields"
+            }, 400
+
+        # Send email and SMS
+        email_sent = send_email(name, email, phone, message)
+        sms_sent = send_sms(name, email, phone, message)
+
+        if email_sent or sms_sent:
+            return {
+                "success": True,
+                "message": "Ticket submitted successfully!",
+                "ticket_id": f"TKT-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            }
+        else:
+            return {
+                "success": False,
+                "error": "Failed to send notifications"
+            }, 500
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return {
+            "success": False,
+            "error": str(e)
+        }, 500
 
 @app.get("/health")
 async def health():
-
     return {
         "status": "online"
     }
