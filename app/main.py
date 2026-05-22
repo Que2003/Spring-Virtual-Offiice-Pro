@@ -1,16 +1,14 @@
 import os
-from pathlib import Path
 from typing import Optional
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
 try:
     from openai import OpenAI
-except Exception:
+except:
     OpenAI = None
 
 app = FastAPI(title="Spring Virtual Office")
@@ -23,12 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-STATIC_DIR = Path(__file__).resolve().parent / "static"
-
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-
-
 class ChatRequest(BaseModel):
     message: str
     name: Optional[str] = None
@@ -36,23 +28,22 @@ class ChatRequest(BaseModel):
 
 SYSTEM_PROMPT = """
 You are SpringBot, the AI assistant for Spring Virtual Office.
-You are futuristic, intelligent, calm, professional, and conversational.
-Keep answers concise, helpful, emotionally intelligent, and useful.
+You are futuristic, intelligent, professional, calm, and helpful.
+Keep responses concise and useful.
 """.strip()
 
 
-def fallback_reply(message: str) -> str:
+def fallback_reply(message: str):
 
     lower = message.lower()
 
     if any(word in lower for word in [
         "sad", "depressed", "anxious",
-        "stressed", "hurt", "lonely"
+        "hurt", "lonely", "stressed"
     ]):
         return (
-            "I hear you. Take a moment to breathe and slow things down. "
-            "I'm here with you. If this feels urgent or unsafe, "
-            "please contact someone you trust or emergency services."
+            "I hear you. Take a breath and slow things down. "
+            "I'm here with you."
         )
 
     if any(word in lower for word in [
@@ -60,15 +51,13 @@ def fallback_reply(message: str) -> str:
     ]):
         return (
             "I can help schedule that. "
-            "Tell me the day, time, and what the appointment is for."
+            "Tell me the day and time."
         )
 
-    return (
-        "SpringBot is online and ready to help."
-    )
+    return "SpringBot is online and ready to help."
 
 
-async def generate_reply(message: str) -> str:
+async def generate_reply(message: str):
 
     api_key = os.getenv("OPENAI_API_KEY")
 
@@ -80,7 +69,7 @@ async def generate_reply(message: str) -> str:
         client = OpenAI(api_key=api_key)
 
         response = client.chat.completions.create(
-            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
@@ -92,20 +81,17 @@ async def generate_reply(message: str) -> str:
                 }
             ],
             temperature=0.7,
-            max_tokens=250
+            max_tokens=200
         )
 
-        return (
-            response.choices[0].message.content
-            or fallback_reply(message)
-        )
+        return response.choices[0].message.content
 
-    except Exception:
+    except:
         return fallback_reply(message)
 
 
 @app.get("/")
-def home():
+async def home():
 
     return HTMLResponse("""
 
@@ -114,7 +100,7 @@ def home():
 
 <head>
 
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 
 <meta
   name="viewport"
@@ -137,23 +123,15 @@ Spring Virtual Office
 :root{
 
   --bg:
-    radial-gradient(circle at top left,
-    rgba(74,222,128,0.14),
-    transparent 25%),
-
-    radial-gradient(circle at bottom right,
-    rgba(56,189,248,0.12),
-    transparent 25%),
-
     linear-gradient(
       135deg,
-      #050816 0%,
-      #0b1120 45%,
-      #020617 100%
+      #050816,
+      #0b1120,
+      #020617
     );
 
   --panel:
-    rgba(15,23,42,0.68);
+    rgba(15,23,42,0.72);
 
   --text:#f8fafc;
 
@@ -173,7 +151,6 @@ body{
   margin:0;
 
   font-family:
-    Inter,
     Arial,
     sans-serif;
 
@@ -199,15 +176,13 @@ header{
 
   align-items:center;
 
-  gap:12px;
-
   padding:16px;
+
+  background:
+    rgba(2,6,23,0.78);
 
   border-bottom:
     1px solid var(--border);
-
-  background:
-    rgba(2,6,23,0.7);
 
   backdrop-filter:blur(20px);
 
@@ -229,7 +204,7 @@ header{
 
   height:52px;
 
-  border-radius:18px;
+  border-radius:16px;
 
   display:grid;
 
@@ -237,15 +212,12 @@ header{
 
   background:
     linear-gradient(
-      145deg,
-      rgba(74,222,128,0.25),
-      rgba(56,189,248,0.14)
+      135deg,
+      rgba(74,222,128,0.3),
+      rgba(56,189,248,0.2)
     );
 
-  border:
-    1px solid rgba(255,255,255,0.15);
-
-  font-size:26px;
+  font-size:28px;
 
 }
 
@@ -261,19 +233,23 @@ header{
 
   color:var(--accent);
 
+  margin-top:3px;
+
   font-size:14px;
 
 }
 
-.header-actions{
+.right{
 
   display:flex;
 
   gap:10px;
 
+  align-items:center;
+
 }
 
-.theme-select,
+select,
 .clear{
 
   border:
@@ -288,8 +264,6 @@ header{
 
   padding:10px 14px;
 
-  font-weight:700;
-
 }
 
 main{
@@ -298,9 +272,9 @@ main{
 
   overflow-y:auto;
 
-  padding:18px;
+  padding:20px;
 
-  padding-bottom:240px;
+  padding-bottom:220px;
 
   display:flex;
 
@@ -312,20 +286,20 @@ main{
 
 .welcome{
 
-  margin-top:40px;
+  margin-top:30px;
 
-  padding:36px 22px;
-
-  border-radius:30px;
+  background:var(--panel);
 
   border:
     1px solid var(--border);
 
-  background:var(--panel);
+  border-radius:30px;
 
-  backdrop-filter:blur(25px);
+  padding:40px 24px;
 
   text-align:center;
+
+  backdrop-filter:blur(25px);
 
 }
 
@@ -341,9 +315,9 @@ main{
 
   color:var(--muted);
 
-  margin-top:16px;
-
   line-height:1.7;
+
+  margin-top:16px;
 
 }
 
@@ -368,8 +342,8 @@ main{
   background:
     linear-gradient(
       135deg,
-      rgba(74,222,128,0.22),
-      rgba(56,189,248,0.18)
+      rgba(74,222,128,0.25),
+      rgba(56,189,248,0.2)
     );
 
 }
@@ -395,8 +369,6 @@ form{
 
   bottom:120px;
 
-  z-index:99999;
-
   display:flex;
 
   gap:12px;
@@ -404,12 +376,12 @@ form{
   padding:14px;
 
   background:
-    rgba(2,6,23,0.78);
-
-  backdrop-filter:blur(25px);
+    rgba(2,6,23,0.82);
 
   border-top:
     1px solid var(--border);
+
+  backdrop-filter:blur(25px);
 
 }
 
@@ -432,12 +404,6 @@ input{
   color:var(--text);
 
   outline:none;
-
-}
-
-input::placeholder{
-
-  color:var(--muted);
 
 }
 
@@ -467,14 +433,14 @@ button{
 @media (max-width:700px){
 
   form{
-    bottom:150px;
+    bottom:140px;
   }
 
   .welcome h1{
     font-size:28px;
   }
 
-  .header-actions{
+  .right{
     flex-direction:column;
   }
 
@@ -597,12 +563,9 @@ Spring Virtual Office
 
 </div>
 
-<div class="header-actions">
+<div class="right">
 
-<select
-  id="themeSelect"
-  class="theme-select"
->
+<select id="themeSelect">
 
 <option value="black-glass">
 Black Glass
@@ -840,11 +803,6 @@ async def api_chat(payload: ChatRequest):
             "reply": "Send me a message."
         }
 
-    if len(message) > 1000:
-        return {
-            "reply": "Message too long."
-        }
-
     reply = await generate_reply(message)
 
     return {
@@ -853,7 +811,7 @@ async def api_chat(payload: ChatRequest):
 
 
 @app.get("/health")
-def health():
+async def health():
 
     return {
         "status": "online"
