@@ -2,93 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spring Virtual Office Pro</title>
-  <meta name="description" content="Spring Virtual Office Pro with SpringBot, an intelligent virtual assistant for support, scheduling, answers, music, and emotional check ins." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Spring Virtual Office</title>
+
   <style>
-    :root {
-      --bg: #07111f;
-      --panel: rgba(255, 255, 255, 0.11);
-      --panel-strong: rgba(255, 255, 255, 0.18);
-      --text: #eef7ff;
-      --muted: #a9c1d9;
-      --line: rgba(255, 255, 255, 0.2);
-      --blue: #66d9ff;
-      --cyan: #9cf6ff;
-      --green: #8dffcb;
-      --shadow: rgba(0, 0, 0, 0.35);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
 
     body {
-      min-height: 100vh;
-      font-family: Inter, Segoe UI, Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 10% 10%, rgba(102, 217, 255, 0.22), transparent 30%),
-        radial-gradient(circle at 90% 20%, rgba(141, 255, 203, 0.14), transparent 28%),
-        linear-gradient(135deg, #07111f 0%, #0b1d33 45%, #06101d 100%);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent 85%);
-    }
-
-    .orb {
-      position: fixed;
-      width: 280px;
-      height: 280px;
-      border-radius: 999px;
-      filter: blur(8px);
-      opacity: 0.32;
-      animation: float 9s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    .orb.one {
-      top: 13%;
-      left: 7%;
-      background: rgba(102, 217, 255, 0.36);
-    }
-
-    .orb.two {
-      right: 8%;
-      bottom: 12%;
-      background: rgba(141, 255, 203, 0.28);
-      animation-delay: 1.6s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-24px) scale(1.04); }
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8faf7;
+      color: #1f2933;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 28px 0;
+      padding: 18px;
+      border-bottom: 1px solid #e5e7eb;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 18px;
+      gap: 12px;
     }
 
     .brand {
@@ -96,551 +32,225 @@
       align-items: center;
       gap: 12px;
       font-weight: 800;
-      letter-spacing: 0.3px;
     }
 
     .logo {
-      width: 42px;
-      height: 42px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
       display: grid;
       place-items: center;
-      border-radius: 16px;
-      background: linear-gradient(145deg, rgba(255,255,255,0.32), rgba(255,255,255,0.08));
-      border: 1px solid var(--line);
-      box-shadow: 0 14px 45px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.35);
-    }
-
-    nav {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      font-weight: 650;
-      font-size: 0.95rem;
-      transition: 0.2s ease;
-    }
-
-    nav a:hover {
-      color: var(--text);
-    }
-
-    .shell {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto 48px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      align-items: center;
-      gap: 28px;
-      min-height: 72vh;
-      padding: 48px 0 28px;
-    }
-
-    .glass {
-      background: linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06));
-      border: 1px solid var(--line);
-      border-radius: 34px;
-      box-shadow: 0 28px 80px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.24);
-      backdrop-filter: blur(22px);
-    }
-
-    .hero-card {
-      padding: 42px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 9px 13px;
-      border-radius: 999px;
-      color: var(--cyan);
-      background: rgba(102, 217, 255, 0.11);
-      border: 1px solid rgba(156, 246, 255, 0.28);
-      font-size: 0.9rem;
-      font-weight: 750;
-      margin-bottom: 22px;
-    }
-
-    h1 {
-      font-size: clamp(2.5rem, 6vw, 5.5rem);
-      line-height: 0.96;
-      letter-spacing: -0.07em;
-      margin-bottom: 22px;
-    }
-
-    h1 span {
-      color: var(--blue);
-      text-shadow: 0 0 32px rgba(102, 217, 255, 0.42);
-    }
-
-    .lead {
-      color: var(--muted);
-      font-size: clamp(1.05rem, 2vw, 1.25rem);
-      line-height: 1.75;
-      max-width: 720px;
-      margin-bottom: 28px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 14px 18px;
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 800;
-      background: rgba(255,255,255,0.12);
-      box-shadow: 0 16px 42px rgba(0,0,0,0.22);
-      transition: 0.2s ease;
-    }
-
-    .btn.primary {
-      color: #03111c;
-      background: linear-gradient(135deg, var(--blue), var(--green));
-      border-color: transparent;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .bot-window {
-      overflow: hidden;
-      transform: perspective(1000px) rotateY(-3deg) rotateX(2deg);
-      animation: panelIn 850ms ease both;
-    }
-
-    @keyframes panelIn {
-      from { opacity: 0; transform: perspective(1000px) rotateY(-8deg) translateY(24px); }
-      to { opacity: 1; transform: perspective(1000px) rotateY(-3deg) rotateX(2deg); }
-    }
-
-    .window-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .dots {
-      display: flex;
-      gap: 7px;
-    }
-
-    .dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.35);
+      background: #5f8f62;
+      color: white;
+      font-size: 24px;
     }
 
     .status {
-      color: var(--green);
-      font-size: 0.86rem;
-      font-weight: 800;
+      color: #6b8f71;
+      font-size: 14px;
     }
 
-    .bot-body {
-      padding: 24px;
+    .clear {
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 600;
     }
 
-    .bot-header {
+    main {
+      flex: 1;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      padding: 16px;
       gap: 14px;
-      margin-bottom: 22px;
+      overflow: hidden;
     }
 
-    .bot-avatar {
-      width: 58px;
-      height: 58px;
-      border-radius: 20px;
-      display: grid;
-      place-items: center;
-      font-size: 1.55rem;
-      background: linear-gradient(145deg, rgba(102,217,255,0.32), rgba(141,255,203,0.2));
-      border: 1px solid rgba(255,255,255,0.26);
-    }
-
-    .bot-title h2 {
-      font-size: 1.4rem;
-      margin-bottom: 4px;
-    }
-
-    .bot-title p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .chat {
-      display: grid;
+    #log {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
       gap: 12px;
-      margin-bottom: 20px;
+      padding-bottom: 8px;
+    }
+
+    .welcome {
+      margin: auto 0;
+      padding: 28px 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      text-align: center;
+      background: white;
+    }
+
+    .welcome h1 {
+      font-size: 30px;
+      margin: 10px 0;
+    }
+
+    .welcome p {
+      color: #6b7280;
+      line-height: 1.5;
+      font-size: 16px;
     }
 
     .bubble {
-      padding: 13px 15px;
+      max-width: 85%;
+      padding: 12px 14px;
       border-radius: 18px;
-      color: #eaf8ff;
-      line-height: 1.45;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.08);
-      max-width: 88%;
+      line-height: 1.4;
     }
 
-    .bubble.user {
-      justify-self: end;
-      background: rgba(102,217,255,0.16);
+    .user {
+      align-self: flex-end;
+      background: #dbeafe;
     }
 
-    .bubble.bot {
-      justify-self: start;
-      background: rgba(141,255,203,0.11);
+    .bot {
+      align-self: flex-start;
+      background: white;
+      border: 1px solid #e5e7eb;
     }
 
-    .input-row {
+    form {
       display: flex;
       gap: 10px;
       padding: 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.16);
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      position: sticky;
+      bottom: 0;
     }
 
-    .input-row input {
+    input {
       flex: 1;
       min-width: 0;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+    }
+
+    button {
       border: 0;
-      outline: 0;
-      background: transparent;
-      color: var(--text);
-      padding: 12px;
-      font-size: 0.95rem;
+      border-radius: 14px;
+      padding: 0 18px;
+      background: #5f8f62;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
     }
 
-    .input-row button {
-      border: 0;
-      border-radius: 15px;
-      padding: 0 16px;
-      font-weight: 900;
-      color: #03111c;
-      background: linear-gradient(135deg, var(--blue), var(--green));
-      cursor: pointer;
-    }
-
-    section {
-      margin-top: 30px;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 4vw, 3.25rem);
-      letter-spacing: -0.05em;
-      margin-bottom: 14px;
-    }
-
-    .section-copy {
-      color: var(--muted);
-      font-size: 1.07rem;
-      line-height: 1.7;
-      max-width: 840px;
-      margin-bottom: 22px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .feature {
-      padding: 24px;
-      min-height: 190px;
-    }
-
-    .feature-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 18px;
-      background: rgba(102,217,255,0.14);
-      border: 1px solid rgba(156,246,255,0.22);
-      font-size: 1.3rem;
-    }
-
-    .feature h3 {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
-
-    .feature p {
-      color: var(--muted);
-      line-height: 1.62;
-    }
-
-    .springbot-section {
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 20px;
-      align-items: stretch;
-      padding: 26px;
-    }
-
-    .capabilities {
-      display: grid;
-      gap: 12px;
-    }
-
-    .capability {
-      padding: 15px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.13);
-      background: rgba(255,255,255,0.07);
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .capability strong {
-      color: var(--text);
-    }
-
-    .mini-dashboard {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .metric {
-      padding: 20px;
-      border-radius: 22px;
-      background: rgba(0,0,0,0.16);
-      border: 1px solid rgba(255,255,255,0.13);
-    }
-
-    .metric b {
-      display: block;
-      font-size: 2rem;
-      color: var(--cyan);
-      margin-bottom: 6px;
-    }
-
-    .metric span {
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    footer {
-      width: min(1180px, calc(100% - 32px));
-      margin: 46px auto 28px;
-      padding: 24px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    @media (max-width: 920px) {
+    @media (max-width: 520px) {
       header {
-        align-items: flex-start;
-        flex-direction: column;
+        padding: 14px;
       }
 
-      nav {
-        justify-content: flex-start;
+      .brand-text strong {
+        font-size: 17px;
       }
 
-      .hero,
-      .springbot-section {
-        grid-template-columns: 1fr;
+      .clear {
+        padding: 9px 11px;
+        font-size: 13px;
       }
 
-      .bot-window {
-        transform: none;
-      }
-
-      .grid,
-      .mini-dashboard {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-card {
-        padding: 28px;
+      .welcome h1 {
+        font-size: 26px;
       }
     }
   </style>
 </head>
-<body>
-  <div class="orb one"></div>
-  <div class="orb two"></div>
 
+<body>
   <header>
     <div class="brand">
-      <div class="logo">🌱</div>
-      <span>Spring Virtual Office Pro</span>
+      <div class="logo">🌿</div>
+      <div class="brand-text">
+        <strong>Spring Virtual Office</strong>
+        <div class="status">● AI Assistant · Online</div>
+      </div>
     </div>
-    <nav>
-      <a href="#features">Features</a>
-      <a href="#springbot">SpringBot</a>
-      <a href="#contact">Contact</a>
-    </nav>
+
+    <button class="clear" onclick="clearChat()">Clear</button>
   </header>
 
-  <main class="shell">
-    <section class="hero">
-      <div class="hero-card glass">
-        <div class="eyebrow">AI powered virtual office experience</div>
-        <h1>Run your office with <span>SpringBot</span>.</h1>
-        <p class="lead">
-          Spring Virtual Office Pro gives users a clean digital workspace powered by an intelligent assistant that can answer questions, guide visitors, support scheduling, play music, and alert the team when someone needs personal support.
+  <main>
+    <div id="log">
+      <div class="welcome" id="welcome">
+        <div style="font-size:42px;">🌿</div>
+        <h1>Welcome to Spring Virtual Office</h1>
+        <p>
+          I'm your AI assistant. Ask me anything, book an appointment,
+          request support, or just chat.
         </p>
-        <div class="actions">
-          <a class="btn primary" href="#springbot">Meet SpringBot</a>
-          <a class="btn" href="#features">View Features</a>
-        </div>
       </div>
-
-      <aside class="bot-window glass" aria-label="SpringBot chat preview">
-        <div class="window-top">
-          <div class="dots">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-          </div>
-          <div class="status">SpringBot Online</div>
-        </div>
-        <div class="bot-body">
-          <div class="bot-header">
-            <div class="bot-avatar">🤖</div>
-            <div class="bot-title">
-              <h2>SpringBot</h2>
-              <p>Virtual assistant for support, answers, music, and check ins.</p>
-            </div>
-          </div>
-          <div class="chat" id="chatLog">
-            <div class="bubble user">I need help scheduling a conversation.</div>
-            <div class="bubble bot">I can help. Tell me what is going on, and I can notify the team so someone can follow up with care.</div>
-            <div class="bubble user">Can you answer questions too?</div>
-            <div class="bubble bot">Yes. I can guide users, answer office questions, and support common tasks from one place.</div>
-          </div>
-          <form class="input-row" id="springbotForm">
-            <input id="springbotInput" type="text" placeholder="Ask SpringBot something..." aria-label="Ask SpringBot something" />
-            <button type="submit">Send</button>
-          </form>
-        </div>
-      </aside>
-    </section>
-
-    <section id="features">
-      <h2 class="section-title">Built for real users, not just a demo.</h2>
-      <p class="section-copy">
-        The platform is designed around fast support, clear communication, and an AI assisted experience that makes the office feel easier to use.
-      </p>
-      <div class="grid">
-        <article class="feature glass">
-          <div class="feature-icon">💬</div>
-          <h3>Smart conversations</h3>
-          <p>SpringBot can guide visitors, answer questions, and make the virtual office feel more personal.</p>
-        </article>
-        <article class="feature glass">
-          <div class="feature-icon">📅</div>
-          <h3>Scheduling support</h3>
-          <p>Users can request help, ask for appointments, and get routed toward the next step.</p>
-        </article>
-        <article class="feature glass">
-          <div class="feature-icon">🎧</div>
-          <h3>Music and atmosphere</h3>
-          <p>SpringBot can support a calming office experience with music focused features.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="springbot" class="springbot-section glass">
-      <div>
-        <h2 class="section-title">SpringBot is now part of the website.</h2>
-        <p class="section-copy">
-          SpringBot is the assistant layer for Spring Virtual Office Pro. It is built to make the platform more helpful, empathetic, and interactive for users who need answers, support, or someone to follow up.
-        </p>
-        <div class="capabilities">
-          <div class="capability"><strong>Answers:</strong> Helps users ask questions and get clear guidance.</div>
-          <div class="capability"><strong>Care check ins:</strong> Recognizes when users may need a human conversation.</div>
-          <div class="capability"><strong>Office support:</strong> Helps with scheduling, navigation, and common requests.</div>
-          <div class="capability"><strong>Engagement:</strong> Adds music, conversation, and a more human feel to the platform.</div>
-        </div>
-      </div>
-
-      <div class="mini-dashboard">
-        <div class="metric">
-          <b>24/7</b>
-          <span>Always available virtual assistant experience.</span>
-        </div>
-        <div class="metric">
-          <b>AI</b>
-          <span>Designed for intelligent answers and automation workflows.</span>
-        </div>
-        <div class="metric">
-          <b>Care</b>
-          <span>Supports emotional check ins and human follow up.</span>
-        </div>
-        <div class="metric">
-          <b>Office</b>
-          <span>Connects users to scheduling, support, and guidance.</span>
-        </div>
-      </div>
-    </section>
+    </div>
   </main>
 
-  <footer id="contact" class="glass">
-    <p>Spring Virtual Office Pro powered by SpringBot. Built to make support faster, smarter, and more human.</p>
-  </footer>
+  <form id="form">
+    <input
+      id="message"
+      type="text"
+      placeholder="Type your message..."
+      autocomplete="off"
+      aria-label="Type your message"
+    />
+    <button type="submit">Send</button>
+  </form>
 
   <script>
-    const form = document.getElementById('springbotForm');
-    const input = document.getElementById('springbotInput');
-    const chatLog = document.getElementById('chatLog');
+    const form = document.getElementById("form");
+    const input = document.getElementById("message");
+    const log = document.getElementById("log");
+    const welcome = document.getElementById("welcome");
 
-    const replies = [
-      'SpringBot is ready. I can help with questions, scheduling, support, and office guidance.',
-      'I can route this to the right place and help make the next step clear.',
-      'If this is about how someone is feeling, SpringBot can flag it so a human can follow up with care.',
-      'That is exactly what Spring Virtual Office Pro is built for: faster support with a more human experience.'
-    ];
+    function addBubble(text, type) {
+      if (welcome) welcome.style.display = "none";
 
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
+      const bubble = document.createElement("div");
+      bubble.className = "bubble " + type;
+      bubble.textContent = text;
+      log.appendChild(bubble);
+      log.scrollTop = log.scrollHeight;
+    }
 
-      const userBubble = document.createElement('div');
-      userBubble.className = 'bubble user';
-      userBubble.textContent = text;
-      chatLog.appendChild(userBubble);
-      input.value = '';
+    function clearChat() {
+      log.innerHTML = "";
+      const card = document.createElement("div");
+      card.className = "welcome";
+      card.id = "welcome";
+      card.innerHTML = `
+        <div style="font-size:42px;">🌿</div>
+        <h1>Welcome to Spring Virtual Office</h1>
+        <p>I'm your AI assistant. Ask me anything, book an appointment, request support, or just chat.</p>
+      `;
+      log.appendChild(card);
+    }
 
-      window.setTimeout(() => {
-        const botBubble = document.createElement('div');
-        botBubble.className = 'bubble bot';
-        botBubble.textContent = replies[Math.floor(Math.random() * replies.length)];
-        chatLog.appendChild(botBubble);
-        chatLog.scrollTop = chatLog.scrollHeight;
-      }, 450);
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const message = input.value.trim();
+      if (!message) return;
+
+      addBubble(message, "user");
+      input.value = "";
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        addBubble(data.reply || "SpringBot is online, but I could not read that response.", "bot");
+      } catch {
+        addBubble("Connection issue. Please try again.", "bot");
+      }
     });
   </script>
 </body>
