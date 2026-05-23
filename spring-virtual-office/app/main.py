@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from chatbot_routes import router as chatbot_router
+import router as chatbot_router
 
 app = FastAPI()
 
