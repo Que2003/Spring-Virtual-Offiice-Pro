@@ -1,3 +1,13 @@
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from chatbot_routes import router as chatbot_router
+
+app = FastAPI()
+
+# Include chatbot routes (ticket submission, /chat page, etc.)
+app.include_router(chatbot_router)
+
+
 @app.get("/")
 async def home():
     return HTMLResponse("""
@@ -106,9 +116,9 @@ footer{text-align:center;padding:40px;color:#5d6d80}
 
   <div class="demo">
     <div class="chatTop">🌿 Spring AI</div>
-    <div class="bubble ai">Hello — I’m Spring. I can answer questions or help book an appointment. What brings you here?</div>
-    <div class="bubble user">I’d like to book a consult next Tuesday.</div>
-    <div class="bubble ai">Absolutely. What time works best for you, and what’s your name?</div>
+    <div class="bubble ai">Hello — I'm Spring. I can answer questions or help book an appointment. What brings you here?</div>
+    <div class="bubble user">I'd like to book a consult next Tuesday.</div>
+    <div class="bubble ai">Absolutely. What time works best for you, and what's your name?</div>
   </div>
 </main>
 
