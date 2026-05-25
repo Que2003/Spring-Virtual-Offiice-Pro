@@ -11,16 +11,114 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg: #f5f5f5;
+            --surface: #fff;
+            --border: #e0e0e0;
+            --text: #333;
+            --muted: #999;
+            --accent: #2d7a4a;
+            --accent2: #1f5632;
+        }
+
+        .t-midnight {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #21262d;
+            --text: #e6edf3;
+            --muted: #7d8590;
+            --accent: #7ee787;
+            --accent2: #ffa657;
+        }
+
+        .t-blossom {
+            --bg: #fff0f5;
+            --surface: #fff8fb;
+            --border: #f7c5d8;
+            --text: #3a1a2a;
+            --muted: #9a6070;
+            --accent: #d4547a;
+            --accent2: #f0a0b8;
+        }
+
+        .t-ocean {
+            --bg: #e8f4f8;
+            --surface: #fff;
+            --border: #b8d8e8;
+            --text: #0a2540;
+            --muted: #4a6a80;
+            --accent: #0070b8;
+            --accent2: #00b4d8;
+        }
+
+        .t-neon {
+            --bg: #000;
+            --surface: #0a0a0a;
+            --border: #1a1a2e;
+            --text: #e0e8ff;
+            --muted: #4060a0;
+            --accent: #00d4ff;
+            --accent2: #7b00ff;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* THEME BAR */
+        .theme-bar {
+            background: var(--surface);
+            padding: 12px 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .theme-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            align-self: center;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--muted);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .theme-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
         }
 
         /* HEADER & NAV */
         header {
-            background: white;
+            background: var(--surface);
             padding: 20px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             position: sticky;
@@ -43,7 +141,7 @@
         .logo {
             font-size: 24px;
             font-weight: bold;
-            color: #2d7a4a;
+            color: var(--accent);
         }
 
         nav ul {
@@ -54,16 +152,16 @@
 
         nav a {
             text-decoration: none;
-            color: #666;
+            color: var(--muted);
             transition: color 0.3s;
         }
 
         nav a:hover {
-            color: #2d7a4a;
+            color: var(--accent);
         }
 
         .btn-primary {
-            background: #2d7a4a;
+            background: var(--accent);
             color: white;
             padding: 10px 24px;
             border: none;
@@ -74,27 +172,12 @@
         }
 
         .btn-primary:hover {
-            background: #1f5632;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #2d7a4a;
-            padding: 10px 24px;
-            border: 2px solid #2d7a4a;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .btn-secondary:hover {
-            background: #f0f0f0;
+            background: var(--accent2);
         }
 
         /* HERO */
         .hero {
-            background: linear-gradient(135deg, #2d7a4a 0%, #1f5632 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
             color: white;
             padding: 120px 20px;
             text-align: center;
@@ -124,7 +207,7 @@
 
         .btn-light {
             background: white;
-            color: #2d7a4a;
+            color: var(--accent);
             padding: 12px 32px;
             border: none;
             border-radius: 6px;
@@ -141,36 +224,37 @@
 
         /* STATS */
         .stats {
-            background: white;
+            background: var(--surface);
             padding: 60px 20px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 40px;
             text-align: center;
+            border-bottom: 1px solid var(--border);
         }
 
         .stat-item h3 {
             font-size: 36px;
-            color: #2d7a4a;
+            color: var(--accent);
             margin-bottom: 10px;
         }
 
         .stat-item p {
-            color: #999;
+            color: var(--muted);
             font-size: 14px;
         }
 
         /* FEATURES */
         .features {
             padding: 80px 20px;
-            background: #fafafa;
+            background: var(--bg);
         }
 
         .features h2 {
             text-align: center;
             font-size: 36px;
             margin-bottom: 50px;
-            color: #333;
+            color: var(--text);
         }
 
         .features-grid {
@@ -180,15 +264,17 @@
         }
 
         .feature-card {
-            background: white;
+            background: var(--surface);
             padding: 30px;
             border-radius: 8px;
+            border: 1px solid var(--border);
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transition: all 0.3s;
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
+            border-color: var(--accent);
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
 
@@ -200,11 +286,11 @@
         .feature-card h3 {
             font-size: 18px;
             margin-bottom: 10px;
-            color: #333;
+            color: var(--text);
         }
 
         .feature-card p {
-            color: #666;
+            color: var(--muted);
             font-size: 14px;
             line-height: 1.8;
         }
@@ -212,14 +298,15 @@
         /* ROOMS */
         .rooms {
             padding: 80px 20px;
-            background: white;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
         }
 
         .rooms h2 {
             text-align: center;
             font-size: 36px;
             margin-bottom: 50px;
-            color: #333;
+            color: var(--text);
         }
 
         .rooms-grid {
@@ -229,17 +316,18 @@
         }
 
         .room-card {
-            background: #f9f9f9;
+            background: var(--bg);
             padding: 25px;
             border-radius: 8px;
-            border-left: 4px solid #2d7a4a;
+            border-left: 4px solid var(--accent);
             transition: all 0.3s;
             cursor: pointer;
         }
 
         .room-card:hover {
-            background: #f0f0f0;
+            background: var(--surface);
             transform: translateX(5px);
+            border-color: var(--accent2);
         }
 
         .room-icon {
@@ -250,25 +338,25 @@
         .room-card h3 {
             font-size: 16px;
             margin-bottom: 8px;
-            color: #333;
+            color: var(--text);
         }
 
         .room-card p {
-            color: #999;
+            color: var(--muted);
             font-size: 13px;
         }
 
         /* TESTIMONIALS */
         .testimonials {
             padding: 80px 20px;
-            background: #fafafa;
+            background: var(--bg);
         }
 
         .testimonials h2 {
             text-align: center;
             font-size: 36px;
             margin-bottom: 50px;
-            color: #333;
+            color: var(--text);
         }
 
         .testimonials-grid {
@@ -278,15 +366,16 @@
         }
 
         .testimonial {
-            background: white;
+            background: var(--surface);
             padding: 30px;
             border-radius: 8px;
+            border: 1px solid var(--border);
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
         .testimonial p {
             font-style: italic;
-            color: #555;
+            color: var(--text);
             margin-bottom: 20px;
             font-size: 15px;
         }
@@ -301,7 +390,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #2d7a4a;
+            background: var(--accent);
             color: white;
             display: flex;
             align-items: center;
@@ -312,20 +401,20 @@
 
         .author-info h4 {
             font-size: 14px;
-            color: #333;
+            color: var(--text);
             margin: 0;
         }
 
         .author-info p {
             font-size: 12px;
-            color: #999;
+            color: var(--muted);
             margin: 0;
             font-style: normal;
         }
 
         /* FOOTER */
         footer {
-            background: #2d7a4a;
+            background: var(--accent);
             color: white;
             padding: 40px 20px;
             text-align: center;
@@ -342,7 +431,7 @@
             right: 30px;
             width: 60px;
             height: 60px;
-            background: #2d7a4a;
+            background: var(--accent);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -356,7 +445,6 @@
 
         .chat-bubble:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
         }
 
         .chat-box {
@@ -365,13 +453,14 @@
             right: 30px;
             width: 380px;
             height: 500px;
-            background: white;
+            background: var(--surface);
             border-radius: 12px;
             box-shadow: 0 5px 40px rgba(0,0,0,0.16);
             display: none;
             flex-direction: column;
             z-index: 999;
             overflow: hidden;
+            border: 1px solid var(--border);
         }
 
         .chat-box.active {
@@ -379,7 +468,7 @@
         }
 
         .chat-header {
-            background: #2d7a4a;
+            background: var(--accent);
             color: white;
             padding: 20px;
             display: flex;
@@ -418,35 +507,37 @@
         }
 
         .message.bot {
-            background: #f0f0f0;
-            color: #333;
+            background: var(--border);
+            color: var(--text);
             align-self: flex-start;
         }
 
         .message.user {
-            background: #2d7a4a;
+            background: var(--accent);
             color: white;
             align-self: flex-end;
         }
 
         .chat-input-area {
             padding: 15px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border);
             display: flex;
             gap: 10px;
         }
 
         .chat-input {
             flex: 1;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 6px;
             padding: 10px;
             font-size: 14px;
             font-family: inherit;
+            background: var(--surface);
+            color: var(--text);
         }
 
         .chat-send {
-            background: #2d7a4a;
+            background: var(--accent);
             color: white;
             border: none;
             border-radius: 6px;
@@ -457,7 +548,7 @@
         }
 
         .chat-send:hover {
-            background: #1f5632;
+            background: var(--accent2);
         }
 
         /* RESPONSIVE */
@@ -468,10 +559,6 @@
 
             .hero h1 {
                 font-size: 32px;
-            }
-
-            .hero p {
-                font-size: 16px;
             }
 
             .features h2, .rooms h2, .testimonials h2 {
@@ -485,14 +572,22 @@
                 right: 15px;
                 left: 15px;
             }
-
-            .stat-item h3 {
-                font-size: 28px;
-            }
         }
     </style>
 </head>
 <body>
+    <!-- THEME BAR -->
+    <div class="theme-bar">
+        <span class="theme-label">Theme:</span>
+        <div class="theme-buttons">
+            <button class="theme-btn active" onclick="setTheme('', this)">Spring</button>
+            <button class="theme-btn" onclick="setTheme('t-midnight', this)">Midnight</button>
+            <button class="theme-btn" onclick="setTheme('t-blossom', this)">Blossom</button>
+            <button class="theme-btn" onclick="setTheme('t-ocean', this)">Ocean</button>
+            <button class="theme-btn" onclick="setTheme('t-neon', this)">Neon</button>
+        </div>
+    </div>
+
     <!-- HEADER & NAV -->
     <header>
         <div class="container">
@@ -655,7 +750,7 @@
     </footer>
 
     <!-- CHATBOT BUBBLE -->
-    <div class="chat-bubble" id="chatBubble" onclick="openChat()">💬</div>
+    <div class="chat-bubble" onclick="openChat()">💬</div>
 
     <!-- CHATBOT BOX -->
     <div class="chat-box" id="chatBox">
@@ -684,6 +779,23 @@
             'help': 'I can answer questions about features, pricing, setup, integrations, security, rooms, and more!'
         };
 
+        function setTheme(theme) {
+            document.documentElement.className = theme;
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            localStorage.setItem('theme', theme);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('theme') || '';
+            document.documentElement.className = saved;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                if ((saved === '' && btn.textContent === 'Spring') || btn.textContent.includes(saved)) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+
         function openChat() {
             document.getElementById('chatBox').classList.add('active');
             document.getElementById('chatInput').focus();
@@ -707,7 +819,6 @@
 
             const messagesDiv = document.getElementById('chatMessages');
             
-            // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'message user';
             userMsg.textContent = message;
@@ -716,7 +827,6 @@
             input.value = '';
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // Get response
             setTimeout(() => {
                 let response = "That's a great question! Our team would love to help. Feel free to ask about features, pricing, setup, integrations, security, or rooms!";
                 
@@ -736,7 +846,6 @@
             }, 300);
         }
 
-        // Close chat on Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeChat();
