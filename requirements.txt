@@ -1,12 +1,7 @@
-fastapi==0.115.12
-uvicorn[standard]==0.34.2
-openai==1.78.1
-python-dotenv==1.1.0
-Flask==2.3.3
-Flask-CORS==4.0.0
-Flask-Mail==0.9.1
-python-dotenv==1.0.0
-twilio==8.10.0
+fastapi
+uvicorn
+python-dotenv
+openai
 anthropic
 requests
 pydantic
