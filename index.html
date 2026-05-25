@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Spring Office">
+<meta name="theme-color" content="#3d6b4f">
+<meta name="description" content="Spring Virtual Office - Your office, beautifully virtual">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%233d6b4f' width='180' height='180'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dy='.3em' font-family='serif' font-weight='bold'>🌿</text></svg>">
 <title>Spring Virtual Office</title>
 <link href="https://fonts.googleapis.com/css2?family=VT323&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -23,8 +29,31 @@
 .t-fode{--bg:#fff;--surface:#fff;--border:#e8e8e8;--text:#111;--muted:#888;--accent:#1a1a1a;--accent2:#f5c842;--card:#fff;--nav:#fffffff0;--btn-r:12px;--card-r:16px;--fh:'Space Grotesk',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#fff8e1}
 .t-neon{--bg:#000;--surface:#0a0a0a;--border:#1a1a2e;--text:#e0e8ff;--muted:#4060a0;--accent:#00d4ff;--accent2:#7b00ff;--card:rgba(10,10,30,.6);--nav:rgba(0,0,0,.9);--btn-r:12px;--card-r:20px;--fh:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#0a0020}
 
-html{scroll-behavior:smooth}
-body{font-family:var(--fb);background:var(--bg);color:var(--text);transition:background .35s,color .35s;overflow-x:hidden;min-height:100vh}
+html{scroll-behavior:smooth;-webkit-user-select:none;user-select:none}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);transition:background .35s,color .35s;overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased;-webkit-touch-callout:none}
+
+@supports (padding: max(0px)) {
+  body{padding-bottom:max(0px, env(safe-area-inset-bottom))}
+}
+
+button, .topt, .rc, .bp, .bg_{
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  user-select:none;
+}
+
+body{-webkit-overflow-scrolling:touch}
+
+input,textarea,select{font-size:16px!important}
+
+@media (hover:none) and (pointer:coarse) {
+  .bp:hover,.bg_:hover,.bnav:hover{opacity:1}
+  .bp:active,.bg_:active,.bnav:active{opacity:.85;transform:scale(.98)}
+  .card:hover{transform:none}
+  .card:active{transform:translateY(-1px)}
+  .rc:hover{transform:none}
+  .rc:active{transform:translateX(2px)}
+}
 
 .tbar{background:var(--nav);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:9px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:400;transition:all .35s}
 .t-win95 .tbar{background:#c0c0c0;border-color:#808080}
@@ -158,6 +187,78 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:22px
   .fgrid,.rgrid,.tgrid,.si{grid-template-columns:1fr}
   .topt{padding:3px 8px;font-size:.67rem}
   .hero{padding:4rem 1.2rem 2rem}
+  
+  nav{padding:0 16px;height:48px}
+  .navlinks{gap:12px}
+  .navlinks a{font-size:.75rem}
+  .bnav{padding:6px 14px;font-size:.75rem}
+  .logo{font-size:1.2rem}
+  
+  button{min-height:44px;min-width:44px}
+  .bp,.bg_,.bnav{padding:12px 20px;font-size:.85rem}
+  
+  .hero{min-height:auto;padding:3rem 1.2rem;margin-top:10px}
+  h1{font-size:1.8rem;margin-bottom:.8rem}
+  .hsub{font-size:.85rem;margin:0 0 1.5rem}
+  .badge{font-size:.65rem;padding:3px 9px}
+  
+  .stats{padding:20px 16px}
+  .sn{font-size:1.8rem}
+  .sl{font-size:.65rem}
+  
+  .card{padding:16px}
+  .fico{width:36px;height:36px;font-size:1rem}
+  .ft{font-size:.8rem}
+  .fd{font-size:.75rem}
+  
+  .rc{padding:14px;gap:10px}
+  .rico{font-size:1.3rem}
+  .rt{font-size:.8rem}
+  .rcc{font-size:.7rem}
+  
+  .tq{font-size:.82rem}
+  .tav{width:24px;height:24px;font-size:.55rem}
+  .tn{font-size:.75rem}
+  .tr{font-size:.65rem}
+  
+  .stitle{font-size:1.4rem}
+  .stag{font-size:.65rem}
+  .ssub{font-size:.8rem}
+  
+  .sec{padding:40px 16px}
+  .rsec{padding:40px 16px}
+  .tsec{padding:40px 16px}
+  footer{padding:16px}
+  
+  .tbar{padding:8px 12px;gap:8px}
+  .tlabel{font-size:.65rem}
+  .topts{gap:3px}
+  .topt{padding:4px 8px;font-size:.65rem}
+  
+  input,textarea,select{font-size:16px}
+  
+  button{-webkit-user-select:none;user-select:none}
+  button:active{opacity:.7;transform:scale(.98)}
+  
+  body{padding-top:max(0px, env(safe-area-inset-top))}
+  nav{padding-left:max(16px, env(safe-area-inset-left));padding-right:max(16px, env(safe-area-inset-right))}
+  footer{padding-left:max(16px, env(safe-area-inset-left));padding-right:max(16px, env(safe-area-inset-right))}
+}
+
+@media(max-width:480px){
+  h1{font-size:1.5rem;line-height:1.2}
+  .stitle{font-size:1.2rem}
+  .hero{padding:2.5rem 1rem}
+  .bp,.bg_{padding:10px 16px;font-size:.8rem}
+  .card{padding:12px}
+  .rc{padding:12px}
+  .tcard{padding:14px}
+  .fgrid{gap:10px}
+  .rgrid{gap:10px}
+  .tgrid{gap:10px}
+  .si{gap:.8rem}
+  .sec,.rsec,.tsec{padding:30px 12px}
+  .stats{padding:16px 12px}
 }
 </style>
 </head>
@@ -258,15 +359,42 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:22px
 </footer>
 
 <script>
-// Theme switching
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(event) {
+  let now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+
+document.addEventListener('touchmove', function(event) {
+  if (event.touches.length > 1) {
+    event.preventDefault();
+  }
+}, { passive: false });
+
+window.addEventListener('orientationchange', function() {
+  document.body.style.opacity = '0.9';
+  setTimeout(() => {
+    document.body.style.opacity = '1';
+  }, 200);
+});
+
 function setTheme(theme, btn) {
   document.documentElement.className = theme;
   document.querySelectorAll('.topt').forEach(el => el.classList.remove('on'));
   btn.classList.add('on');
   localStorage.setItem('theme', theme);
+  
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (theme === 't-midnight') themeColor.setAttribute('content', '#0d1117');
+  else if (theme === 't-blossom') themeColor.setAttribute('content', '#d4547a');
+  else if (theme === 't-ocean') themeColor.setAttribute('content', '#0070b8');
+  else if (theme === 't-neon') themeColor.setAttribute('content', '#00d4ff');
+  else themeColor.setAttribute('content', '#3d6b4f');
 }
 
-// Load saved theme
 window.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('theme') || '';
   document.documentElement.className = saved;
@@ -275,9 +403,14 @@ window.addEventListener('DOMContentLoaded', () => {
       el.classList.add('on');
     }
   });
+  
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (saved === 't-midnight') themeColor.setAttribute('content', '#0d1117');
+  else if (saved === 't-blossom') themeColor.setAttribute('content', '#d4547a');
+  else if (saved === 't-ocean') themeColor.setAttribute('content', '#0070b8');
+  else if (saved === 't-neon') themeColor.setAttribute('content', '#00d4ff');
 });
 
-// Reveal animation
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -289,7 +422,6 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Number counter with intersection observer
 const statsObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting && !entry.target.dataset.counted) {
@@ -311,6 +443,21 @@ const statsObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 
 document.querySelectorAll('.sn').forEach(el => statsObserver.observe(el));
+
+document.querySelectorAll('button, a, .rc').forEach(el => {
+  el.addEventListener('touchstart', function() {
+    this.style.opacity = '0.8';
+  });
+  el.addEventListener('touchend', function() {
+    this.style.opacity = '1';
+  });
+});
+
+document.addEventListener('selectstart', (e) => {
+  if (e.target.closest('button')) {
+    e.preventDefault();
+  }
+});
 </script>
 
 </body>
