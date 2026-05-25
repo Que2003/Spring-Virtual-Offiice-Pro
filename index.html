@@ -1,342 +1,747 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#3d6b4f">
-<title>Spring Virtual Office</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f0ece4;--surface:#fff;--border:#e0d8ce;--text:#1a1410;--muted:#7a6f65;--accent:#3d6b4f;--accent2:#c8a96e;--card:#fff;--btn-r:8px;--card-r:16px;--fh:serif;--fb:'DM Sans',sans-serif}
-.t-midnight{--bg:#0d1117;--surface:#161b22;--border:#21262d;--text:#e6edf3;--muted:#7d8590;--accent:#7ee787;--accent2:#ffa657;--card:#161b22}
-.t-blossom{--bg:#fff0f5;--surface:#fff8fb;--border:#f7c5d8;--text:#3a1a2a;--muted:#9a6070;--accent:#d4547a;--accent2:#f0a0b8;--card:#fff8fb}
-.t-ocean{--bg:#e8f4f8;--surface:#fff;--border:#b8d8e8;--text:#0a2540;--muted:#4a6a80;--accent:#0070b8;--accent2:#00b4d8;--card:#fff}
-.t-neon{--bg:#000;--surface:#0a0a0a;--border:#1a1a2e;--text:#e0e8ff;--muted:#4060a0;--accent:#00d4ff;--accent2:#7b00ff;--card:rgba(10,10,30,.6)}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Virtual Office</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-html{scroll-behavior:smooth}
-body{font-family:var(--fb);background:var(--bg);color:var(--text);transition:background .35s;overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
 
-.tbar{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:400}
-.tlabel{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--muted);flex-shrink:0}
-.topts{display:flex;gap:5px;flex-wrap:wrap}
-.topt{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:.7rem;font-weight:500;color:var(--muted);transition:all .2s}
-.topt:hover{border-color:var(--accent);color:var(--accent)}
-.topt.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+        /* HEADER & NAV */
+        header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:46px;z-index:300}
-.logo{font-size:1.3rem;font-weight:600;color:var(--accent)}
-.navlinks{display:flex;gap:20px}
-.navlinks a{color:var(--muted);text-decoration:none;font-size:.85rem;transition:color .2s}
-.navlinks a:hover{color:var(--accent)}
-.bnav{background:var(--accent);color:#fff;border:none;border-radius:var(--btn-r);padding:8px 18px;font-size:.8rem;font-weight:500;cursor:pointer}
-.bnav:hover{opacity:.9}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-.hero{min-height:85vh;display:flex;align-items:center;justify-content:center;padding:4rem 2rem;position:relative}
-.hero-inner{text-align:center;max-width:600px}
-.badge{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.7rem;color:var(--muted);margin-bottom:1.5rem}
-h1{font-size:clamp(2rem,6vw,4rem);font-weight:300;line-height:1.1;margin-bottom:1rem}
-h1 em{font-style:italic;color:var(--accent)}
-.hsub{font-size:.95rem;color:var(--muted);max-width:400px;margin:0 auto 2rem}
-.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.bp{background:var(--accent);color:#fff;padding:11px 24px;border:none;border-radius:var(--btn-r);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s}
-.bp:hover{opacity:.9;transform:translateY(-1px)}
-.bg_{background:var(--card);color:var(--text);padding:11px 24px;border:1px solid var(--border);border-radius:var(--btn-r);font-size:.85rem;cursor:pointer;transition:all .2s}
-.bg_:hover{border-color:var(--accent);color:var(--accent)}
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.stats{padding:28px 20px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.si{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center}
-.sn{font-size:2rem;font-weight:600;color:var(--accent)}
-.sl{font-size:.7rem;color:var(--muted);margin-top:4px}
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d7a4a;
+        }
 
-.sec{padding:56px 20px;max-width:900px;margin:0 auto}
-.stag{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
-.stitle{font-size:clamp(1.5rem,3vw,2.4rem);font-weight:300;margin-bottom:12px}
-.ssub{color:var(--muted);font-weight:300;max-width:400px;font-size:.9rem}
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;transition:transform .3s}
-.card:hover{transform:translateY(-3px);border-color:var(--accent)}
-.fico{font-size:2.5rem;margin-bottom:12px}
-.ft{font-weight:600;font-size:.85rem;margin-bottom:8px}
-.fd{font-size:.75rem;color:var(--muted);line-height:1.6}
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
 
-.rsec{background:var(--surface);border-top:1px solid var(--border);padding:56px 20px}
-.rin{max-width:900px;margin:0 auto}
-.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
-.rc{background:var(--bg);border:1px solid var(--border);border-radius:var(--card-r);padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none;color:inherit;transition:all .25s}
-.rc:hover{background:var(--card);border-color:var(--accent);transform:translateX(2px)}
-.rico{font-size:1.8rem}
-.rt{font-weight:600;font-size:.85rem}
-.rcc{font-size:.7rem;color:var(--muted)}
+        nav a {
+            text-decoration: none;
+            color: #666;
+            transition: color 0.3s;
+        }
 
-.tsec{padding:56px 20px;max-width:900px;margin:0 auto}
-.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
-.tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:18px;transition:transform .25s}
-.tcard:hover{transform:translateY(-2px)}
-.tq{font-size:.85rem;font-style:italic;margin-bottom:10px;line-height:1.6}
-.ta{display:flex;align-items:center;gap:8px;margin-top:12px}
-.tav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:600;color:#fff;flex-shrink:0}
-.tn{font-weight:600;font-size:.75rem}
-.tr{font-size:.65rem;color:var(--muted)}
+        nav a:hover {
+            color: #2d7a4a;
+        }
 
-footer{background:var(--surface);border-top:1px solid var(--border);padding:20px;text-align:center;font-size:.7rem;color:var(--muted)}
-.flogo{font-size:1.1rem;color:var(--accent);margin-bottom:4px;font-weight:600}
+        .btn-primary {
+            background: #2d7a4a;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
 
-.reveal{opacity:0;transform:translateY(15px);transition:all .6s ease}
-.reveal.vis{opacity:1;transform:none}
+        .btn-primary:hover {
+            background: #1f5632;
+        }
 
-/* CHATBOT STYLES */
-.chatbot-container{position:fixed;bottom:20px;right:20px;width:380px;height:500px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.1);display:flex;flex-direction:column;z-index:1000;opacity:0;transform:scale(.9);transition:all .3s ease;pointer-events:none}
-.chatbot-container.open{opacity:1;transform:scale(1);pointer-events:all}
+        .btn-secondary {
+            background: white;
+            color: #2d7a4a;
+            padding: 10px 24px;
+            border: 2px solid #2d7a4a;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
 
-.chatbot-header{background:var(--accent);color:#fff;padding:16px;border-radius:16px 16px 0 0;font-weight:600;display:flex;justify-content:space-between;align-items:center}
-.chatbot-header button{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:0;width:24px;height:24px}
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
 
-.chatbot-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.msg{padding:10px 12px;border-radius:8px;font-size:.8rem;line-height:1.5;max-width:85%;word-wrap:break-word}
-.msg.bot{background:var(--border);align-self:flex-start;border-radius:0 8px 8px 8px}
-.msg.user{background:var(--accent);color:#fff;align-self:flex-end;border-radius:8px 0 8px 8px}
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #2d7a4a 0%, #1f5632 100%);
+            color: white;
+            padding: 120px 20px;
+            text-align: center;
+        }
 
-.chatbot-input{display:flex;gap:8px;padding:12px;border-top:1px solid var(--border)}
-.chatbot-input input{flex:1;border:1px solid var(--border);border-radius:var(--btn-r);padding:8px 12px;font-size:.8rem;font-family:var(--fb)}
-.chatbot-input button{background:var(--accent);color:#fff;border:none;border-radius:var(--btn-r);padding:8px 14px;font-size:.75rem;font-weight:500;cursor:pointer}
-.chatbot-input button:hover{opacity:.9}
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
 
-.chatbot-toggle{position:fixed;bottom:20px;right:20px;width:56px;height:56px;background:var(--accent);border:none;border-radius:50%;color:#fff;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;z-index:999;transition:all .3s ease}
-.chatbot-toggle:hover{transform:scale(1.1)}
-.chatbot-toggle.hide{display:none}
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-@media(max-width:768px){
-  .fgrid,.rgrid,.tgrid,.si{grid-template-columns:1fr}
-  .navlinks{gap:12px}
-  nav{padding:0 16px}
-  .sec,.rsec,.tsec{padding:40px 16px}
-  h1{font-size:clamp(1.5rem,5vw,2.5rem)}
-  .stitle{font-size:1.3rem}
-  .bp,.bg_{padding:10px 18px;font-size:.8rem}
-  
-  .chatbot-container{width:calc(100% - 20px);height:400px;right:10px;left:10px;bottom:10px}
-}
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
-@media(max-width:480px){
-  .topt{font-size:.65rem;padding:4px 8px}
-  .navlinks{display:none}
-  h1{font-size:1.4rem}
-  .si{grid-template-columns:repeat(2,1fr);gap:.8rem}
-  .sn{font-size:1.5rem}
-  .card,.rc,.tcard{padding:14px}
-}
+        .btn-light {
+            background: white;
+            color: #2d7a4a;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
 
-/* Dark theme chatbot adjustments */
-.t-midnight .chatbot-container{background:#161b22;border-color:#21262d}
-.t-midnight .chatbot-messages .msg.bot{background:#21262d}
-.t-midnight .chatbot-input{border-color:#21262d}
+        .btn-light:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
 
-.t-blossom .chatbot-container{background:#fff8fb;border-color:#f7c5d8}
-.t-blossom .chatbot-messages .msg.bot{background:#f7c5d8}
+        /* STATS */
+        .stats {
+            background: white;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
 
-.t-ocean .chatbot-container{background:#fff;border-color:#b8d8e8}
-.t-ocean .chatbot-messages .msg.bot{background:#caf0f8}
+        .stat-item h3 {
+            font-size: 36px;
+            color: #2d7a4a;
+            margin-bottom: 10px;
+        }
 
-.t-neon .chatbot-container{background:#0a0a0a;border-color:#1a1a2e}
-.t-neon .chatbot-messages .msg.bot{background:#1a1a2e}
-</style>
+        .stat-item p {
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* FEATURES */
+        .features {
+            padding: 80px 20px;
+            background: #fafafa;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* ROOMS */
+        .rooms {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .rooms h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .room-card {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #2d7a4a;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .room-card:hover {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .room-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .room-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .room-card p {
+            color: #999;
+            font-size: 13px;
+        }
+
+        /* TESTIMONIALS */
+        .testimonials {
+            padding: 80px 20px;
+            background: #fafafa;
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .testimonial p {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2d7a4a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .author-info h4 {
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+        }
+
+        .author-info p {
+            font-size: 12px;
+            color: #999;
+            margin: 0;
+            font-style: normal;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #2d7a4a;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+        }
+
+        /* CHATBOT */
+        .chat-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #2d7a4a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 999;
+            transition: all 0.3s;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        .chat-box {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .chat-box.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: #2d7a4a;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            max-width: 85%;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        .message.bot {
+            background: #f0f0f0;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background: #2d7a4a;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .chat-send {
+            background: #2d7a4a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .chat-send:hover {
+            background: #1f5632;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .features h2, .rooms h2, .testimonials h2 {
+                font-size: 28px;
+            }
+
+            .chat-box {
+                width: calc(100% - 30px);
+                height: 400px;
+                bottom: 100px;
+                right: 15px;
+                left: 15px;
+            }
+
+            .stat-item h3 {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- HEADER & NAV -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🌿 Spring Office</div>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#rooms">Rooms</a></li>
+                    <li><a href="#testimonials">Stories</a></li>
+                </ul>
+                <button class="btn-primary" onclick="openChat()">Chat</button>
+            </nav>
+        </div>
+    </header>
 
-<!-- THEME BAR -->
-<div class="tbar">
-  <span class="tlabel">Theme</span>
-  <div class="topts">
-    <button class="topt on" onclick="setTheme('',this)">Spring</button>
-    <button class="topt" onclick="setTheme('t-midnight',this)">Midnight</button>
-    <button class="topt" onclick="setTheme('t-blossom',this)">Blossom</button>
-    <button class="topt" onclick="setTheme('t-ocean',this)">Ocean</button>
-    <button class="topt" onclick="setTheme('t-neon',this)">Neon</button>
-  </div>
-</div>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your office, beautifully virtual</h1>
+            <p>A workspace where your team gathers, collaborates, and thrives — anywhere in the world.</p>
+            <div class="hero-buttons">
+                <button class="btn-light">Enter the Office →</button>
+                <button class="btn-light" onclick="openChat()">Ask SpringBot</button>
+            </div>
+        </div>
+    </section>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">🌿 Spring Office</div>
-  <div class="navlinks">
-    <a href="#features">Features</a>
-    <a href="#rooms">Rooms</a>
-    <a href="#testimonials">Stories</a>
-  </div>
-  <button class="bnav" onclick="toggleChat()">Chat</button>
-</nav>
+    <!-- STATS -->
+    <section class="stats">
+        <div class="stat-item">
+            <h3>12.4k+</h3>
+            <p>Teams Worldwide</p>
+        </div>
+        <div class="stat-item">
+            <h3>98%</h3>
+            <p>Uptime SLA</p>
+        </div>
+        <div class="stat-item">
+            <h3>340+</h3>
+            <p>Integrations</p>
+        </div>
+        <div class="stat-item">
+            <h3>4.9★</h3>
+            <p>Average Rating</p>
+        </div>
+    </section>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="badge">✨ 42 teammates online</div>
-    <h1>Your office,<br><em>beautifully</em> virtual</h1>
-    <p class="hsub">A workspace where your team gathers, collaborates, and thrives — anywhere.</p>
-    <div class="hbtns">
-      <button class="bp">Enter the Office →</button>
-      <button class="bg_" onclick="toggleChat()">Ask SpringBot</button>
+    <!-- FEATURES -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Everything Your Team Needs</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌿</div>
+                    <h3>Ambient Presence</h3>
+                    <p>See who's available, focused, or in a meeting — always at a glance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Smart Rooms</h3>
+                    <p>Rooms that know their purpose. Stand-ups start automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3>AI Meeting Notes</h3>
+                    <p>Summaries, action items, and decisions captured automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Deep Integrations</h3>
+                    <p>Slack, Notion, Jira, GitHub — all unified in one view.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Enterprise Security</h3>
+                    <p>SOC 2 Type II. End-to-end encryption. Custom data residency.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌸</div>
+                    <h3>Wellness Features</h3>
+                    <p>Break reminders and focus metrics for sustainable productivity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROOMS -->
+    <section class="rooms" id="rooms">
+        <div class="container">
+            <h2>Rooms Your Team Loves</h2>
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <div class="room-icon">☕</div>
+                    <h3>Morning Brew</h3>
+                    <p>Casual chat & coffee breaks</p>
+                </div>
+                <div class="room-card">
+                    <div class="room-icon">🎯</div>
+                    <h3>Engineering Hub</h3>
+                    <p>Code reviews & standups</p>
+                </div>
+                <div class="room-card">
+                    <div class="room-icon">🎨</div>
+                    <h3>Design Studio</h3>
+                    <p>Critiques & ideation sprints</p>
+                </div>
+                <div class="room-card">
+                    <div class="room-icon">🔇</div>
+                    <h3>Focus Zone</h3>
+                    <p>Deep work, no interruptions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2>What Teams Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <p>"Spring Office made our distributed team feel like we're actually in the same room."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SR</div>
+                        <div class="author-info">
+                            <h4>Sarah Reyes</h4>
+                            <p>Engineering Lead, Linara</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p>"Nothing comes close to the UX and reliability. Our team actually uses it every day."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JK</div>
+                        <div class="author-info">
+                            <h4>James Kim</h4>
+                            <p>Head of Product, Velo</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p>"AI meeting notes saved us 3 hours a week. We didn't expect to love it this much."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MP</div>
+                        <div class="author-info">
+                            <h4>Maya Patel</h4>
+                            <p>Chief of Staff, Archway</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Spring Virtual Office. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- CHATBOT BUBBLE -->
+    <div class="chat-bubble" id="chatBubble" onclick="openChat()">💬</div>
+
+    <!-- CHATBOT BOX -->
+    <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+            <h3>SpringBot 🤖</h3>
+            <button class="chat-close" onclick="closeChat()">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">Hi! 👋 I'm SpringBot. Ask me anything about Spring Virtual Office!</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Ask me something..." onkeypress="handleEnter(event)">
+            <button class="chat-send" onclick="sendMessage()">Send</button>
+        </div>
     </div>
-  </div>
-</section>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="si">
-    <div class="reveal"><div class="sn">12.4k</div><div class="sl">Teams</div></div>
-    <div class="reveal"><div class="sn">98%</div><div class="sl">Uptime</div></div>
-    <div class="reveal"><div class="sn">340+</div><div class="sl">Integrations</div></div>
-    <div class="reveal"><div class="sn">4.9★</div><div class="sl">Rating</div></div>
-  </div>
-</div>
+    <script>
+        const chatResponses = {
+            'hello': 'Hi there! 👋 How can I help you today?',
+            'features': 'We offer ambient presence, smart rooms, AI notes, integrations, enterprise security, and wellness features!',
+            'pricing': 'For pricing details, please contact our sales team.',
+            'setup': 'Setup is easy! Just sign in with your email and invite your team. You can start using rooms in minutes!',
+            'integrations': 'We integrate with Slack, Notion, Jira, GitHub, and 340+ other tools!',
+            'security': 'We have SOC 2 Type II compliance, end-to-end encryption, and custom data residency.',
+            'rooms': 'We have Morning Brew, Engineering Hub, Design Studio, and Focus Zone!',
+            'help': 'I can answer questions about features, pricing, setup, integrations, security, rooms, and more!'
+        };
 
-<!-- FEATURES -->
-<section class="sec" id="features">
-  <div class="stag reveal">Built for modern teams</div>
-  <h2 class="stitle reveal">Everything you need</h2>
-  <p class="ssub reveal">From quick syncs to deep focus — Spring adapts to how your team works.</p>
-  <div class="fgrid">
-    <div class="card reveal"><div class="fico">🌿</div><div class="ft">Ambient Presence</div><div class="fd">See who's available at a glance.</div></div>
-    <div class="card reveal"><div class="fico">🎯</div><div class="ft">Smart Rooms</div><div class="fd">Rooms that know their purpose.</div></div>
-    <div class="card reveal"><div class="fico">✨</div><div class="ft">AI Notes</div><div class="fd">Auto-summaries & action items.</div></div>
-    <div class="card reveal"><div class="fico">🔗</div><div class="ft">Integrations</div><div class="fd">Slack, Notion, Jira & more.</div></div>
-    <div class="card reveal"><div class="fico">🛡️</div><div class="ft">Security</div><div class="fd">Enterprise-grade encryption.</div></div>
-    <div class="card reveal"><div class="fico">🌸</div><div class="ft">Wellness</div><div class="fd">Focus metrics & break reminders.</div></div>
-  </div>
-</section>
+        function openChat() {
+            document.getElementById('chatBox').classList.add('active');
+            document.getElementById('chatInput').focus();
+        }
 
-<!-- ROOMS -->
-<section class="rsec" id="rooms">
-  <div class="rin">
-    <div class="stag reveal">Live right now</div>
-    <h2 class="stitle reveal">Rooms your team loves</h2>
-    <div class="rgrid">
-      <div class="rc reveal"><div class="rico">☕</div><div><div class="rt">Morning Brew</div><div class="rcc">Casual chat & coffee</div></div></div>
-      <div class="rc reveal"><div class="rico">🎯</div><div><div class="rt">Engineering</div><div class="rcc">Code & standups</div></div></div>
-      <div class="rc reveal"><div class="rico">🎨</div><div><div class="rt">Design Studio</div><div class="rcc">Critiques & ideas</div></div></div>
-      <div class="rc reveal"><div class="rico">🔇</div><div><div class="rt">Focus Zone</div><div class="rcc">Deep work</div></div></div>
-    </div>
-  </div>
-</section>
+        function closeChat() {
+            document.getElementById('chatBox').classList.remove('active');
+        }
 
-<!-- TESTIMONIALS -->
-<section class="tsec" id="testimonials">
-  <div class="stag reveal">What teams say</div>
-  <h2 class="stitle reveal">Stories from the field</h2>
-  <div class="tgrid">
-    <div class="tcard reveal"><div class="tq">"Spring made our distributed team feel like we're in the same room."</div><div class="ta"><div class="tav" style="background:#3d6b4f">SR</div><div><div class="tn">Sarah Reyes</div><div class="tr">Engineering Lead</div></div></div></div>
-    <div class="tcard reveal"><div class="tq">"Best UX and reliability. Our team uses it every day."</div><div class="ta"><div class="tav" style="background:#c8a96e">JK</div><div><div class="tn">James Kim</div><div class="tr">Product Head</div></div></div></div>
-    <div class="tcard reveal"><div class="tq">"AI notes saved us 3 hours a week. We love it!"</div><div class="ta"><div class="tav" style="background:#d4547a">MP</div><div><div class="tn">Maya Patel</div><div class="tr">Chief of Staff</div></div></div></div>
-  </div>
-</section>
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
 
-<!-- FOOTER -->
-<footer>
-  <div class="flogo">Spring Office</div>
-  <p>© 2025 Spring Virtual Office</p>
-</footer>
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
 
-<!-- CHATBOT TOGGLE BUTTON -->
-<button class="chatbot-toggle" id="chatbot-toggle" onclick="toggleChat()">💬</button>
+            const messagesDiv = document.getElementById('chatMessages');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.textContent = message;
+            messagesDiv.appendChild(userMsg);
+            
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-<!-- CHATBOT CONTAINER -->
-<div class="chatbot-container" id="chatbot-container">
-  <div class="chatbot-header">
-    SpringBot 🤖
-    <button onclick="toggleChat()">×</button>
-  </div>
-  <div class="chatbot-messages" id="chatbot-messages">
-    <div class="msg bot">Hi! 👋 I'm SpringBot. Ask me anything about Spring Virtual Office!</div>
-  </div>
-  <div class="chatbot-input">
-    <input type="text" id="chatbot-input" placeholder="Ask SpringBot something..." onkeypress="handleChatSubmit(event)">
-    <button onclick="sendChatMessage()">Send</button>
-  </div>
-</div>
+            // Get response
+            setTimeout(() => {
+                let response = "That's a great question! Our team would love to help. Feel free to ask about features, pricing, setup, integrations, security, or rooms!";
+                
+                const lowerMessage = message.toLowerCase();
+                for (let key in chatResponses) {
+                    if (lowerMessage.includes(key)) {
+                        response = chatResponses[key];
+                        break;
+                    }
+                }
 
-<script>
-// THEME SWITCHING
-function setTheme(t,b){document.documentElement.className=t;document.querySelectorAll('.topt').forEach(e=>e.classList.remove('on'));b.classList.add('on');localStorage.setItem('theme',t)}
-window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('theme')||'';document.documentElement.className=s;document.querySelectorAll('.topt').forEach(e=>{if((s===''&&e.textContent.includes('Spring'))||e.textContent.includes(s))e.classList.add('on')})});
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                botMsg.textContent = response;
+                messagesDiv.appendChild(botMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 300);
+        }
 
-// REVEAL ANIMATIONS
-const obs=new IntersectionObserver(e=>{e.forEach(t=>{if(t.isIntersecting){t.target.classList.add('vis');obs.unobserve(t.target)}})},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
-
-// CHATBOT LOGIC
-const chatResponses={
-  'hello':'Hi there! 👋 How can I help you with Spring Office today?',
-  'features':'We offer ambient presence, smart rooms, AI notes, integrations with Slack/Notion/Jira, enterprise security, and wellness features!',
-  'pricing':'Great question! For pricing details, please visit our contact page or chat with our sales team.',
-  'setup':'Setting up is easy! Just sign in with your email and invite your team. You can start using rooms in minutes!',
-  'integrations':'We integrate with Slack, Notion, Jira, GitHub, and 340+ other tools!',
-  'security':'We have SOC 2 Type II compliance, end-to-end encryption, and custom data residency options.',
-  'rooms':'We have Morning Brew (casual chat), Engineering (code & standups), Design Studio (critiques), and Focus Zone (deep work).',
-  'help':'I can help with questions about features, pricing, setup, integrations, security, rooms, and more. What would you like to know?'
-};
-
-function toggleChat(){
-  const container=document.getElementById('chatbot-container');
-  const toggle=document.getElementById('chatbot-toggle');
-  container.classList.toggle('open');
-  if(container.classList.contains('open')){
-    document.getElementById('chatbot-input').focus();
-  }
-}
-
-function handleChatSubmit(e){
-  if(e.key==='Enter')sendChatMessage();
-}
-
-function sendChatMessage(){
-  const input=document.getElementById('chatbot-input');
-  const message=input.value.trim();
-  if(!message)return;
-  
-  const messagesDiv=document.getElementById('chatbot-messages');
-  
-  // Add user message
-  const userMsg=document.createElement('div');
-  userMsg.className='msg user';
-  userMsg.textContent=message;
-  messagesDiv.appendChild(userMsg);
-  
-  // Clear input
-  input.value='';
-  
-  // Scroll to bottom
-  messagesDiv.scrollTop=messagesDiv.scrollHeight;
-  
-  // Get response (after delay for realistic feel)
-  setTimeout(()=>{
-    let response='That\'s a great question! I don\'t have a specific answer, but our team would love to help. Would you like to connect with someone?';
-    
-    const msg_lower=message.toLowerCase();
-    for(let key in chatResponses){
-      if(msg_lower.includes(key)){
-        response=chatResponses[key];
-        break;
-      }
-    }
-    
-    const botMsg=document.createElement('div');
-    botMsg.className='msg bot';
-    botMsg.textContent=response;
-    messagesDiv.appendChild(botMsg);
-    messagesDiv.scrollTop=messagesDiv.scrollHeight;
-  },400);
-}
-
-// Close chatbot on escape key
-document.addEventListener('keydown',(e)=>{
-  if(e.key==='Escape'){
-    const container=document.getElementById('chatbot-container');
-    if(container.classList.contains('open')){
-      toggleChat();
-    }
-  }
-});
-</script>
+        // Close chat on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeChat();
+            }
+        });
+    </script>
 </body>
 </html>
