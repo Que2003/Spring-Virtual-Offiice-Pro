@@ -61,6 +61,26 @@
             --accent2: #7b00ff;
         }
 
+        .t-win95 {
+            --bg: #008080;
+            --surface: #c0c0c0;
+            --border: #808080;
+            --text: #000;
+            --muted: #444;
+            --accent: #000080;
+            --accent2: #c0c0c0;
+        }
+
+        .t-glass {
+            --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --surface: rgba(255, 255, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.25);
+            --text: #fff;
+            --muted: rgba(255, 255, 255, 0.7);
+            --accent: rgba(255, 255, 255, 0.3);
+            --accent2: rgba(255, 255, 255, 0.4);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg);
@@ -69,7 +89,15 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* THEME BAR */
+        .t-win95 body {
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+        }
+
+        .t-glass body {
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
         .theme-bar {
             background: var(--surface);
             padding: 12px 20px;
@@ -78,6 +106,19 @@
             flex-wrap: wrap;
             justify-content: center;
             border-bottom: 1px solid var(--border);
+        }
+
+        .t-glass .theme-bar {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 .theme-bar {
+            border-top: 2px solid white;
+            border-left: 2px solid white;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
         }
 
         .theme-label {
@@ -105,6 +146,21 @@
             transition: all 0.2s;
         }
 
+        .t-glass .theme-btn {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .t-win95 .theme-btn {
+            border-radius: 0;
+            border-top: 2px solid white;
+            border-left: 2px solid white;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
+
         .theme-btn:hover {
             border-color: var(--accent);
             color: var(--accent);
@@ -116,7 +172,18 @@
             border-color: var(--accent);
         }
 
-        /* HEADER & NAV */
+        .t-glass .theme-btn.active {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        .t-win95 .theme-btn.active {
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
+
         header {
             background: var(--surface);
             padding: 20px 0;
@@ -124,6 +191,18 @@
             position: sticky;
             top: 0;
             z-index: 100;
+        }
+
+        .t-glass header {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 header {
+            box-shadow: none;
+            border-bottom: 2px solid #808080;
         }
 
         .container {
@@ -142,6 +221,10 @@
             font-size: 24px;
             font-weight: bold;
             color: var(--accent);
+        }
+
+        .t-glass .logo {
+            color: #fff;
         }
 
         nav ul {
@@ -171,11 +254,26 @@
             transition: background 0.3s;
         }
 
+        .t-glass .btn-primary {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+
+        .t-win95 .btn-primary {
+            border-radius: 0;
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+            font-family: 'MS Sans Serif', Arial;
+        }
+
         .btn-primary:hover {
             background: var(--accent2);
         }
 
-        /* HERO */
         .hero {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
             color: white;
@@ -183,10 +281,24 @@
             text-align: center;
         }
 
+        .t-glass .hero {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .t-win95 .hero {
+            background: #008080;
+        }
+
         .hero h1 {
             font-size: 48px;
             margin-bottom: 20px;
             line-height: 1.2;
+        }
+
+        .t-win95 .hero h1 {
+            font-size: 28px;
+            font-family: 'MS Sans Serif', Arial;
         }
 
         .hero p {
@@ -196,6 +308,10 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        .t-win95 .hero p {
+            font-size: 14px;
         }
 
         .hero-buttons {
@@ -217,12 +333,33 @@
             transition: all 0.3s;
         }
 
+        .t-glass .btn-light {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .t-win95 .btn-light {
+            border-radius: 0;
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+            background: #c0c0c0;
+            color: #000;
+            font-family: 'MS Sans Serif', Arial;
+        }
+
         .btn-light:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
 
-        /* STATS */
+        .t-win95 .btn-light:hover {
+            transform: none;
+        }
+
         .stats {
             background: var(--surface);
             padding: 60px 20px;
@@ -233,10 +370,28 @@
             border-bottom: 1px solid var(--border);
         }
 
+        .t-glass .stats {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 .stats {
+            border-bottom: 2px solid #808080;
+        }
+
         .stat-item h3 {
             font-size: 36px;
             color: var(--accent);
             margin-bottom: 10px;
+        }
+
+        .t-glass .stat-item h3 {
+            color: #fff;
+        }
+
+        .t-win95 .stat-item h3 {
+            font-size: 24px;
         }
 
         .stat-item p {
@@ -244,7 +399,6 @@
             font-size: 14px;
         }
 
-        /* FEATURES */
         .features {
             padding: 80px 20px;
             background: var(--bg);
@@ -255,6 +409,10 @@
             font-size: 36px;
             margin-bottom: 50px;
             color: var(--text);
+        }
+
+        .t-win95 .features h2 {
+            font-size: 24px;
         }
 
         .features-grid {
@@ -272,10 +430,33 @@
             transition: all 0.3s;
         }
 
+        .t-glass .feature-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 .feature-card {
+            border-radius: 0;
+            border-top: 2px solid white;
+            border-left: 2px solid white;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
+
         .feature-card:hover {
             transform: translateY(-5px);
             border-color: var(--accent);
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .t-glass .feature-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .t-win95 .feature-card:hover {
+            transform: none;
         }
 
         .feature-icon {
@@ -295,11 +476,20 @@
             line-height: 1.8;
         }
 
-        /* ROOMS */
         .rooms {
             padding: 80px 20px;
             background: var(--surface);
             border-top: 1px solid var(--border);
+        }
+
+        .t-glass .rooms {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 .rooms {
+            border-top: 2px solid #808080;
         }
 
         .rooms h2 {
@@ -307,6 +497,10 @@
             font-size: 36px;
             margin-bottom: 50px;
             color: var(--text);
+        }
+
+        .t-win95 .rooms h2 {
+            font-size: 24px;
         }
 
         .rooms-grid {
@@ -324,10 +518,32 @@
             cursor: pointer;
         }
 
+        .t-glass .room-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .t-win95 .room-card {
+            border-radius: 0;
+            border-left: 2px solid white;
+            border-top: 2px solid white;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
+
         .room-card:hover {
             background: var(--surface);
             transform: translateX(5px);
             border-color: var(--accent2);
+        }
+
+        .t-glass .room-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .t-win95 .room-card:hover {
+            transform: none;
         }
 
         .room-icon {
@@ -346,7 +562,6 @@
             font-size: 13px;
         }
 
-        /* TESTIMONIALS */
         .testimonials {
             padding: 80px 20px;
             background: var(--bg);
@@ -357,6 +572,10 @@
             font-size: 36px;
             margin-bottom: 50px;
             color: var(--text);
+        }
+
+        .t-win95 .testimonials h2 {
+            font-size: 24px;
         }
 
         .testimonials-grid {
@@ -371,6 +590,20 @@
             border-radius: 8px;
             border: 1px solid var(--border);
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .t-glass .testimonial {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 .testimonial {
+            border-radius: 0;
+            border-top: 2px solid white;
+            border-left: 2px solid white;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
         }
 
         .testimonial p {
@@ -399,6 +632,10 @@
             font-size: 14px;
         }
 
+        .t-glass .author-avatar {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         .author-info h4 {
             font-size: 14px;
             color: var(--text);
@@ -412,7 +649,6 @@
             font-style: normal;
         }
 
-        /* FOOTER */
         footer {
             background: var(--accent);
             color: white;
@@ -420,11 +656,22 @@
             text-align: center;
         }
 
+        .t-glass footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 footer {
+            background: #c0c0c0;
+            color: #000;
+            border-top: 2px solid white;
+        }
+
         footer p {
             font-size: 14px;
         }
 
-        /* CHATBOT */
         .chat-bubble {
             position: fixed;
             bottom: 30px;
@@ -441,6 +688,20 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             z-index: 999;
             transition: all 0.3s;
+        }
+
+        .t-glass .chat-bubble {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .t-win95 .chat-bubble {
+            border-radius: 0;
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
         }
 
         .chat-bubble:hover {
@@ -463,6 +724,20 @@
             border: 1px solid var(--border);
         }
 
+        .t-glass .chat-box {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 .chat-box {
+            border-radius: 0;
+            border-top: 2px solid white;
+            border-left: 2px solid white;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
+
         .chat-box.active {
             display: flex;
         }
@@ -476,9 +751,24 @@
             align-items: center;
         }
 
+        .t-glass .chat-header {
+            background: rgba(102, 126, 234, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .t-win95 .chat-header {
+            background: #000080;
+            padding: 2px 2px 2px 2px;
+        }
+
         .chat-header h3 {
             margin: 0;
             font-size: 16px;
+        }
+
+        .t-win95 .chat-header h3 {
+            font-size: 12px;
+            font-family: 'MS Sans Serif', Arial;
         }
 
         .chat-close {
@@ -506,10 +796,24 @@
             font-size: 14px;
         }
 
+        .t-glass .message {
+            border-radius: 8px;
+        }
+
+        .t-win95 .message {
+            border-radius: 0;
+            border: 1px solid #808080;
+        }
+
         .message.bot {
             background: var(--border);
             color: var(--text);
             align-self: flex-start;
+        }
+
+        .t-glass .message.bot {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
         }
 
         .message.user {
@@ -525,6 +829,14 @@
             gap: 10px;
         }
 
+        .t-glass .chat-input-area {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .t-win95 .chat-input-area {
+            border-top: 2px solid white;
+        }
+
         .chat-input {
             flex: 1;
             border: 1px solid var(--border);
@@ -534,6 +846,25 @@
             font-family: inherit;
             background: var(--surface);
             color: var(--text);
+        }
+
+        .t-glass .chat-input {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .t-glass .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .t-win95 .chat-input {
+            border-radius: 0;
+            border-top: 2px solid white;
+            border-left: 2px solid white;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
         }
 
         .chat-send {
@@ -547,11 +878,24 @@
             transition: background 0.3s;
         }
 
+        .t-glass .chat-send {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .t-win95 .chat-send {
+            border-radius: 0;
+            border-top: 2px solid #dfdfdf;
+            border-left: 2px solid #dfdfdf;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+        }
+
         .chat-send:hover {
             background: var(--accent2);
         }
 
-        /* RESPONSIVE */
         @media (max-width: 768px) {
             nav ul {
                 display: none;
@@ -576,7 +920,6 @@
     </style>
 </head>
 <body>
-    <!-- THEME BAR -->
     <div class="theme-bar">
         <span class="theme-label">Theme:</span>
         <div class="theme-buttons">
@@ -585,10 +928,11 @@
             <button class="theme-btn" onclick="setTheme('t-blossom', this)">Blossom</button>
             <button class="theme-btn" onclick="setTheme('t-ocean', this)">Ocean</button>
             <button class="theme-btn" onclick="setTheme('t-neon', this)">Neon</button>
+            <button class="theme-btn" onclick="setTheme('t-win95', this)">Windows 95</button>
+            <button class="theme-btn" onclick="setTheme('t-glass', this)">Liquid Glass</button>
         </div>
     </div>
 
-    <!-- HEADER & NAV -->
     <header>
         <div class="container">
             <nav>
@@ -603,7 +947,6 @@
         </div>
     </header>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="container">
             <h1>Your office, beautifully virtual</h1>
@@ -615,7 +958,6 @@
         </div>
     </section>
 
-    <!-- STATS -->
     <section class="stats">
         <div class="stat-item">
             <h3>12.4k+</h3>
@@ -635,7 +977,6 @@
         </div>
     </section>
 
-    <!-- FEATURES -->
     <section class="features" id="features">
         <div class="container">
             <h2>Everything Your Team Needs</h2>
@@ -674,7 +1015,6 @@
         </div>
     </section>
 
-    <!-- ROOMS -->
     <section class="rooms" id="rooms">
         <div class="container">
             <h2>Rooms Your Team Loves</h2>
@@ -703,7 +1043,6 @@
         </div>
     </section>
 
-    <!-- TESTIMONIALS -->
     <section class="testimonials" id="testimonials">
         <div class="container">
             <h2>What Teams Say</h2>
@@ -742,17 +1081,14 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="container">
             <p>&copy; 2025 Spring Virtual Office. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- CHATBOT BUBBLE -->
     <div class="chat-bubble" onclick="openChat()">💬</div>
 
-    <!-- CHATBOT BOX -->
     <div class="chat-box" id="chatBox">
         <div class="chat-header">
             <h3>SpringBot 🤖</h3>
@@ -779,18 +1115,20 @@
             'help': 'I can answer questions about features, pricing, setup, integrations, security, rooms, and more!'
         };
 
-        function setTheme(theme) {
+        function setTheme(theme, btn) {
             document.documentElement.className = theme;
-            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             localStorage.setItem('theme', theme);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             const saved = localStorage.getItem('theme') || '';
             document.documentElement.className = saved;
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                if ((saved === '' && btn.textContent === 'Spring') || btn.textContent.includes(saved)) {
+            const buttons = document.querySelectorAll('.theme-btn');
+            const themeNames = ['', 't-midnight', 't-blossom', 't-ocean', 't-neon', 't-win95', 't-glass'];
+            buttons.forEach((btn, idx) => {
+                if (themeNames[idx] === saved) {
                     btn.classList.add('active');
                 }
             });
