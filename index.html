@@ -2,263 +2,107 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Spring Office">
 <meta name="theme-color" content="#3d6b4f">
-<meta name="description" content="Spring Virtual Office - Your office, beautifully virtual">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%233d6b4f' width='180' height='180'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dy='.3em' font-family='serif' font-weight='bold'>🌿</text></svg>">
 <title>Spring Virtual Office</title>
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f0ece4;--surface:#fff;--border:#e0d8ce;--text:#1a1410;--muted:#7a6f65;--accent:#3d6b4f;--accent2:#c8a96e;--card:#fff;--btn-r:8px;--card-r:16px;--fh:serif;--fb:'DM Sans',sans-serif}
+.t-midnight{--bg:#0d1117;--surface:#161b22;--border:#21262d;--text:#e6edf3;--muted:#7d8590;--accent:#7ee787;--accent2:#ffa657;--card:#161b22}
+.t-blossom{--bg:#fff0f5;--surface:#fff8fb;--border:#f7c5d8;--text:#3a1a2a;--muted:#9a6070;--accent:#d4547a;--accent2:#f0a0b8;--card:#fff8fb}
+.t-ocean{--bg:#e8f4f8;--surface:#fff;--border:#b8d8e8;--text:#0a2540;--muted:#4a6a80;--accent:#0070b8;--accent2:#00b4d8;--card:#fff}
+.t-neon{--bg:#000;--surface:#0a0a0a;--border:#1a1a2e;--text:#e0e8ff;--muted:#4060a0;--accent:#00d4ff;--accent2:#7b00ff;--card:rgba(10,10,30,.6)}
 
-:root{
-  --bg:#f0ece4;--surface:#fff;--border:#e0d8ce;--text:#1a1410;--muted:#7a6f65;
-  --accent:#3d6b4f;--accent2:#c8a96e;--card:#fff;--nav:#ffffffee;
-  --btn-r:8px;--card-r:16px;--fh:'Cormorant Garamond',serif;--fb:'DM Sans',sans-serif;
-  --bloom:#e8c5c5;--p1:#e8c5c5;--p2:#c8a96e;
-}
-.t-midnight{--bg:#0d1117;--surface:#161b22;--border:#21262d;--text:#e6edf3;--muted:#7d8590;--accent:#7ee787;--accent2:#ffa657;--card:#161b22;--nav:#0d1117f0;--bloom:#1a2a1a}
-.t-blossom{--bg:#fff0f5;--surface:#fff8fb;--border:#f7c5d8;--text:#3a1a2a;--muted:#9a6070;--accent:#d4547a;--accent2:#f0a0b8;--card:#fff8fb;--nav:#fff0f5f0;--bloom:#fce4ec}
-.t-ocean{--bg:#e8f4f8;--surface:#fff;--border:#b8d8e8;--text:#0a2540;--muted:#4a6a80;--accent:#0070b8;--accent2:#00b4d8;--card:#fff;--nav:#e8f4f8f0;--bloom:#caf0f8}
-.t-win95{--bg:#008080;--surface:#c0c0c0;--border:#fff;--text:#000;--muted:#444;--accent:#000080;--accent2:#c0c0c0;--card:#c0c0c0;--nav:#c0c0c0;--btn-r:0px;--card-r:0px;--fh:'VT323',monospace;--fb:'VT323',monospace;--bloom:#c0c0c0}
-.t-liquid{--bg:#f5f5f7;--surface:rgba(255,255,255,.72);--border:rgba(0,0,0,.08);--text:#1d1d1f;--muted:#6e6e73;--accent:#0071e3;--accent2:#34c759;--card:rgba(255,255,255,.65);--nav:rgba(245,245,247,.85);--btn-r:980px;--card-r:22px;--fh:'DM Sans',sans-serif;--fb:'DM Sans',sans-serif;--bloom:rgba(200,230,255,.4)}
-.t-defi{--bg:#06060a;--surface:#0e0e18;--border:#1e1e30;--text:#e8e8f8;--muted:#6060a0;--accent:#a855f7;--accent2:#7c3aed;--card:#0e0e18;--nav:#06060af0;--btn-r:8px;--card-r:12px;--fh:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#1a0a2e}
-.t-fode{--bg:#fff;--surface:#fff;--border:#e8e8e8;--text:#111;--muted:#888;--accent:#1a1a1a;--accent2:#f5c842;--card:#fff;--nav:#fffffff0;--btn-r:12px;--card-r:16px;--fh:'Space Grotesk',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#fff8e1}
-.t-neon{--bg:#000;--surface:#0a0a0a;--border:#1a1a2e;--text:#e0e8ff;--muted:#4060a0;--accent:#00d4ff;--accent2:#7b00ff;--card:rgba(10,10,30,.6);--nav:rgba(0,0,0,.9);--btn-r:12px;--card-r:20px;--fh:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#0a0020}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);transition:background .35s;overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased}
 
-html{scroll-behavior:smooth;-webkit-user-select:none;user-select:none}
-body{font-family:var(--fb);background:var(--bg);color:var(--text);transition:background .35s,color .35s;overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased;-webkit-touch-callout:none}
-
-@supports (padding: max(0px)) {
-  body{padding-bottom:max(0px, env(safe-area-inset-bottom))}
-}
-
-button, .topt, .rc, .bp, .bg_{
-  -webkit-user-select:none;
-  -webkit-touch-callout:none;
-  user-select:none;
-}
-
-body{-webkit-overflow-scrolling:touch}
-
-input,textarea,select{font-size:16px!important}
-
-@media (hover:none) and (pointer:coarse) {
-  .bp:hover,.bg_:hover,.bnav:hover{opacity:1}
-  .bp:active,.bg_:active,.bnav:active{opacity:.85;transform:scale(.98)}
-  .card:hover{transform:none}
-  .card:active{transform:translateY(-1px)}
-  .rc:hover{transform:none}
-  .rc:active{transform:translateX(2px)}
-}
-
-.tbar{background:var(--nav);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:9px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:400;transition:all .35s}
-.t-win95 .tbar{background:#c0c0c0;border-color:#808080}
-.t-liquid .tbar{backdrop-filter:blur(24px) saturate(180%)}
-.tlabel{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex-shrink:0}
-.t-win95 .tlabel{font-family:'VT323',monospace;font-size:.9rem;text-transform:none}
+.tbar{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:400}
+.tlabel{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--muted);flex-shrink:0}
 .topts{display:flex;gap:5px;flex-wrap:wrap}
-.topt{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:100px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:.72rem;font-weight:500;color:var(--muted);transition:all .2s;white-space:nowrap;font-family:var(--fb)}
+.topt{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:.7rem;font-weight:500;color:var(--muted);transition:all .2s}
 .topt:hover{border-color:var(--accent);color:var(--accent)}
 .topt.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-.tdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.d1{background:linear-gradient(135deg,#3d6b4f,#c8a96e)}
-.d2{background:linear-gradient(135deg,#0d1117,#7ee787)}
-.d3{background:linear-gradient(135deg,#d4547a,#fce4ec)}
-.d4{background:linear-gradient(135deg,#0070b8,#90e0ef)}
-.d5{background:linear-gradient(135deg,#000080,#c0c0c0)}
-.d6{background:linear-gradient(135deg,rgba(0,113,227,.7),rgba(52,199,89,.6))}
-.d7{background:linear-gradient(135deg,#06060a,#a855f7)}
-.d8{background:linear-gradient(135deg,#111,#f5c842)}
-.d9{background:linear-gradient(135deg,#000,#00d4ff)}
 
-nav{background:var(--nav);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px);position:sticky;top:52px;z-index:300;transition:all .35s}
-.t-win95 nav{background:#c0c0c0;border-color:#808080;height:auto;padding:2px 4px;top:42px}
-
-.logo{font-family:var(--fh);font-size:1.45rem;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px}
-.lpulse{width:7px;height:7px;background:var(--accent2);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5);opacity:.6}}
-
-.navlinks{display:flex;gap:22px}
-.navlinks a{color:var(--muted);text-decoration:none;font-size:.84rem;font-weight:500;transition:color .2s}
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:46px;z-index:300}
+.logo{font-size:1.3rem;font-weight:600;color:var(--accent)}
+.navlinks{display:flex;gap:20px}
+.navlinks a{color:var(--muted);text-decoration:none;font-size:.85rem;transition:color .2s}
 .navlinks a:hover{color:var(--accent)}
+.bnav{background:var(--accent);color:#fff;border:none;border-radius:var(--btn-r);padding:8px 18px;font-size:.8rem;font-weight:500;cursor:pointer}
+.bnav:hover{opacity:.9}
 
-.bnav{background:var(--accent);color:#fff;border:none;border-radius:var(--btn-r);padding:7px 18px;font-size:.82rem;font-weight:500;cursor:pointer;font-family:var(--fb);transition:opacity .2s}
-.bnav:hover{opacity:.85}
-
-.hero{min-height:88vh;display:flex;align-items:center;justify-content:center;padding:5rem 2rem 3rem;position:relative;overflow:hidden}
-.t-win95 .hero{min-height:auto;padding:8px;background:#008080;align-items:flex-start;justify-content:flex-start}
-
-.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,var(--bloom) 0%,transparent 70%);opacity:.6;pointer-events:none;transition:all .4s}
-.t-win95 .hero-glow{display:none}
-
-.hero-inner{text-align:center;max-width:620px;position:relative;z-index:1}
-.t-win95 .hero-inner{text-align:left;max-width:420px;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff}
-
-.badge{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:.73rem;color:var(--muted);margin-bottom:1.2rem;animation:fadeUp .8s ease both}
-.t-win95 .badge{display:none}
-.bdot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1.8s infinite}
-
-h1{font-family:var(--fh);font-size:clamp(2.5rem,5vw,4.4rem);font-weight:300;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;animation:fadeUp .8s .15s ease both}
+.hero{min-height:85vh;display:flex;align-items:center;justify-content:center;padding:4rem 2rem;position:relative}
+.hero-inner{text-align:center;max-width:600px}
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.7rem;color:var(--muted);margin-bottom:1.5rem}
+h1{font-size:clamp(2rem,6vw,4rem);font-weight:300;line-height:1.1;margin-bottom:1rem}
 h1 em{font-style:italic;color:var(--accent)}
-.t-win95 h1{font-size:1.35rem;letter-spacing:0;margin-bottom:6px;font-weight:400}
-
-.hsub{font-size:.95rem;color:var(--muted);max-width:400px;margin:0 auto 1.8rem;font-weight:300;animation:fadeUp .8s .3s ease both}
-.t-win95 .hsub{display:none}
-
-.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .45s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-
-.bp{background:var(--accent);color:#fff;padding:10px 22px;border:none;border-radius:var(--btn-r);font-size:.88rem;font-weight:500;cursor:pointer;font-family:var(--fb);transition:opacity .2s,transform .2s}
-.bp:hover{opacity:.88;transform:translateY(-1px)}
-
-.bg_{background:var(--card);color:var(--text);padding:10px 22px;border:1px solid var(--border);border-radius:var(--btn-r);font-size:.88rem;cursor:pointer;font-family:var(--fb);transition:border-color .2s}
+.hsub{font-size:.95rem;color:var(--muted);max-width:400px;margin:0 auto 2rem}
+.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.bp{background:var(--accent);color:#fff;padding:11px 24px;border:none;border-radius:var(--btn-r);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s}
+.bp:hover{opacity:.9;transform:translateY(-1px)}
+.bg_{background:var(--card);color:var(--text);padding:11px 24px;border:1px solid var(--border);border-radius:var(--btn-r);font-size:.85rem;cursor:pointer;transition:all .2s}
 .bg_:hover{border-color:var(--accent);color:var(--accent)}
 
-.stats{padding:26px 24px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);transition:all .35s}
-.t-win95 .stats{background:#c0c0c0;border:2px inset #808080;margin:4px;padding:8px}
+.stats{padding:28px 20px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .si{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center}
-.sn{font-family:var(--fh);font-size:2.2rem;font-weight:600;color:var(--accent);line-height:1}
-.sl{font-size:.72rem;color:var(--muted);margin-top:3px;letter-spacing:.03em}
+.sn{font-size:2rem;font-weight:600;color:var(--accent)}
+.sl{font-size:.7rem;color:var(--muted);margin-top:4px}
 
-.sec{padding:56px 24px;max-width:980px;margin:0 auto}
-.t-win95 .sec{padding:8px}
-.stag{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px}
-.stitle{font-family:var(--fh);font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:300;letter-spacing:-.02em;margin-bottom:8px}
-.ssub{color:var(--muted);font-weight:300;max-width:400px;font-size:.88rem}
-
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
-.t-win95 .fgrid{gap:4px;grid-template-columns:repeat(2,1fr)}
-
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:22px;transition:transform .3s,border-color .3s;position:relative;overflow:hidden}
+.sec{padding:56px 20px;max-width:900px;margin:0 auto}
+.stag{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px}
+.stitle{font-size:clamp(1.5rem,3vw,2.4rem);font-weight:300;margin-bottom:12px}
+.ssub{color:var(--muted);font-weight:300;max-width:400px;font-size:.9rem}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;transition:transform .3s}
 .card:hover{transform:translateY(-3px);border-color:var(--accent)}
-.t-win95 .card{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;padding:8px;transform:none!important}
+.fico{font-size:2.5rem;margin-bottom:12px}
+.ft{font-weight:600;font-size:.85rem;margin-bottom:8px}
+.fd{font-size:.75rem;color:var(--muted);line-height:1.6}
 
-.fico{width:42px;height:42px;border-radius:10px;background:var(--bloom);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:12px;transition:transform .3s}
-.card:hover .fico{transform:scale(1.1) rotate(5deg)}
-.ft{font-weight:600;margin-bottom:5px;font-size:.88rem}
-.fd{font-size:.8rem;color:var(--muted);line-height:1.65}
-
-.rsec{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 24px;transition:all .35s}
-.t-win95 .rsec{background:#c0c0c0;border:2px inset #808080;margin:4px;padding:8px}
-.rin{max-width:980px;margin:0 auto}
-.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
-
+.rsec{background:var(--surface);border-top:1px solid var(--border);padding:56px 20px}
+.rin{max-width:900px;margin:0 auto}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
 .rc{background:var(--bg);border:1px solid var(--border);border-radius:var(--card-r);padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none;color:inherit;transition:all .25s}
-.rc:hover{background:var(--card);border-color:var(--accent);transform:translateX(3px)}
-.t-win95 .rc{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0;transform:none!important;padding:6px}
+.rc:hover{background:var(--card);border-color:var(--accent);transform:translateX(2px)}
+.rico{font-size:1.8rem}
+.rt{font-weight:600;font-size:.85rem}
+.rcc{font-size:.7rem;color:var(--muted)}
 
-.rico{font-size:1.6rem;flex-shrink:0}
-.rt{font-weight:600;font-size:.86rem;margin-bottom:2px}
-.rcc{font-size:.74rem;color:var(--muted);margin-bottom:8px}
-.avs{display:flex;margin-top:5px;margin-bottom:5px}
-.av{width:20px;height:20px;border-radius:50%;background:var(--accent);border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:.5rem;color:#fff;font-weight:600;margin-left:-5px}
-.av:first-child{margin-left:0}
-.live{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;color:var(--accent);font-weight:600}
-.lv{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite}
-
-.tsec{padding:56px 24px;max-width:980px;margin:0 auto}
+.tsec{padding:56px 20px;max-width:900px;margin:0 auto}
 .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
-.t-win95 .tgrid{gap:4px}
-
-.tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;transition:transform .25s}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:18px;transition:transform .25s}
 .tcard:hover{transform:translateY(-2px)}
-.t-win95 .tcard{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0;transform:none!important;padding:8px}
+.tq{font-size:.85rem;font-style:italic;margin-bottom:10px;line-height:1.6}
+.ta{display:flex;align-items:center;gap:8px;margin-top:12px}
+.tav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:600;color:#fff;flex-shrink:0}
+.tn{font-weight:600;font-size:.75rem}
+.tr{font-size:.65rem;color:var(--muted)}
 
-.tq{font-family:var(--fh);font-size:.94rem;font-style:italic;margin-bottom:10px;line-height:1.55}
-.ta{display:flex;align-items:center;gap:8px}
-.tav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;color:#fff;flex-shrink:0}
-.tn{font-weight:600;font-size:.79rem}
-.tr{font-size:.7rem;color:var(--muted)}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:20px;text-align:center;font-size:.7rem;color:var(--muted)}
+.flogo{font-size:1.1rem;color:var(--accent);margin-bottom:4px;font-weight:600}
 
-footer{background:var(--surface);border-top:1px solid var(--border);padding:22px;text-align:center;font-size:.75rem;color:var(--muted);transition:all .35s}
-.t-win95 footer{background:#c0c0c0;border-top:2px solid #fff}
-
-.flogo{font-family:var(--fh);font-size:1.25rem;color:var(--accent);margin-bottom:4px}
-
-.reveal{opacity:0;transform:translateY(20px);transition:all .65s ease}
+.reveal{opacity:0;transform:translateY(15px);transition:all .6s ease}
 .reveal.vis{opacity:1;transform:none}
-.t-win95 .reveal{opacity:1;transform:none}
 
-@media(max-width:640px){
+@media(max-width:768px){
   .fgrid,.rgrid,.tgrid,.si{grid-template-columns:1fr}
-  .topt{padding:3px 8px;font-size:.67rem}
-  .hero{padding:4rem 1.2rem 2rem}
-  
-  nav{padding:0 16px;height:48px}
   .navlinks{gap:12px}
-  .navlinks a{font-size:.75rem}
-  .bnav{padding:6px 14px;font-size:.75rem}
-  .logo{font-size:1.2rem}
-  
-  button{min-height:44px;min-width:44px}
-  .bp,.bg_,.bnav{padding:12px 20px;font-size:.85rem}
-  
-  .hero{min-height:auto;padding:3rem 1.2rem;margin-top:10px}
-  h1{font-size:1.8rem;margin-bottom:.8rem}
-  .hsub{font-size:.85rem;margin:0 0 1.5rem}
-  .badge{font-size:.65rem;padding:3px 9px}
-  
-  .stats{padding:20px 16px}
-  .sn{font-size:1.8rem}
-  .sl{font-size:.65rem}
-  
-  .card{padding:16px}
-  .fico{width:36px;height:36px;font-size:1rem}
-  .ft{font-size:.8rem}
-  .fd{font-size:.75rem}
-  
-  .rc{padding:14px;gap:10px}
-  .rico{font-size:1.3rem}
-  .rt{font-size:.8rem}
-  .rcc{font-size:.7rem}
-  
-  .tq{font-size:.82rem}
-  .tav{width:24px;height:24px;font-size:.55rem}
-  .tn{font-size:.75rem}
-  .tr{font-size:.65rem}
-  
-  .stitle{font-size:1.4rem}
-  .stag{font-size:.65rem}
-  .ssub{font-size:.8rem}
-  
-  .sec{padding:40px 16px}
-  .rsec{padding:40px 16px}
-  .tsec{padding:40px 16px}
-  footer{padding:16px}
-  
-  .tbar{padding:8px 12px;gap:8px}
-  .tlabel{font-size:.65rem}
-  .topts{gap:3px}
-  .topt{padding:4px 8px;font-size:.65rem}
-  
-  input,textarea,select{font-size:16px}
-  
-  button{-webkit-user-select:none;user-select:none}
-  button:active{opacity:.7;transform:scale(.98)}
-  
-  body{padding-top:max(0px, env(safe-area-inset-top))}
-  nav{padding-left:max(16px, env(safe-area-inset-left));padding-right:max(16px, env(safe-area-inset-right))}
-  footer{padding-left:max(16px, env(safe-area-inset-left));padding-right:max(16px, env(safe-area-inset-right))}
+  nav{padding:0 16px}
+  .sec,.rsec,.tsec{padding:40px 16px}
+  h1{font-size:clamp(1.5rem,5vw,2.5rem)}
+  .stitle{font-size:1.3rem}
+  .bp,.bg_{padding:10px 18px;font-size:.8rem}
 }
 
 @media(max-width:480px){
-  h1{font-size:1.5rem;line-height:1.2}
-  .stitle{font-size:1.2rem}
-  .hero{padding:2.5rem 1rem}
-  .bp,.bg_{padding:10px 16px;font-size:.8rem}
-  .card{padding:12px}
-  .rc{padding:12px}
-  .tcard{padding:14px}
-  .fgrid{gap:10px}
-  .rgrid{gap:10px}
-  .tgrid{gap:10px}
-  .si{gap:.8rem}
-  .sec,.rsec,.tsec{padding:30px 12px}
-  .stats{padding:16px 12px}
+  .topt{font-size:.65rem;padding:4px 8px}
+  .navlinks{display:none}
+  h1{font-size:1.4rem}
+  .si{grid-template-columns:repeat(2,1fr);gap:.8rem}
+  .sn{font-size:1.5rem}
+  .card,.rc,.tcard{padding:14px}
 }
 </style>
 </head>
@@ -268,34 +112,31 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:22px
 <div class="tbar">
   <span class="tlabel">Theme</span>
   <div class="topts">
-    <button class="topt on" onclick="setTheme('', this)"><span class="tdot d1"></span>Spring</button>
-    <button class="topt" onclick="setTheme('t-midnight', this)"><span class="tdot d2"></span>Midnight</button>
-    <button class="topt" onclick="setTheme('t-blossom', this)"><span class="tdot d3"></span>Blossom</button>
-    <button class="topt" onclick="setTheme('t-ocean', this)"><span class="tdot d4"></span>Ocean</button>
-    <button class="topt" onclick="setTheme('t-win95', this)"><span class="tdot d5"></span>Win 95</button>
-    <button class="topt" onclick="setTheme('t-liquid', this)"><span class="tdot d6"></span>Liquid Glass</button>
-    <button class="topt" onclick="setTheme('t-defi', this)"><span class="tdot d7"></span>DeFi</button>
-    <button class="topt" onclick="setTheme('t-fode', this)"><span class="tdot d8"></span>Fode</button>
-    <button class="topt" onclick="setTheme('t-neon', this)"><span class="tdot d9"></span>Neon Black</button>
+    <button class="topt on" onclick="setTheme('',this)">Spring</button>
+    <button class="topt" onclick="setTheme('t-midnight',this)">Midnight</button>
+    <button class="topt" onclick="setTheme('t-blossom',this)">Blossom</button>
+    <button class="topt" onclick="setTheme('t-ocean',this)">Ocean</button>
+    <button class="topt" onclick="setTheme('t-neon',this)">Neon</button>
   </div>
 </div>
 
 <!-- NAV -->
 <nav>
-  <div class="logo"><div class="lpulse"></div><span>Spring Office</span></div>
+  <div class="logo">🌿 Spring Office</div>
   <div class="navlinks">
-    <a href="#">Features</a><a href="#">Rooms</a><a href="#">Team</a><a href="#">Chat</a>
+    <a href="#features">Features</a>
+    <a href="#rooms">Rooms</a>
+    <a href="#testimonials">Stories</a>
   </div>
   <button class="bnav">Sign In</button>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-glow"></div>
   <div class="hero-inner">
-    <div class="badge"><span class="bdot"></span>42 teammates online now</div>
+    <div class="badge">✨ 42 teammates online</div>
     <h1>Your office,<br><em>beautifully</em> virtual</h1>
-    <p class="hsub">A living, breathing workspace where your team gathers, collaborates, and thrives — anywhere.</p>
+    <p class="hsub">A workspace where your team gathers, collaborates, and thrives — anywhere.</p>
     <div class="hbtns">
       <button class="bp">Enter the Office →</button>
       <button class="bg_">Watch Tour</button>
@@ -306,159 +147,64 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:22px
 <!-- STATS -->
 <div class="stats">
   <div class="si">
-    <div class="reveal"><div class="sn" data-cnt="12400">0</div><div class="sl">Teams Worldwide</div></div>
-    <div class="reveal"><div class="sn" data-cnt="98">0</div><div class="sl">% Uptime SLA</div></div>
-    <div class="reveal"><div class="sn" data-cnt="340">0</div><div class="sl">Integrations</div></div>
-    <div class="reveal"><div class="sn" data-cnt="4.9">0</div><div class="sl">Avg Rating</div></div>
+    <div class="reveal"><div class="sn">12.4k</div><div class="sl">Teams</div></div>
+    <div class="reveal"><div class="sn">98%</div><div class="sl">Uptime</div></div>
+    <div class="reveal"><div class="sn">340+</div><div class="sl">Integrations</div></div>
+    <div class="reveal"><div class="sn">4.9★</div><div class="sl">Rating</div></div>
   </div>
 </div>
 
 <!-- FEATURES -->
-<section class="sec">
+<section class="sec" id="features">
   <div class="stag reveal">Built for modern teams</div>
-  <h2 class="stitle reveal">Everything your team needs</h2>
+  <h2 class="stitle reveal">Everything you need</h2>
   <p class="ssub reveal">From quick syncs to deep focus — Spring adapts to how your team works.</p>
   <div class="fgrid">
-    <div class="card reveal"><div class="fico">🌿</div><div class="ft">Ambient Presence</div><div class="fd">See who's available, focused, or in a meeting — always at a glance.</div></div>
-    <div class="card reveal"><div class="fico">🎯</div><div class="ft">Smart Rooms</div><div class="fd">Rooms that know their purpose. Stand-ups start automatically.</div></div>
-    <div class="card reveal"><div class="fico">✨</div><div class="ft">AI Meeting Notes</div><div class="fd">Summaries, action items, and decisions captured automatically.</div></div>
-    <div class="card reveal"><div class="fico">🔗</div><div class="ft">Deep Integrations</div><div class="fd">Slack, Notion, Jira, GitHub — all unified in one view.</div></div>
-    <div class="card reveal"><div class="fico">🛡️</div><div class="ft">Enterprise Security</div><div class="fd">SOC 2 Type II. End-to-end encryption. Custom data residency.</div></div>
-    <div class="card reveal"><div class="fico">🌸</div><div class="ft">Wellness Features</div><div class="fd">Break reminders and focus metrics for sustainable productivity.</div></div>
+    <div class="card reveal"><div class="fico">🌿</div><div class="ft">Ambient Presence</div><div class="fd">See who's available at a glance.</div></div>
+    <div class="card reveal"><div class="fico">🎯</div><div class="ft">Smart Rooms</div><div class="fd">Rooms that know their purpose.</div></div>
+    <div class="card reveal"><div class="fico">✨</div><div class="ft">AI Notes</div><div class="fd">Auto-summaries & action items.</div></div>
+    <div class="card reveal"><div class="fico">🔗</div><div class="ft">Integrations</div><div class="fd">Slack, Notion, Jira & more.</div></div>
+    <div class="card reveal"><div class="fico">🛡️</div><div class="ft">Security</div><div class="fd">Enterprise-grade encryption.</div></div>
+    <div class="card reveal"><div class="fico">🌸</div><div class="ft">Wellness</div><div class="fd">Focus metrics & break reminders.</div></div>
   </div>
 </section>
 
 <!-- ROOMS -->
-<section class="rsec">
+<section class="rsec" id="rooms">
   <div class="rin">
     <div class="stag reveal">Live right now</div>
     <h2 class="stitle reveal">Rooms your team loves</h2>
     <div class="rgrid">
-      <a class="rc reveal" href="#"><div class="rico">☕</div><div><div class="rt">Morning Brew</div><div class="rcc">Casual chat & coffee breaks</div><div class="avs"><div class="av">SJ</div><div class="av">MK</div><div class="av">+4</div></div><div class="live"><span class="lv"></span>6 inside</div></div></a>
-      <a class="rc reveal" href="#"><div class="rico">🎯</div><div><div class="rt">Engineering Hub</div><div class="rcc">Code reviews & standups</div><div class="avs"><div class="av">RC</div><div class="av">TB</div></div><div class="live"><span class="lv"></span>2 inside</div></div></a>
-      <a class="rc reveal" href="#"><div class="rico">🎨</div><div><div class="rt">Design Studio</div><div class="rcc">Critiques & ideation sprints</div><div class="avs"><div class="av">PL</div><div class="av">ZW</div><div class="av">NY</div></div><div class="live"><span class="lv"></span>3 inside</div></div></a>
-      <a class="rc reveal" href="#"><div class="rico">🔇</div><div><div class="rt">Focus Zone</div><div class="rcc">Deep work, no interruptions</div><div class="avs"><div class="av">AH</div></div><div class="live"><span class="lv"></span>1 inside</div></div></a>
+      <div class="rc reveal"><div class="rico">☕</div><div><div class="rt">Morning Brew</div><div class="rcc">Casual chat & coffee</div></div></div>
+      <div class="rc reveal"><div class="rico">🎯</div><div><div class="rt">Engineering</div><div class="rcc">Code & standups</div></div></div>
+      <div class="rc reveal"><div class="rico">🎨</div><div><div class="rt">Design Studio</div><div class="rcc">Critiques & ideas</div></div></div>
+      <div class="rc reveal"><div class="rico">🔇</div><div><div class="rt">Focus Zone</div><div class="rcc">Deep work</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="tsec">
+<section class="tsec" id="testimonials">
   <div class="stag reveal">What teams say</div>
   <h2 class="stitle reveal">Stories from the field</h2>
   <div class="tgrid">
-    <div class="tcard reveal"><div class="tq">"Spring Office made our distributed team feel like we're actually in the same room."</div><div class="ta"><div class="tav" style="background:#3d6b4f">SR</div><div><div class="tn">Sarah Reyes</div><div class="tr">Engineering Lead, Linara</div></div></div></div>
-    <div class="tcard reveal"><div class="tq">"Nothing comes close to the UX and reliability. Our team actually uses it every day."</div><div class="ta"><div class="tav" style="background:#c8a96e">JK</div><div><div class="tn">James Kim</div><div class="tr">Head of Product, Velo</div></div></div></div>
-    <div class="tcard reveal"><div class="tq">"AI meeting notes saved us 3 hours a week. We didn't expect to love it this much."</div><div class="ta"><div class="tav" style="background:#d4547a">MP</div><div><div class="tn">Maya Patel</div><div class="tr">Chief of Staff, Archway</div></div></div></div>
+    <div class="tcard reveal"><div class="tq">"Spring made our distributed team feel like we're in the same room."</div><div class="ta"><div class="tav" style="background:#3d6b4f">SR</div><div><div class="tn">Sarah Reyes</div><div class="tr">Engineering Lead</div></div></div></div>
+    <div class="tcard reveal"><div class="tq">"Best UX and reliability. Our team uses it every day."</div><div class="ta"><div class="tav" style="background:#c8a96e">JK</div><div><div class="tn">James Kim</div><div class="tr">Product Head</div></div></div></div>
+    <div class="tcard reveal"><div class="tq">"AI notes saved us 3 hours a week. We love it!"</div><div class="ta"><div class="tav" style="background:#d4547a">MP</div><div><div class="tn">Maya Patel</div><div class="tr">Chief of Staff</div></div></div></div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="flogo">Spring Office</div>
-  <p>© 2025 Spring Virtual Office &middot; <a href="#" style="color:var(--accent);text-decoration:none">Privacy</a> &middot; <a href="#" style="color:var(--accent);text-decoration:none">Terms</a></p>
+  <p>© 2025 Spring Virtual Office</p>
 </footer>
 
 <script>
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function(event) {
-  let now = Date.now();
-  if (now - lastTouchEnd <= 300) {
-    event.preventDefault();
-  }
-  lastTouchEnd = now;
-}, false);
-
-document.addEventListener('touchmove', function(event) {
-  if (event.touches.length > 1) {
-    event.preventDefault();
-  }
-}, { passive: false });
-
-window.addEventListener('orientationchange', function() {
-  document.body.style.opacity = '0.9';
-  setTimeout(() => {
-    document.body.style.opacity = '1';
-  }, 200);
-});
-
-function setTheme(theme, btn) {
-  document.documentElement.className = theme;
-  document.querySelectorAll('.topt').forEach(el => el.classList.remove('on'));
-  btn.classList.add('on');
-  localStorage.setItem('theme', theme);
-  
-  const themeColor = document.querySelector('meta[name="theme-color"]');
-  if (theme === 't-midnight') themeColor.setAttribute('content', '#0d1117');
-  else if (theme === 't-blossom') themeColor.setAttribute('content', '#d4547a');
-  else if (theme === 't-ocean') themeColor.setAttribute('content', '#0070b8');
-  else if (theme === 't-neon') themeColor.setAttribute('content', '#00d4ff');
-  else themeColor.setAttribute('content', '#3d6b4f');
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('theme') || '';
-  document.documentElement.className = saved;
-  document.querySelectorAll('.topt').forEach(el => {
-    if ((saved === '' && el.textContent.includes('Spring')) || el.textContent.includes(saved)) {
-      el.classList.add('on');
-    }
-  });
-  
-  const themeColor = document.querySelector('meta[name="theme-color"]');
-  if (saved === 't-midnight') themeColor.setAttribute('content', '#0d1117');
-  else if (saved === 't-blossom') themeColor.setAttribute('content', '#d4547a');
-  else if (saved === 't-ocean') themeColor.setAttribute('content', '#0070b8');
-  else if (saved === 't-neon') themeColor.setAttribute('content', '#00d4ff');
-});
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('vis');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-const statsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !entry.target.dataset.counted) {
-      entry.target.dataset.counted = 'true';
-      const target = parseFloat(entry.target.dataset.cnt);
-      let current = 0;
-      const increment = target / 60;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          entry.target.textContent = target;
-          clearInterval(timer);
-        } else {
-          entry.target.textContent = Math.floor(current);
-        }
-      }, 30);
-    }
-  });
-}, { threshold: 0.5 });
-
-document.querySelectorAll('.sn').forEach(el => statsObserver.observe(el));
-
-document.querySelectorAll('button, a, .rc').forEach(el => {
-  el.addEventListener('touchstart', function() {
-    this.style.opacity = '0.8';
-  });
-  el.addEventListener('touchend', function() {
-    this.style.opacity = '1';
-  });
-});
-
-document.addEventListener('selectstart', (e) => {
-  if (e.target.closest('button')) {
-    e.preventDefault();
-  }
-});
+function setTheme(t,b){document.documentElement.className=t;document.querySelectorAll('.topt').forEach(e=>e.classList.remove('on'));b.classList.add('on');localStorage.setItem('theme',t)}
+window.addEventListener('DOMContentLoaded',()=>{const s=localStorage.getItem('theme')||'';document.documentElement.className=s;document.querySelectorAll('.topt').forEach(e=>{if((s===''&&e.textContent.includes('Spring'))||e.textContent.includes(s))e.classList.add('on')})});
+const obs=new IntersectionObserver(e=>{e.forEach(t=>{if(t.isIntersecting){t.target.classList.add('vis');obs.unobserve(t.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
 </script>
-
 </body>
 </html>
