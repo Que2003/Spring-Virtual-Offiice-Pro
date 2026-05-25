@@ -1,1324 +1,948 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring Virtual Office - Premium Chatbot</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'Roboto', sans-serif;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* ==================== ANIMATED BACKGROUND ==================== */
-
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
-
-        .floating-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.6;
-            animation: float 25s infinite ease-in-out;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: rgba(99, 102, 241, 0.6);
-            top: -200px;
-            left: -200px;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: rgba(168, 85, 247, 0.5);
-            top: 30%;
-            right: -250px;
-            animation-delay: 3s;
-        }
-
-        .orb-3 {
-            width: 450px;
-            height: 450px;
-            background: rgba(236, 72, 153, 0.4);
-            bottom: -200px;
-            left: 40%;
-            animation-delay: 6s;
-        }
-
-        .orb-4 {
-            width: 350px;
-            height: 350px;
-            background: rgba(59, 130, 246, 0.5);
-            top: 10%;
-            right: 5%;
-            animation-delay: 9s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -60px) scale(1.15); }
-            50% { transform: translate(-40px, 50px) scale(0.95); }
-            75% { transform: translate(60px, 30px) scale(1.1); }
-        }
-
-        .animated-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
-            animation: particle-float 12s infinite ease-in;
-        }
-
-        @keyframes particle-float {
-            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(80px) scale(0); opacity: 0; }
-        }
-
-        /* ==================== THEME DEFINITIONS ==================== */
-
-        :root {
-            --primary: #ffffff;
-            --secondary: #f0f9ff;
-            --accent: #00d9ff;
-            --bg-primary: rgba(255, 255, 255, 0.1);
-            --bg-secondary: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff;
-            --text-secondary: #e0e7ff;
-            --border-color: rgba(255, 255, 255, 0.2);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
-        }
-
-        body.theme-clear-glass {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(168, 85, 247, 0.95) 100%);
-        }
-
-        body.theme-dark-glass {
-            --primary: #0f172a;
-            --secondary: #1e293b;
-            --accent: #00d9ff;
-            --bg-primary: rgba(15, 23, 42, 0.5);
-            --bg-secondary: rgba(30, 41, 59, 0.6);
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --glass-bg: rgba(30, 41, 59, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
-        }
-
-        body.theme-neon-cyberpunk {
-            --primary: #ff006e;
-            --secondary: #ffbe0b;
-            --accent: #00f5ff;
-            --bg-primary: rgba(10, 10, 10, 0.7);
-            --bg-secondary: rgba(29, 29, 29, 0.8);
-            --text-primary: #ffffff;
-            --text-secondary: #ffbe0b;
-            --border-color: rgba(255, 0, 110, 0.3);
-            --glass-bg: rgba(29, 29, 29, 0.5);
-            --glass-border: rgba(255, 0, 110, 0.25);
-            background: linear-gradient(135deg, rgba(10, 10, 10, 0.98) 0%, rgba(29, 29, 29, 0.98) 100%);
-        }
-
-        body.theme-aurora {
-            --primary: #00d9ff;
-            --secondary: #7b2cbf;
-            --accent: #00ff88;
-            --bg-primary: rgba(10, 14, 39, 0.6);
-            --bg-secondary: rgba(22, 33, 62, 0.7);
-            --text-primary: #e8f4f8;
-            --text-secondary: #a8d8ff;
-            --border-color: rgba(0, 217, 255, 0.3);
-            --glass-bg: rgba(22, 33, 62, 0.4);
-            --glass-border: rgba(0, 217, 255, 0.2);
-            background: linear-gradient(135deg, rgba(10, 14, 39, 0.95) 0%, rgba(123, 44, 191, 0.9) 100%);
-        }
-
-        body.theme-sunset {
-            --primary: #ff6b6b;
-            --secondary: #ffa94d;
-            --accent: #ffd43b;
-            --bg-primary: rgba(255, 107, 107, 0.15);
-            --bg-secondary: rgba(255, 169, 77, 0.1);
-            --text-primary: #5c2e2a;
-            --text-secondary: #a04a3a;
-            --border-color: rgba(255, 107, 107, 0.2);
-            --glass-bg: rgba(255, 231, 225, 0.3);
-            --glass-border: rgba(255, 107, 107, 0.2);
-            background: linear-gradient(135deg, rgba(255, 183, 77, 0.95) 0%, rgba(255, 107, 107, 0.95) 100%);
-        }
-
-        body.theme-forest {
-            --primary: #2d6a4f;
-            --secondary: #40916c;
-            --accent: #52b788;
-            --bg-primary: rgba(45, 106, 79, 0.15);
-            --bg-secondary: rgba(64, 145, 108, 0.1);
-            --text-primary: #1b4332;
-            --text-secondary: #2d6a4f;
-            --border-color: rgba(82, 183, 136, 0.2);
-            --glass-bg: rgba(216, 243, 220, 0.3);
-            --glass-border: rgba(82, 183, 136, 0.2);
-            background: linear-gradient(135deg, rgba(177, 229, 166, 0.95) 0%, rgba(82, 183, 136, 0.95) 100%);
-        }
-
-        body.theme-ocean {
-            --primary: #0ea5e9;
-            --secondary: #0284c7;
-            --accent: #06b6d4;
-            --bg-primary: rgba(14, 165, 233, 0.15);
-            --bg-secondary: rgba(2, 132, 199, 0.1);
-            --text-primary: #075985;
-            --text-secondary: #0284c7;
-            --border-color: rgba(125, 211, 252, 0.2);
-            --glass-bg: rgba(224, 242, 254, 0.3);
-            --glass-border: rgba(14, 165, 233, 0.2);
-            background: linear-gradient(135deg, rgba(125, 211, 252, 0.95) 0%, rgba(14, 165, 233, 0.95) 100%);
-        }
-
-        body.theme-deep-space {
-            --primary: #e6ccff;
-            --secondary: #b399ff;
-            --accent: #00bfff;
-            --bg-primary: rgba(11, 0, 20, 0.6);
-            --bg-secondary: rgba(26, 0, 51, 0.7);
-            --text-primary: #e6ccff;
-            --text-secondary: #b399ff;
-            --border-color: rgba(138, 43, 226, 0.3);
-            --glass-bg: rgba(26, 0, 51, 0.5);
-            --glass-border: rgba(138, 43, 226, 0.2);
-            background: linear-gradient(135deg, rgba(11, 0, 20, 0.98) 0%, rgba(75, 0, 130, 0.95) 100%);
-        }
-
-        body.theme-corporate {
-            --primary: #0066cc;
-            --secondary: #004499;
-            --accent: #00ccff;
-            --bg-primary: rgba(0, 102, 204, 0.1);
-            --bg-secondary: rgba(0, 68, 153, 0.08);
-            --text-primary: #0a1929;
-            --text-secondary: #366092;
-            --border-color: rgba(0, 102, 204, 0.2);
-            --glass-bg: rgba(240, 245, 255, 0.4);
-            --glass-border: rgba(0, 102, 204, 0.15);
-            background: linear-gradient(135deg, rgba(200, 220, 255, 0.95) 0%, rgba(100, 150, 255, 0.95) 100%);
-        }
-
-        body.theme-vibrant {
-            --primary: #a855f7;
-            --secondary: #d946ef;
-            --accent: #ec4899;
-            --bg-primary: rgba(168, 85, 247, 0.15);
-            --bg-secondary: rgba(217, 70, 239, 0.1);
-            --text-primary: #6b21a8;
-            --text-secondary: #a855f7;
-            --border-color: rgba(236, 72, 153, 0.2);
-            --glass-bg: rgba(250, 245, 255, 0.3);
-            --glass-border: rgba(236, 72, 153, 0.2);
-            background: linear-gradient(135deg, rgba(233, 213, 255, 0.95) 0%, rgba(236, 72, 153, 0.95) 100%);
-        }
-
-        body.theme-tech-teal {
-            --primary: #06d6d0;
-            --secondary: #118ab2;
-            --accent: #073b4c;
-            --bg-primary: rgba(6, 214, 208, 0.15);
-            --bg-secondary: rgba(17, 138, 178, 0.1);
-            --text-primary: #073b4c;
-            --text-secondary: #118ab2;
-            --border-color: rgba(6, 214, 208, 0.2);
-            --glass-bg: rgba(232, 245, 245, 0.3);
-            --glass-border: rgba(6, 214, 208, 0.2);
-            background: linear-gradient(135deg, rgba(177, 245, 242, 0.95) 0%, rgba(6, 214, 208, 0.95) 100%);
-        }
-
-        body.theme-elegant {
-            --primary: #d4af37;
-            --secondary: #c9ada7;
-            --accent: #e8c4a0;
-            --bg-primary: rgba(212, 175, 55, 0.1);
-            --bg-secondary: rgba(201, 173, 167, 0.08);
-            --text-primary: #3e2c27;
-            --text-secondary: #8b7355;
-            --border-color: rgba(212, 175, 55, 0.2);
-            --glass-bg: rgba(255, 248, 240, 0.3);
-            --glass-border: rgba(212, 175, 55, 0.15);
-            background: linear-gradient(135deg, rgba(255, 228, 181, 0.95) 0%, rgba(212, 175, 55, 0.95) 100%);
-        }
-
-        body.theme-midnight {
-            --primary: #00ff88;
-            --secondary: #ff0080;
-            --accent: #00d4ff;
-            --bg-primary: rgba(13, 2, 33, 0.7);
-            --bg-secondary: rgba(26, 0, 51, 0.8);
-            --text-primary: #00ff88;
-            --text-secondary: #ff0080;
-            --border-color: rgba(0, 255, 136, 0.3);
-            --glass-bg: rgba(26, 0, 51, 0.5);
-            --glass-border: rgba(0, 255, 136, 0.2);
-            background: linear-gradient(135deg, rgba(13, 2, 33, 0.98) 0%, rgba(75, 0, 100, 0.98) 100%);
-        }
-
-        /* ==================== MAIN LAYOUT ==================== */
-
-        .container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-        }
-
-        .header {
-            padding: 20px;
-            background: var(--glass-bg);
-            border-bottom: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-title h1 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .header-title p {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .header-right {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .icon-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .theme-dropdown {
-            position: relative;
-        }
-
-        .theme-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            margin-top: 8px;
-            min-width: 220px;
-            max-height: 450px;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-        }
-
-        .theme-menu.active {
-            display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .theme-menu-title {
-            padding: 12px 16px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--glass-border);
-            letter-spacing: 1px;
-        }
-
-        .theme-option {
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-left: 3px solid transparent;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .theme-option:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-left-color: var(--accent);
-        }
-
-        .theme-option.active {
-            background: rgba(255, 255, 255, 0.15);
-            border-left-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .message {
-            display: flex;
-            gap: 12px;
-            animation: slideInMessage 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            max-width: 85%;
-        }
-
-        @keyframes slideInMessage {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-        }
-
-        .message.user .message-avatar {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border: none;
-        }
-
-        .message-bubble {
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.5;
-            word-wrap: break-word;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            color: var(--text-primary);
-        }
-
-        .message.user .message-bubble {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border: none;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--text-secondary);
-            text-align: center;
-        }
-
-        .empty-state-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .empty-state-text {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-primary);
-        }
-
-        .empty-state-subtext {
-            font-size: 13px;
-            opacity: 0.8;
-        }
-
-        .typing-indicator {
-            display: flex;
-            gap: 4px;
-            padding: 12px 16px;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                opacity: 0.5;
-                transform: translateY(0);
-            }
-            30% {
-                opacity: 1;
-                transform: translateY(-10px);
-            }
-        }
-
-        .input-area {
-            padding: 20px;
-            background: var(--glass-bg);
-            border-top: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
-        }
-
-        .message-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            font-size: 14px;
-            font-family: inherit;
-            resize: none;
-            max-height: 120px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .message-input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .message-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
-        }
-
-        .send-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .send-btn:active {
-            transform: translateY(0);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .messages-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .messages-container::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .messages-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            backdrop-filter: blur(10px);
-        }
-
-        .messages-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input, .form-textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 14px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .form-input::placeholder, .form-textarea::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .form-input:focus, .form-textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .modal-btn-submit {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-btn-cancel {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            color: var(--text-primary);
-            backdrop-filter: blur(10px);
-        }
-
-        .modal-btn-cancel:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        @media (max-width: 768px) {
-            .message {
-                max-width: 95%;
-            }
-
-            .theme-menu {
-                min-width: 180px;
-            }
-
-            .header {
-                padding: 16px;
-            }
-
-            .header-title h1 {
-                font-size: 16px;
-            }
-
-            .modal {
-                padding: 20px;
-                max-width: 90vw;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .icon-btn {
-                padding: 6px 10px;
-                font-size: 11px;
-            }
-
-            .messages-container {
-                padding: 12px;
-            }
-
-            .message {
-                max-width: 100%;
-            }
-
-            .input-wrapper {
-                flex-direction: column;
-            }
-
-            .send-btn {
-                width: 100%;
-            }
-
-            .modal {
-                padding: 16px;
-                width: 95%;
-            }
-
-            .modal-buttons {
-                flex-direction: column;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Virtual Office</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ── THEMES ── */
+:root{
+  --bg:#f0ece4;--surface:#fff;--border:#e0d8ce;--text:#1a1410;--muted:#7a6f65;
+  --accent:#3d6b4f;--accent2:#c8a96e;--card:#fff;--nav:#ffffffee;
+  --btn-r:8px;--card-r:16px;--fh:'Cormorant Garamond',serif;--fb:'DM Sans',sans-serif;
+  --bloom:#e8c5c5;--p1:#e8c5c5;--p2:#c8a96e;
+}
+.t-midnight{--bg:#0d1117;--surface:#161b22;--border:#21262d;--text:#e6edf3;--muted:#7d8590;--accent:#7ee787;--accent2:#ffa657;--card:#161b22;--nav:#0d1117f0;--bloom:#1a2a1a}
+.t-blossom{--bg:#fff0f5;--surface:#fff8fb;--border:#f7c5d8;--text:#3a1a2a;--muted:#9a6070;--accent:#d4547a;--accent2:#f0a0b8;--card:#fff8fb;--nav:#fff0f5f0;--bloom:#fce4ec}
+.t-ocean{--bg:#e8f4f8;--surface:#fff;--border:#b8d8e8;--text:#0a2540;--muted:#4a6a80;--accent:#0070b8;--accent2:#00b4d8;--card:#fff;--nav:#e8f4f8f0;--bloom:#caf0f8}
+.t-win95{--bg:#008080;--surface:#c0c0c0;--border:#fff;--text:#000;--muted:#444;--accent:#000080;--accent2:#c0c0c0;--card:#c0c0c0;--nav:#c0c0c0;--btn-r:0px;--card-r:0px;--fh:'VT323',monospace;--fb:'VT323',monospace;--bloom:#c0c0c0}
+.t-liquid{--bg:#f5f5f7;--surface:rgba(255,255,255,.72);--border:rgba(0,0,0,.08);--text:#1d1d1f;--muted:#6e6e73;--accent:#0071e3;--accent2:#34c759;--card:rgba(255,255,255,.65);--nav:rgba(245,245,247,.85);--btn-r:980px;--card-r:22px;--fh:'DM Sans',sans-serif;--fb:'DM Sans',sans-serif;--bloom:rgba(200,230,255,.4)}
+.t-defi{--bg:#06060a;--surface:#0e0e18;--border:#1e1e30;--text:#e8e8f8;--muted:#6060a0;--accent:#a855f7;--accent2:#7c3aed;--card:#0e0e18;--nav:#06060af0;--btn-r:8px;--card-r:12px;--fh:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#1a0a2e}
+.t-fode{--bg:#fff;--surface:#fff;--border:#e8e8e8;--text:#111;--muted:#888;--accent:#1a1a1a;--accent2:#f5c842;--card:#fff;--nav:#fffffff0;--btn-r:12px;--card-r:16px;--fh:'Space Grotesk',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#fff8e1}
+.t-neon{--bg:#000;--surface:#0a0a0a;--border:#1a1a2e;--text:#e0e8ff;--muted:#4060a0;--accent:#00d4ff;--accent2:#7b00ff;--card:rgba(10,10,30,.6);--nav:rgba(0,0,0,.9);--btn-r:12px;--card-r:20px;--fh:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--bloom:#0a0020}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);transition:background .35s,color .35s;overflow-x:hidden;min-height:100vh}
+
+/* ── THEME BAR ── */
+.tbar{
+  background:var(--nav);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+  padding:9px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  position:sticky;top:0;z-index:400;transition:all .35s;
+}
+.t-win95 .tbar{background:#c0c0c0;border-color:#808080}
+.t-liquid .tbar{backdrop-filter:blur(24px) saturate(180%)}
+.tlabel{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.t-win95 .tlabel{font-family:'VT323',monospace;font-size:.9rem;text-transform:none}
+.topts{display:flex;gap:5px;flex-wrap:wrap}
+.topt{
+  display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:100px;
+  border:1.5px solid var(--border);background:var(--card);cursor:pointer;
+  font-size:.72rem;font-weight:500;color:var(--muted);transition:all .2s;
+  white-space:nowrap;font-family:var(--fb);
+}
+.topt:hover{border-color:var(--accent);color:var(--accent)}
+.topt.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.d1{background:linear-gradient(135deg,#3d6b4f,#c8a96e)}
+.d2{background:linear-gradient(135deg,#0d1117,#7ee787)}
+.d3{background:linear-gradient(135deg,#d4547a,#fce4ec)}
+.d4{background:linear-gradient(135deg,#0070b8,#90e0ef)}
+.d5{background:linear-gradient(135deg,#000080,#c0c0c0)}
+.d6{background:linear-gradient(135deg,rgba(0,113,227,.7),rgba(52,199,89,.6))}
+.d7{background:linear-gradient(135deg,#06060a,#a855f7)}
+.d8{background:linear-gradient(135deg,#111,#f5c842)}
+.d9{background:linear-gradient(135deg,#000,#00d4ff)}
+.t-win95 .topt{border-radius:0;border:2px solid;border-color:#fff #808080 #808080 #fff;background:#c0c0c0;color:#000;font-family:'VT323',monospace;padding:1px 6px}
+.t-win95 .topt.on{background:#000080;color:#fff;border-color:#808080 #fff #fff #808080}
+
+/* ── NAV ── */
+nav{
+  background:var(--nav);border-bottom:1px solid var(--border);
+  padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;
+  backdrop-filter:blur(12px);position:sticky;top:52px;z-index:300;transition:all .35s;
+}
+.t-win95 nav{background:#c0c0c0;border-color:#808080;height:auto;padding:2px 4px;top:42px}
+.t-defi nav{border-color:#1e1e30}
+.t-neon nav{border-color:#1a1a2e}
+
+.logo{font-family:var(--fh);font-size:1.45rem;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px}
+.lpulse{width:7px;height:7px;background:var(--accent2);border-radius:50%;animation:pulse 2s infinite}
+.t-defi .logo{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem}
+.t-fode .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.5rem;color:#111}
+.t-neon .logo{font-family:'Syne',sans-serif;font-weight:700}
+.t-win95 .lpulse,.t-defi .lpulse,.t-fode .lpulse,.t-neon .lpulse{display:none}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5);opacity:.6}}
+
+.navlinks{display:flex;gap:22px}
+.navlinks a{color:var(--muted);text-decoration:none;font-size:.84rem;font-weight:500;transition:color .2s}
+.navlinks a:hover{color:var(--accent)}
+.t-win95 .navlinks a{font-family:'VT323',monospace;font-size:1rem;color:#000}
+.t-win95 .navlinks a:hover{background:#000080;color:#fff;padding:1px 4px}
+.t-defi .navlinks a{font-family:'Space Grotesk',sans-serif;font-size:.82rem;color:#6060a0}
+.t-defi .navlinks a:hover{color:#a855f7}
+.t-neon .navlinks a{color:#4060a0}
+.t-neon .navlinks a:hover{color:#00d4ff}
+
+.bnav{background:var(--accent);color:#fff;border:none;border-radius:var(--btn-r);padding:7px 18px;font-size:.82rem;font-weight:500;cursor:pointer;font-family:var(--fb);transition:opacity .2s}
+.bnav:hover{opacity:.85}
+.t-win95 .bnav{background:#c0c0c0;color:#000;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0;font-family:'VT323',monospace}
+.t-defi .bnav{background:linear-gradient(135deg,#a855f7,#7c3aed);font-family:'Space Grotesk',sans-serif;border-radius:8px}
+.t-fode .bnav{background:#f5c842;color:#111;border-radius:24px;font-weight:600}
+.t-neon .bnav{background:transparent;border:1px solid #00d4ff;color:#00d4ff;font-family:'Space Grotesk',sans-serif}
+.t-liquid .bnav{border-radius:980px}
+
+.w95nav-w{display:none;width:100%}
+.t-win95 .w95nav-w{display:block}
+.w95nav{display:flex;background:#c0c0c0;padding:2px;font-family:'VT323',monospace}
+.w95mi{padding:1px 8px;cursor:pointer;font-size:.95rem}
+.w95mi:hover{background:#000080;color:#fff}
+
+/* ── PARTICLES ── */
+.ptcls{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.petal{position:absolute;animation:fall linear infinite;opacity:.35}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:.35}100%{transform:translateY(110vh) rotate(480deg) translateX(30px);opacity:0}}
+
+/* DEFI/NEON GRID */
+.bgrid{display:none;position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(168,85,247,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,.04) 1px,transparent 1px);
+  background-size:50px 50px;}
+.t-defi .bgrid{display:block}
+.t-neon .bgrid{display:block;background-image:linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px)}
+
+/* ── HERO ── */
+.hero{
+  min-height:88vh;display:flex;align-items:center;justify-content:center;
+  padding:5rem 2rem 3rem;position:relative;overflow:hidden;
+}
+.t-win95 .hero{min-height:auto;padding:8px;background:#008080;align-items:flex-start;justify-content:flex-start}
+.t-fode .hero{min-height:88vh;padding:3rem 4rem;justify-content:flex-start;align-items:center;background:linear-gradient(135deg,#fff 55%,#111 45%)}
+
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,var(--bloom) 0%,transparent 70%);opacity:.6;pointer-events:none;transition:all .4s}
+.t-win95 .hero-glow,.t-fode .hero-glow{display:none}
+.t-defi .hero-glow{background:radial-gradient(ellipse 50% 50% at 70% 50%,rgba(168,85,247,.15) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 30% 60%,rgba(124,58,237,.1) 0%,transparent 60%);opacity:1}
+.t-neon .hero-glow{background:radial-gradient(ellipse 50% 45% at 25% 40%,rgba(0,212,255,.06) 0%,transparent 60%),radial-gradient(ellipse 45% 40% at 75% 60%,rgba(123,0,255,.06) 0%,transparent 60%);opacity:1}
+
+.defi-rings{display:none;position:absolute;right:10%;top:50%;transform:translateY(-50%)}
+.t-defi .defi-rings,.t-neon .defi-rings{display:block}
+.ring{border-radius:50%;border-style:solid;animation:ringFloat ease-in-out infinite}
+@keyframes ringFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(180deg)}}
+
+.fode-card{display:none;position:absolute;right:3rem;bottom:2rem;background:rgba(20,20,20,.92);border:1px solid #2a2a2a;border-radius:16px;padding:16px 20px;color:#fff;min-width:260px}
+.t-fode .fode-card{display:block}
+.fode-coupon-label{font-size:.7rem;color:#888;margin-bottom:8px;display:flex;justify-content:space-between}
+.fode-item{display:flex;align-items:center;gap:10px}
+.fode-pizza{width:40px;height:40px;border-radius:50%;background:#ff6b35;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.fode-badge{background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.4);color:#f5c842;font-size:.68rem;padding:2px 8px;border-radius:100px;display:inline-flex;align-items:center;gap:3px;margin-top:8px}
+
+.w95-icons{display:none;position:absolute;top:8px;right:8px;flex-direction:column;gap:8px;align-items:center}
+.t-win95 .w95-icons{display:flex}
+.w95-icon{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px;color:#fff;font-family:'VT323',monospace;font-size:.72rem;text-shadow:1px 1px #000}
+.w95-icon:hover{background:rgba(0,0,128,.4)}
+.w95-ico{font-size:1.8rem;image-rendering:pixelated}
+
+.hero-inner{text-align:center;max-width:620px;position:relative;z-index:1}
+.t-win95 .hero-inner{text-align:left;max-width:420px;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff}
+.t-defi .hero-inner,.t-neon .hero-inner{text-align:left;max-width:520px}
+.t-fode .hero-inner{text-align:left;max-width:420px}
+
+.w95titlebar{display:none;background:#000080;color:#fff;padding:2px 4px;justify-content:space-between;align-items:center;font-family:'VT323',monospace;font-size:.9rem}
+.t-win95 .w95titlebar{display:flex}
+.w95bbts{display:flex;gap:2px}
+.w95b{width:16px;height:13px;background:#c0c0c0;border:1px solid;border-color:#fff #808080 #808080 #fff;font-size:.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000}
+.w95body{padding:10px 14px;display:none}
+.t-win95 .w95body{display:block}
+
+.badge{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:.73rem;color:var(--muted);margin-bottom:1.2rem;animation:fadeUp .8s ease both}
+.t-win95 .badge,.t-defi .badge,.t-fode .badge,.t-neon .badge{display:none}
+.bdot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1.8s infinite}
+.t-liquid .badge{border-color:rgba(0,0,0,.1);backdrop-filter:blur(10px)}
+
+h1{font-family:var(--fh);font-size:clamp(2.5rem,5vw,4.4rem);font-weight:300;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;animation:fadeUp .8s .15s ease both}
+h1 em{font-style:italic;color:var(--accent)}
+.t-win95 h1{font-size:1.35rem;letter-spacing:0;margin-bottom:6px;font-weight:400}
+.t-win95 h1 em{font-style:normal;color:#000}
+.t-liquid h1{font-weight:400;letter-spacing:-.03em;font-family:'DM Sans',sans-serif}
+.t-liquid h1 em{font-style:normal;background:linear-gradient(90deg,#0071e3,#34c759);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.t-defi h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.2rem,4.5vw,3.8rem);letter-spacing:-.03em;color:#fff}
+.t-defi h1 em{font-style:normal;color:#a855f7}
+.t-fode h1{font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:400;color:#111}
+.t-fode h1 strong{font-weight:700}
+.t-neon h1{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(2rem,4vw,3.6rem);color:#e0e8ff;letter-spacing:-.02em}
+.t-neon h1 em{font-style:normal;color:#00d4ff}
+
+.hsub{font-size:.95rem;color:var(--muted);max-width:400px;margin:0 auto 1.8rem;font-weight:300;animation:fadeUp .8s .3s ease both}
+.t-defi .hsub,.t-neon .hsub,.t-fode .hsub{margin:0 0 1.8rem}
+.t-win95 .hsub{display:none}
+.t-defi .hsub{color:#6060a0;font-family:'Space Grotesk',sans-serif}
+.t-fode .hsub{color:#555;margin:0 0 1.2rem;font-size:.9rem}
+.t-neon .hsub{color:#4060a0}
+
+.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .45s ease both}
+.t-win95 .hbtns,.t-defi .hbtns,.t-fode .hbtns,.t-neon .hbtns{justify-content:flex-start}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+.bp{background:var(--accent);color:#fff;padding:10px 22px;border:none;border-radius:var(--btn-r);font-size:.88rem;font-weight:500;cursor:pointer;font-family:var(--fb);transition:opacity .2s,transform .2s}
+.bp:hover{opacity:.88;transform:translateY(-1px)}
+.t-win95 .bp{background:#c0c0c0;color:#000;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0;padding:3px 10px;font-family:'VT323',monospace;transform:none}
+.t-win95 .bp:active{border-color:#808080 #fff #fff #808080}
+.t-defi .bp{background:linear-gradient(135deg,#a855f7,#7c3aed);font-family:'Space Grotesk',sans-serif;border-radius:8px;box-shadow:0 0 24px rgba(168,85,247,.4)}
+.t-fode .bp{background:#111;color:#fff;border-radius:40px;font-family:'Space Grotesk',sans-serif;padding:12px 28px}
+.t-neon .bp{background:transparent;border:1px solid #00d4ff;color:#00d4ff;font-family:'Space Grotesk',sans-serif;box-shadow:0 0 16px rgba(0,212,255,.2)}
+.t-liquid .bp{border-radius:980px;box-shadow:0 2px 12px rgba(0,113,227,.35)}
+
+.bg_{background:var(--card);color:var(--text);padding:10px 22px;border:1px solid var(--border);border-radius:var(--btn-r);font-size:.88rem;cursor:pointer;font-family:var(--fb);transition:border-color .2s}
+.bg_:hover{border-color:var(--accent);color:var(--accent)}
+.t-win95 .bg_{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0;font-family:'VT323',monospace;padding:3px 10px}
+.t-liquid .bg_{backdrop-filter:blur(8px);border-radius:980px;border-color:rgba(0,0,0,.15)}
+.t-defi .bg_{background:transparent;border-color:#1e1e30;color:#6060a0;font-family:'Space Grotesk',sans-serif;border-radius:8px}
+.t-neon .bg_{background:transparent;border-color:#1a1a2e;color:#4060a0;font-family:'Space Grotesk',sans-serif}
+
+/* ── STATS ── */
+.stats{padding:26px 24px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);transition:all .35s}
+.t-win95 .stats{background:#c0c0c0;border:2px inset #808080;margin:4px;padding:8px}
+.t-liquid .stats{background:rgba(255,255,255,.55);backdrop-filter:blur(20px) saturate(180%);border-color:rgba(0,0,0,.08)}
+.t-defi .stats{background:#06060a;border-color:#1e1e30}
+.t-neon .stats{background:rgba(10,10,30,.6);backdrop-filter:blur(20px);border-color:#1a1a2e}
+.t-fode .stats{background:#f8f8f8;border-color:#e8e8e8}
+.si{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center}
+.sn{font-family:var(--fh);font-size:2.2rem;font-weight:600;color:var(--accent);line-height:1}
+.t-win95 .sn{font-family:'VT323',monospace;font-size:2rem}
+.t-defi .sn{font-family:'Syne',sans-serif;font-weight:700;color:#a855f7}
+.t-fode .sn{font-family:'Space Grotesk',sans-serif;font-weight:700}
+.t-neon .sn{font-family:'Syne',sans-serif;font-weight:700;color:#00d4ff}
+.sl{font-size:.72rem;color:var(--muted);margin-top:3px;letter-spacing:.03em}
+.t-win95 .sl{font-family:'VT323',monospace;font-size:.85rem;color:#000}
+
+/* ── FEATURES ── */
+.sec{padding:56px 24px;max-width:980px;margin:0 auto}
+.t-win95 .sec{padding:8px}
+.stag{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px}
+.t-defi .stag{color:#a855f7;font-family:'Space Grotesk',sans-serif}
+.t-neon .stag{color:#00d4ff;font-family:'Space Grotesk',sans-serif}
+.t-fode .stag{color:#f5c842;font-family:'Space Grotesk',sans-serif}
+.stitle{font-family:var(--fh);font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:300;letter-spacing:-.02em;margin-bottom:8px}
+.t-win95 .stitle{font-size:1.2rem;letter-spacing:0;font-weight:400}
+.t-liquid .stitle{font-family:'DM Sans',sans-serif;font-weight:400}
+.t-defi .stitle{font-family:'Syne',sans-serif;font-weight:700;color:#e8e8f8}
+.t-neon .stitle{font-family:'Syne',sans-serif;font-weight:700;color:#e0e8ff}
+.t-fode .stitle{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#111}
+.ssub{color:var(--muted);font-weight:300;max-width:400px;font-size:.88rem}
+.t-win95 .ssub{color:#000;font-family:'VT323',monospace}
+
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.t-win95 .fgrid{gap:4px;grid-template-columns:repeat(2,1fr)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:22px;transition:transform .3s,border-color .3s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.t-win95 .card{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;padding:8px;transform:none!important}
+.t-liquid .card{background:rgba(255,255,255,.6);border-color:rgba(255,255,255,.8);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 2px 16px rgba(0,0,0,.06),inset 0 0 0 .5px rgba(255,255,255,.9)}
+.t-liquid .card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,.1),inset 0 0 0 .5px rgba(255,255,255,.9)}
+.t-defi .card{background:#0e0e18;border-color:#1e1e30}
+.t-defi .card:hover{border-color:#a855f7;box-shadow:0 0 24px rgba(168,85,247,.1)}
+.t-neon .card{background:rgba(10,10,30,.6);border-color:#1a1a2e;backdrop-filter:blur(20px)}
+.t-neon .card:hover{border-color:#00d4ff;box-shadow:0 0 20px rgba(0,212,255,.08)}
+.t-fode .card{border-color:#f0f0f0;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+
+.fico{width:42px;height:42px;border-radius:10px;background:var(--bloom);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:12px;transition:transform .3s}
+.card:hover .fico{transform:scale(1.1) rotate(5deg)}
+.t-win95 .fico{width:20px;height:20px;border-radius:0;background:none;font-size:.8rem;margin-bottom:2px}
+.t-liquid .fico{background:rgba(0,113,227,.08);border:.5px solid rgba(0,113,227,.15);border-radius:14px}
+.t-defi .fico{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:10px}
+.t-neon .fico{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:10px}
+.t-fode .fico{background:#fff8e1;border-radius:12px}
+.ft{font-weight:600;margin-bottom:5px;font-size:.88rem}
+.t-win95 .ft{font-family:'VT323',monospace;font-size:.9rem;font-weight:400}
+.t-defi .ft{font-family:'Space Grotesk',sans-serif;color:#e8e8f8}
+.t-neon .ft{font-family:'Space Grotesk',sans-serif;color:#e0e8ff}
+.t-fode .ft{font-family:'Space Grotesk',sans-serif;font-weight:600}
+.fd{font-size:.8rem;color:var(--muted);line-height:1.65}
+.t-win95 .fd{font-family:'VT323',monospace;font-size:.8rem;color:#000}
+
+/* ── ROOMS ── */
+.rsec{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 24px;transition:all .35s}
+.t-win95 .rsec{background:#c0c0c0;border:2px inset #808080;margin:4px;padding:8px}
+.t-liquid .rsec{background:rgba(255,255,255,.45);backdrop-filter:blur(20px) saturate(180%);border-color:rgba(0,0,0,.07)}
+.t-defi .rsec{background:#06060a;border-color:#1e1e30}
+.t-neon .rsec{background:rgba(10,10,30,.5);border-color:#1a1a2e}
+.rin{max-width:980px;margin:0 auto}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.t-win95 .rgrid{gap:4px}
+
+.rc{background:var(--bg);border:1px solid var(--border);border-radius:var(--card-r);padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none;color:inherit;transition:all .25s}
+.rc:hover{background:var(--card);border-color:var(--accent);transform:translateX(3px)}
+.t-win95 .rc{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0;transform:none!important;padding:6px}
+.t-win95 .rc:hover{background:#000080;color:#fff}
+.t-liquid .rc{background:rgba(255,255,255,.5);backdrop-filter:blur(16px) saturate(180%);border-color:rgba(255,255,255,.8);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.9)}
+.t-liquid .rc:hover{background:rgba(255,255,255,.75);transform:translateX(4px);border-color:rgba(0,113,227,.3)}
+.t-defi .rc{background:#0e0e18;border-color:#1e1e30}
+.t-defi .rc:hover{border-color:#a855f7;box-shadow:0 0 20px rgba(168,85,247,.08)}
+.t-neon .rc{background:rgba(10,10,30,.6);border-color:#1a1a2e;backdrop-filter:blur(16px)}
+.t-neon .rc:hover{border-color:#00d4ff}
+.t-fode .rc{background:#fafafa;border-color:#f0f0f0}
+.t-fode .rc:hover{border-color:#f5c842}
+.rico{font-size:1.6rem;flex-shrink:0}
+.t-win95 .rico{font-size:1rem}
+.rt{font-weight:600;font-size:.86rem;margin-bottom:2px}
+.t-win95 .rt{font-family:'VT323',monospace;font-size:.9rem;font-weight:400}
+.t-defi .rt{font-family:'Space Grotesk',sans-serif;color:#e8e8f8}
+.t-neon .rt{font-family:'Space Grotesk',sans-serif;color:#e0e8ff}
+.rcc{font-size:.74rem;color:var(--muted)}
+.avs{display:flex;margin-top:5px}
+.av{width:20px;height:20px;border-radius:50%;background:var(--accent);border:2px solid var(--card);display:flex;align-items:center;justify-content:center;font-size:.5rem;color:#fff;font-weight:600;margin-left:-5px}
+.av:first-child{margin-left:0}
+.t-win95 .av{border-radius:0;width:16px;height:16px}
+.live{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;color:var(--accent);font-weight:600;margin-top:4px}
+.lv{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite}
+.t-defi .live{color:#a855f7}.t-defi .lv{background:#a855f7}
+.t-neon .live{color:#00d4ff}.t-neon .lv{background:#00d4ff}
+.t-fode .live{color:#f5c842}.t-fode .lv{background:#f5c842}
+
+/* ── TESTIMONIALS ── */
+.tsec{padding:56px 24px;max-width:980px;margin:0 auto}
+.t-win95 .tsec{padding:8px}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.t-win95 .tgrid{gap:4px}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;transition:transform .25s}
+.tcard:hover{transform:translateY(-2px)}
+.t-win95 .tcard{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0;transform:none!important;padding:8px}
+.t-liquid .tcard{background:rgba(255,255,255,.6);backdrop-filter:blur(20px) saturate(180%);border-color:rgba(255,255,255,.85);box-shadow:0 2px 16px rgba(0,0,0,.05),inset 0 0 0 .5px rgba(255,255,255,.9)}
+.t-defi .tcard{background:#0e0e18;border-color:#1e1e30}
+.t-neon .tcard{background:rgba(10,10,30,.6);border-color:#1a1a2e;backdrop-filter:blur(20px)}
+.t-fode .tcard{border-color:#f0f0f0;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.tq{font-family:var(--fh);font-size:.94rem;font-style:italic;margin-bottom:10px;line-height:1.55}
+.t-win95 .tq{font-style:normal;font-family:'VT323',monospace;font-size:.82rem}
+.t-liquid .tq,.t-defi .tq,.t-neon .tq,.t-fode .tq{font-family:'DM Sans',sans-serif;font-style:normal;font-weight:300;font-size:.88rem}
+.t-defi .tq{color:#8080c0}
+.t-neon .tq{color:#5070a0}
+.ta{display:flex;align-items:center;gap:8px}
+.tav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;color:#fff;flex-shrink:0}
+.t-win95 .tav{border-radius:0}
+.tn{font-weight:600;font-size:.79rem}
+.tr{font-size:.7rem;color:var(--muted)}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:22px;text-align:center;font-size:.75rem;color:var(--muted);transition:all .35s}
+.t-win95 footer{background:#c0c0c0;border-top:2px solid #fff;font-family:'VT323',monospace;font-size:.85rem;color:#000}
+.t-liquid footer{background:rgba(255,255,255,.5);backdrop-filter:blur(20px);border-color:rgba(0,0,0,.07)}
+.t-defi footer{background:#06060a;border-color:#1e1e30}
+.t-neon footer{background:rgba(10,10,30,.6);border-color:#1a1a2e}
+.flogo{font-family:var(--fh);font-size:1.25rem;color:var(--accent);margin-bottom:4px}
+.t-win95 .flogo{font-family:'VT323',monospace}
+.t-liquid .flogo{font-family:'DM Sans',sans-serif;font-weight:500}
+.t-defi .flogo{font-family:'Syne',sans-serif;font-weight:700;color:#a855f7}
+.t-neon .flogo{font-family:'Syne',sans-serif;font-weight:700;color:#00d4ff}
+.t-fode .flogo{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#111}
+
+/* ── WIN95 TASKBAR ── */
+.w95tb{display:none;background:#c0c0c0;border-top:2px solid #fff;padding:2px 4px;align-items:center;gap:4px;position:sticky;bottom:0;z-index:500}
+.t-win95 .w95tb{display:flex}
+.w95start{background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;padding:1px 8px;cursor:pointer;font-family:'VT323',monospace;font-size:1rem;font-weight:bold}
+.w95start:active{border-color:#808080 #fff #fff #808080}
+.w95tbitem{background:#c0c0c0;border:2px inset #808080;padding:1px 8px;font-family:'VT323',monospace;font-size:.8rem;cursor:pointer}
+.w95clk{margin-left:auto;background:#c0c0c0;border:2px inset #808080;padding:1px 8px;font-family:'VT323',monospace;font-size:.8rem}
+
+/* ── CHATBOT ── */
+.cwrap{position:sticky;bottom:24px;display:flex;flex-direction:column;align-items:flex-end;padding:0 24px;z-index:500;margin-top:-64px}
+.t-win95 .cwrap{bottom:38px}
+
+.ctog{
+  width:50px;height:50px;border-radius:50%;background:var(--accent);border:none;
+  cursor:pointer;font-size:1.15rem;color:#fff;transition:transform .25s;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);animation:popIn .6s 1s ease both;
+}
+.ctog:hover{transform:scale(1.08)}
+.t-win95 .ctog{border-radius:0;border:2px solid;border-color:#fff #808080 #808080 #fff;background:#c0c0c0;color:#000;font-family:'VT323',monospace;font-size:.8rem;width:auto;height:auto;padding:2px 8px;animation:none}
+.t-defi .ctog{background:linear-gradient(135deg,#a855f7,#7c3aed);box-shadow:0 0 24px rgba(168,85,247,.5)}
+.t-neon .ctog{background:transparent;border:1px solid #00d4ff;color:#00d4ff;box-shadow:0 0 20px rgba(0,212,255,.3)}
+.t-fode .ctog{background:#111;color:#fff}
+.t-liquid .ctog{border-radius:980px;width:auto;padding:9px 18px;font-size:.8rem;font-weight:500;font-family:'DM Sans',sans-serif;background:rgba(255,255,255,.75);color:var(--accent);border:.5px solid rgba(255,255,255,.9);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 4px 16px rgba(0,0,0,.09)}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+.cbox{
+  width:320px;background:var(--card);border:1px solid var(--border);border-radius:var(--card-r);
+  overflow:hidden;display:flex;flex-direction:column;margin-bottom:10px;
+  transform-origin:bottom right;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s;
+  max-height:500px;
+}
+.cbox.hidden{transform:scale(.8) translateY(18px);opacity:0;pointer-events:none}
+.t-win95 .cbox{border-radius:0;border:2px solid;border-color:#fff #808080 #808080 #fff;box-shadow:4px 4px 0 #000;background:#c0c0c0}
+.t-liquid .cbox{background:rgba(255,255,255,.72);backdrop-filter:blur(32px) saturate(200%);border-color:rgba(255,255,255,.9);box-shadow:0 16px 60px rgba(0,0,0,.1),inset 0 0 0 .5px rgba(255,255,255,.85)}
+.t-defi .cbox{background:#0e0e18;border-color:#1e1e30;box-shadow:0 0 40px rgba(168,85,247,.15)}
+.t-neon .cbox{background:rgba(10,10,30,.85);border-color:#1a1a2e;backdrop-filter:blur(32px);box-shadow:0 0 40px rgba(0,212,255,.08)}
+
+.chead{background:var(--accent);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;color:#fff}
+.t-win95 .chead{background:#000080;padding:2px 4px;font-family:'VT323',monospace}
+.t-liquid .chead{background:rgba(255,255,255,.6);backdrop-filter:blur(20px);color:var(--text);border-bottom:.5px solid rgba(255,255,255,.8)}
+.t-defi .chead{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(124,58,237,.2));border-bottom:1px solid #1e1e30}
+.t-neon .chead{background:rgba(0,212,255,.08);border-bottom:1px solid rgba(0,212,255,.15)}
+.t-fode .chead{background:#111}
+.chl{display:flex;align-items:center;gap:8px}
+.cav{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.05rem;animation:spin 10s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.t-win95 .cav{animation:none;border-radius:0;width:18px;height:18px;font-size:.75rem}
+.t-liquid .cav{background:rgba(0,113,227,.1);border:.5px solid rgba(0,113,227,.2)}
+.t-defi .cav{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);border-radius:8px;animation:none}
+.t-neon .cav{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2)}
+.cnm{font-weight:600;font-size:.85rem}
+.cst{font-size:.67rem;opacity:.85;display:flex;align-items:center;gap:3px}
+.t-liquid .cnm,.t-liquid .cst{color:var(--text)}
+.t-defi .cnm{font-family:'Space Grotesk',sans-serif;color:#e8e8f8}
+.t-defi .cst{color:#6060a0}
+.t-neon .cnm{color:#e0e8ff}
+.t-neon .cst{color:#4060a0}
+.ccl{background:rgba(255,255,255,.2);border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:.82rem;transition:background .15s}
+.ccl:hover{background:rgba(255,255,255,.35)}
+.t-win95 .ccl{border-radius:0;border:1px solid;border-color:#fff #808080 #808080 #fff;background:#c0c0c0;color:#000;width:15px;height:13px;font-size:.5rem}
+.t-liquid .ccl{border:.5px solid rgba(0,0,0,.12);background:rgba(0,0,0,.05);color:var(--muted);border-radius:50%}
+.t-defi .ccl{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.2);border-radius:6px}
+.t-neon .ccl{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:50%}
+
+.cmsgs{padding:10px;display:flex;flex-direction:column;gap:7px;flex:1;overflow-y:auto;scroll-behavior:smooth;min-height:180px;max-height:240px}
+.cmsgs::-webkit-scrollbar{width:3px}
+.cmsgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+.msg{max-width:85%;padding:8px 11px;border-radius:13px;font-size:.8rem;line-height:1.55;animation:msgIn .25s ease;word-break:break-word}
+@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.msg.bot{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:3px;color:var(--text)}
+.msg.usr{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.t-win95 .msg{border-radius:0;font-family:'VT323',monospace;font-size:.82rem}
+.t-win95 .msg.bot{background:#fff;border:1px solid #808080}
+.t-win95 .msg.usr{background:#000080;color:#fff}
+.t-liquid .msg.bot{background:rgba(255,255,255,.7);border-color:rgba(255,255,255,.85);backdrop-filter:blur(10px)}
+.t-defi .msg.bot{background:#161824;border-color:#1e1e30;color:#8080c0}
+.t-defi .msg.usr{background:linear-gradient(135deg,#a855f7,#7c3aed)}
+.t-neon .msg.bot{background:rgba(20,20,40,.8);border-color:#1a1a2e;color:#5070a0}
+.t-neon .msg.usr{background:rgba(0,212,255,.2);border:1px solid rgba(0,212,255,.4);color:#00d4ff}
+.t-fode .msg.usr{background:#111}
+
+.msg.typing{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-radius:13px;border-bottom-left-radius:3px;padding:10px 13px}
+.t-defi .msg.typing{background:#161824;border-color:#1e1e30}
+.t-neon .msg.typing{background:rgba(20,20,40,.8);border-color:#1a1a2e}
+.tdots{display:flex;gap:3px;align-items:center}
+.tdots span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:td 1.2s infinite}
+.tdots span:nth-child(2){animation-delay:.2s}
+.tdots span:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1.1);opacity:1}}
+.t-defi .tdots span{background:#a855f7}
+.t-neon .tdots span{background:#00d4ff}
+
+.csugg{display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px;border-top:1px solid var(--border)}
+.t-defi .csugg{border-color:#1e1e30}
+.t-neon .csugg{border-color:#1a1a2e}
+.t-liquid .csugg{border-color:rgba(0,0,0,.07)}
+.sugg{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:100px;padding:3px 10px;font-size:.71rem;cursor:pointer;transition:all .2s;font-family:var(--fb)}
+.sugg:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.t-win95 .sugg{border-radius:0;font-family:'VT323',monospace;font-size:.82rem;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff}
+.t-win95 .sugg:hover{background:#000080;color:#fff}
+.t-liquid .sugg{border-radius:980px;background:rgba(255,255,255,.6);backdrop-filter:blur(10px);border-color:rgba(0,0,0,.1)}
+.t-liquid .sugg:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.t-defi .sugg{background:#0e0e18;border-color:#1e1e30;color:#6060a0;border-radius:6px}
+.t-defi .sugg:hover{background:rgba(168,85,247,.2);color:#a855f7;border-color:#a855f7}
+.t-neon .sugg{background:rgba(10,10,30,.6);border-color:#1a1a2e;color:#4060a0;border-radius:8px}
+.t-neon .sugg:hover{background:rgba(0,212,255,.1);color:#00d4ff;border-color:#00d4ff}
+.t-fode .sugg{background:#f8f8f8;border-color:#e8e8e8;border-radius:8px}
+.t-fode .sugg:hover{background:#f5c842;color:#111;border-color:#f5c842}
+
+.cinprow{display:flex;gap:6px;padding:8px 10px;border-top:1px solid var(--border)}
+.t-defi .cinprow{border-color:#1e1e30}
+.t-neon .cinprow{border-color:#1a1a2e}
+.t-liquid .cinprow{border-color:rgba(0,0,0,.07)}
+.cinp{flex:1;border:1px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.8rem;background:var(--bg);color:var(--text);outline:none;font-family:var(--fb);transition:border-color .2s}
+.cinp:focus{border-color:var(--accent)}
+.cinp::placeholder{color:var(--muted)}
+.t-win95 .cinp{border-radius:0;border:2px inset #808080;background:#fff;font-family:'VT323',monospace;font-size:.82rem}
+.t-liquid .cinp{background:rgba(255,255,255,.5);backdrop-filter:blur(10px);border-color:rgba(0,0,0,.12);border-radius:10px}
+.t-liquid .cinp:focus{border-color:rgba(0,113,227,.4)}
+.t-defi .cinp{background:#06060a;border-color:#1e1e30;color:#e8e8f8;border-radius:8px}
+.t-defi .cinp:focus{border-color:#a855f7}
+.t-neon .cinp{background:rgba(10,10,30,.8);border-color:#1a1a2e;color:#e0e8ff;border-radius:8px}
+.t-neon .cinp:focus{border-color:#00d4ff}
+.t-fode .cinp{background:#f8f8f8;border-color:#e8e8e8;border-radius:8px}
+.csend{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:6px 11px;cursor:pointer;font-size:.9rem;transition:opacity .15s}
+.csend:hover{opacity:.85}
+.t-win95 .csend{border-radius:0;border:2px solid;border-color:#fff #808080 #808080 #fff;background:#c0c0c0;color:#000;font-family:'VT323',monospace}
+.t-liquid .csend{border-radius:10px;box-shadow:0 2px 8px rgba(0,113,227,.25)}
+.t-defi .csend{background:linear-gradient(135deg,#a855f7,#7c3aed);border-radius:8px;box-shadow:0 0 12px rgba(168,85,247,.3)}
+.t-neon .csend{background:rgba(0,212,255,.2);border:1px solid rgba(0,212,255,.4);color:#00d4ff;border-radius:8px}
+.t-fode .csend{background:#111;border-radius:8px}
+
+.api-bar{padding:4px 10px;background:var(--surface);border-top:1px solid var(--border);font-size:.64rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+.t-defi .api-bar{background:#06060a;border-color:#1e1e30}
+.t-neon .api-bar{background:rgba(10,10,30,.8);border-color:#1a1a2e}
+.api-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+
+/* ── ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(20px);transition:all .65s ease}
+.reveal.vis{opacity:1;transform:none}
+.t-win95 .reveal{opacity:1;transform:none}
+
+/* ── LIQUID GLASS DEMO ── */
+.glass-demo{display:none;max-width:980px;margin:0 auto;padding:40px 24px}
+.t-liquid .glass-demo{display:block}
+.glass-pill{display:inline-flex;align-items:center;gap:12px;background:rgba(255,255,255,.65);backdrop-filter:blur(20px) saturate(200%);border:.5px solid rgba(255,255,255,.9);border-radius:980px;padding:12px 24px;font-size:.9rem;font-weight:500;color:var(--text);box-shadow:0 2px 16px rgba(0,0,0,.07),inset 0 1px 0 rgba(255,255,255,.8)}
+.glass-menu{display:inline-flex;flex-direction:column;background:rgba(255,255,255,.7);backdrop-filter:blur(24px) saturate(200%);border:.5px solid rgba(255,255,255,.85);border-radius:18px;padding:6px 0;min-width:130px;box-shadow:0 4px 24px rgba(0,0,0,.1),inset 0 0 0 .5px rgba(255,255,255,.85)}
+.glass-mi{padding:8px 16px;font-size:.85rem;color:var(--text);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px}
+.glass-mi:hover{background:rgba(0,113,227,.08)}
+
+@media(max-width:640px){
+  .fgrid,.rgrid,.tgrid,.si{grid-template-columns:1fr}
+  .topt{padding:3px 8px;font-size:.67rem}
+  .hero{padding:4rem 1.2rem 2rem}
+  .t-fode .hero{padding:2rem 1.5rem;background:#fff}
+  .fode-card{display:none!important}
+}
+</style>
 </head>
-<body class="theme-clear-glass">
-    <div class="animated-bg">
-        <div class="floating-orb orb-1"></div>
-        <div class="floating-orb orb-2"></div>
-        <div class="floating-orb orb-3"></div>
-        <div class="floating-orb orb-4"></div>
-        <div class="animated-particles" id="particlesContainer"></div>
+<body>
+
+<!-- THEME BAR -->
+<div class="tbar">
+  <span class="tlabel">Theme</span>
+  <div class="topts">
+    <button class="topt on" onclick="setT(this,'')"><span class="tdot d1"></span>Spring</button>
+    <button class="topt" onclick="setT(this,'t-midnight')"><span class="tdot d2"></span>Midnight</button>
+    <button class="topt" onclick="setT(this,'t-blossom')"><span class="tdot d3"></span>Blossom</button>
+    <button class="topt" onclick="setT(this,'t-ocean')"><span class="tdot d4"></span>Ocean</button>
+    <button class="topt" onclick="setT(this,'t-win95')"><span class="tdot d5"></span>Win 95</button>
+    <button class="topt" onclick="setT(this,'t-liquid')"><span class="tdot d6"></span>Liquid Glass</button>
+    <button class="topt" onclick="setT(this,'t-defi')"><span class="tdot d7"></span>DeFi</button>
+    <button class="topt" onclick="setT(this,'t-fode')"><span class="tdot d8"></span>Fode</button>
+    <button class="topt" onclick="setT(this,'t-neon')"><span class="tdot d9"></span>Neon Black</button>
+  </div>
+</div>
+
+<div class="ptcls" id="ptcls"></div>
+<div class="bgrid"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="w95nav-w">
+    <div style="background:#000080;color:#fff;padding:2px 4px;display:flex;justify-content:space-between;align-items:center;font-family:'VT323',monospace;font-size:.9rem">
+      <span>🖥 Spring Virtual Office</span>
+      <div style="display:flex;gap:2px"><div class="w95b">_</div><div class="w95b">□</div><div class="w95b">✕</div></div>
     </div>
-
-    <div class="container">
-        <div class="header">
-            <div class="header-left">
-                <div style="font-size: 28px;">🌿</div>
-                <div class="header-title">
-                    <h1>Spring Virtual Office</h1>
-                    <p>AI Assistant · Online</p>
-                </div>
-            </div>
-            <div class="header-right">
-                <button class="icon-btn" id="clearBtn" title="Clear History">🗑️ Clear</button>
-                <div class="theme-dropdown">
-                    <button class="icon-btn" id="themeBtn" title="Choose Theme">🎨 Theme</button>
-                    <div class="theme-menu" id="themeMenu">
-                        <div class="theme-menu-title">✨ Premium Themes</div>
-                        <div class="theme-option active" data-theme="clear-glass">
-                            <span>✨</span>
-                            <span>Clear Glass</span>
-                        </div>
-                        <div class="theme-option" data-theme="dark-glass">
-                            <span>🌙</span>
-                            <span>Dark Glass</span>
-                        </div>
-                        <div class="theme-option" data-theme="neon-cyberpunk">
-                            <span>🤖</span>
-                            <span>Neon Cyberpunk</span>
-                        </div>
-                        <div class="theme-option" data-theme="aurora">
-                            <span>🌌</span>
-                            <span>Aurora</span>
-                        </div>
-                        <div class="theme-option" data-theme="sunset">
-                            <span>🌅</span>
-                            <span>Sunset Vibes</span>
-                        </div>
-                        <div class="theme-option" data-theme="forest">
-                            <span>🌲</span>
-                            <span>Forest Mint</span>
-                        </div>
-                        <div class="theme-option" data-theme="ocean">
-                            <span>🌊</span>
-                            <span>Ocean Wave</span>
-                        </div>
-                        <div class="theme-option" data-theme="deep-space">
-                            <span>🚀</span>
-                            <span>Deep Space</span>
-                        </div>
-                        <div class="theme-option" data-theme="corporate">
-                            <span>💼</span>
-                            <span>Corporate Pro</span>
-                        </div>
-                        <div class="theme-option" data-theme="vibrant">
-                            <span>⚡</span>
-                            <span>Vibrant Pink</span>
-                        </div>
-                        <div class="theme-option" data-theme="tech-teal">
-                            <span>💻</span>
-                            <span>Tech Teal</span>
-                        </div>
-                        <div class="theme-option" data-theme="elegant">
-                            <span>👑</span>
-                            <span>Elegant Gold</span>
-                        </div>
-                        <div class="theme-option" data-theme="midnight">
-                            <span>💚</span>
-                            <span>Midnight Neon</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="messages-container" id="messagesContainer">
-            <div class="empty-state">
-                <div class="empty-state-icon">🌿</div>
-                <div class="empty-state-text">Welcome to Spring Virtual Office</div>
-                <div class="empty-state-subtext">I'm your AI assistant. Ask me anything!</div>
-            </div>
-        </div>
-
-        <div class="input-area">
-            <div class="input-wrapper">
-                <textarea 
-                    class="message-input" 
-                    id="messageInput" 
-                    placeholder="Type your message... (Shift+Enter for new line)"
-                    rows="1"
-                ></textarea>
-                <button class="send-btn" id="sendBtn">Send →</button>
-            </div>
-        </div>
+    <div class="w95nav">
+      <span class="w95mi">File</span><span class="w95mi">Edit</span><span class="w95mi">View</span><span class="w95mi" onclick="openChat()">Help</span>
     </div>
+  </div>
+  <div class="logo" id="logo-el"><div class="lpulse"></div><span id="logo-txt">Spring Office</span></div>
+  <div class="navlinks" id="navlinks-el">
+    <a href="#">Features</a><a href="#">Rooms</a><a href="#">Team</a><a href="#" onclick="openChat()">Chat</a>
+  </div>
+  <button class="bnav" id="nav-btn-el">Sign In</button>
+</nav>
 
-    <div class="modal-overlay" id="ticketModal">
-        <div class="modal">
-            <div class="modal-title">📋 Submit a Ticket</div>
-            <div class="form-group">
-                <label class="form-label">Your Name</label>
-                <input type="text" class="form-input" id="ticketName" placeholder="Enter your name">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Your Email</label>
-                <input type="email" class="form-input" id="ticketEmail" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Phone (Optional)</label>
-                <input type="tel" class="form-input" id="ticketPhone" placeholder="(555) 123-4567">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Issue Description</label>
-                <textarea class="form-textarea" id="ticketMessage" placeholder="Describe your issue in detail..."></textarea>
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-submit" id="submitTicketBtn">Submit Ticket</button>
-                <button class="modal-btn modal-btn-cancel" id="cancelTicketBtn">Cancel</button>
-            </div>
-        </div>
+<!-- HERO -->
+<section class="hero" id="hero-sec">
+  <div class="hero-glow"></div>
+
+  <!-- DeFi / Neon rings -->
+  <div class="defi-rings" id="defi-rings" style="display:none">
+    <div class="ring" style="width:160px;height:160px;border-width:18px;border-color:rgba(168,85,247,.7) transparent rgba(168,85,247,.3) transparent;animation-duration:6s"></div>
+    <div class="ring" style="width:100px;height:100px;border-width:12px;border-color:transparent rgba(124,58,237,.8) transparent rgba(124,58,237,.4);margin-top:-60px;margin-left:30px;animation-duration:4s;animation-delay:-2s"></div>
+  </div>
+
+  <!-- Win95 desktop icons -->
+  <div class="w95-icons">
+    <div class="w95-icon"><div class="w95-ico">💻</div>My Office</div>
+    <div class="w95-icon"><div class="w95-ico">📁</div>My Files</div>
+    <div class="w95-icon" onclick="openChat()"><div class="w95-ico">💬</div>Sprout</div>
+    <div class="w95-icon"><div class="w95-ico">🗑️</div>Recycle</div>
+  </div>
+
+  <!-- Fode discount card -->
+  <div class="fode-card">
+    <div class="fode-coupon-label"><span>Discount coupon</span><span>‹ Prev &nbsp; Next ›</span></div>
+    <div class="fode-item">
+      <div class="fode-pizza">🍕</div>
+      <div><div style="font-weight:600;font-size:.88rem">Mexicoo Pizza</div><div style="font-size:.7rem;color:#888">78 Calories</div></div>
+      <div style="margin-left:auto;text-align:right"><div style="font-size:.72rem;color:#555;text-decoration:line-through">$7.90</div><div style="font-size:1.1rem;font-weight:700">$7.90</div></div>
     </div>
+    <div class="fode-badge">⏱ 30 dk.</div>
+  </div>
 
-    <script>
-        const state = {
-            messages: [],
-            sadMessageCount: 0,
-            isFirstMessage: true,
-            isLoading: false,
-            currentTheme: localStorage.getItem('svo_theme') || 'clear-glass',
-            conversationHistory: []
-        };
+  <div class="hero-inner">
+    <!-- Win95 window title -->
+    <div class="w95titlebar"><span>🌿 Welcome to Spring Office</span><div class="w95bbts"><div class="w95b">_</div><div class="w95b">□</div><div class="w95b">✕</div></div></div>
+    <div class="w95body">
+      <p style="font-family:'VT323',monospace;margin-bottom:6px">Welcome to Spring Virtual Office v1.0</p>
+      <p style="font-family:'VT323',monospace;font-size:.82rem;margin-bottom:10px">Select an option to continue:</p>
+      <div style="display:flex;gap:4px"><button class="bp" onclick="openChat()">OK</button><button class="bg_">Cancel</button><button class="bg_">Help</button></div>
+    </div>
+    <!-- Standard hero -->
+    <div id="std-hero">
+      <div class="badge"><span class="bdot"></span>42 teammates online now</div>
+      <h1 id="h1-el">Your office,<br><em>beautifully</em> virtual</h1>
+      <p class="hsub" id="hsub-el">A living, breathing workspace where your team gathers, collaborates, and thrives — anywhere.</p>
+      <div class="hbtns">
+        <button class="bp" onclick="openChat()"><span id="btn-p-txt">Enter the Office →</span></button>
+        <button class="bg_" id="btn-g-el">Watch Tour</button>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const messagesContainer = document.getElementById('messagesContainer');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const themeBtn = document.getElementById('themeBtn');
-        const themeMenu = document.getElementById('themeMenu');
-        const themeOptions = document.querySelectorAll('.theme-option');
-        const ticketModal = document.getElementById('ticketModal');
-        const submitTicketBtn = document.getElementById('submitTicketBtn');
-        const cancelTicketBtn = document.getElementById('cancelTicketBtn');
+<!-- LIQUID GLASS DEMO -->
+<div class="glass-demo">
+  <div style="text-align:center;margin-bottom:16px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700">Liquid Glass Components — WWDC25</div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;justify-content:center">
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+      <div class="glass-pill">‹ + ○ △</div>
+      <div class="glass-pill" style="gap:16px"><span style="width:9px;height:9px;border-radius:50%;border:1.5px solid var(--text);display:inline-block"></span>One <span style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid var(--text);display:inline-block"></span>Two <span style="width:8px;height:8px;border:1.5px solid var(--text);display:inline-block"></span>Three</div>
+      <div style="height:36px;width:200px;border-radius:980px;background:rgba(255,255,255,.65);backdrop-filter:blur(16px) saturate(180%);border:.5px solid rgba(255,255,255,.85);box-shadow:0 2px 12px rgba(0,0,0,.07),inset 0 0 0 .5px rgba(255,255,255,.8);overflow:hidden;position:relative;display:flex;align-items:center">
+        <div style="height:100%;width:60%;background:linear-gradient(90deg,#ff375f,#ff9500,#ffcc00,#34c759,#0071e3,#8e44ad);border-radius:980px;position:relative"><div style="position:absolute;right:0;width:28px;height:28px;background:rgba(255,255,255,.9);border-radius:50%;margin:4px;box-shadow:0 1px 4px rgba(0,0,0,.18)"></div></div>
+      </div>
+    </div>
+    <div class="glass-menu">
+      <div class="glass-mi"><span style="width:10px;height:10px;border-radius:50%;border:1.5px solid var(--text);display:inline-block"></span>One</div>
+      <div class="glass-mi"><span style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:9px solid var(--text);display:inline-block"></span>Two</div>
+      <div class="glass-mi"><span style="width:9px;height:9px;border:1.5px solid var(--text);display:inline-block"></span>Three</div>
+      <div class="glass-mi"><span style="width:9px;height:9px;border-radius:2px;border:1.5px solid var(--text);display:inline-block"></span>Four</div>
+    </div>
+  </div>
+</div>
 
-        const crisisKeywords = [
-            'hurt myself', 'kill myself', 'suicide', 'want to die', 'taking my life',
-            'harm myself', 'end it all', 'self harm', 'hurt others', 'hurt someone',
-            'going to hurt', 'want to hurt', 'thinking about harming', 'planning to hurt'
-        ];
+<!-- STATS -->
+<div class="stats"><div class="si">
+  <div class="reveal"><div class="sn" data-cnt="12400">0</div><div class="sl">Teams Worldwide</div></div>
+  <div class="reveal"><div class="sn" data-cnt="98">0</div><div class="sl">% Uptime SLA</div></div>
+  <div class="reveal"><div class="sn" data-cnt="340">0</div><div class="sl">Integrations</div></div>
+  <div class="reveal"><div class="sn" data-cnt="4.9">0</div><div class="sl">Avg Rating</div></div>
+</div></div>
 
-        const sadKeywords = [
-            'sad', 'depressed', 'depression', 'anxious', 'anxiety', 'lonely',
-            'unhappy', 'miserable', 'worthless', 'hopeless', 'lost', 'stressed',
-            'overwhelmed', 'struggling', 'difficult time', 'hard time', 'breakup',
-            'heartbroken', 'alone', 'isolated', 'scared', 'afraid', 'worried'
-        ];
+<!-- FEATURES -->
+<section class="sec">
+  <div class="stag reveal" id="feat-tag">Built for modern teams</div>
+  <h2 class="stitle reveal" id="feat-title">Everything your team needs</h2>
+  <p class="ssub reveal">From quick syncs to deep focus — Spring adapts to how your team works.</p>
+  <div class="fgrid">
+    <div class="card reveal"><div class="fico">🌿</div><div class="ft">Ambient Presence</div><div class="fd">See who's available, focused, or in a meeting — always at a glance.</div></div>
+    <div class="card reveal"><div class="fico">🎯</div><div class="ft">Smart Rooms</div><div class="fd">Rooms that know their purpose. Stand-ups start automatically.</div></div>
+    <div class="card reveal"><div class="fico">✨</div><div class="ft">AI Meeting Notes</div><div class="fd">Summaries, action items, and decisions captured automatically.</div></div>
+    <div class="card reveal"><div class="fico">🔗</div><div class="ft">Deep Integrations</div><div class="fd">Slack, Notion, Jira, GitHub — all unified in one view.</div></div>
+    <div class="card reveal"><div class="fico">🛡️</div><div class="ft">Enterprise Security</div><div class="fd">SOC 2 Type II. End-to-end encryption. Custom data residency.</div></div>
+    <div class="card reveal"><div class="fico">🌸</div><div class="ft">Wellness Features</div><div class="fd">Break reminders and focus metrics for sustainable productivity.</div></div>
+  </div>
+</section>
 
-        function detectCrisis(message) {
-            const lower = message.toLowerCase();
-            return crisisKeywords.some(keyword => lower.includes(keyword));
-        }
+<!-- ROOMS -->
+<section class="rsec"><div class="rin">
+  <div class="stag reveal">Live right now</div>
+  <h2 class="stitle reveal">Rooms your team loves</h2>
+  <div class="rgrid">
+    <a class="rc reveal" href="#"><div class="rico">☕</div><div><div class="rt">Morning Brew</div><div class="rcc">Casual chat & coffee breaks</div><div class="avs"><div class="av">SJ</div><div class="av">MK</div><div class="av">+4</div></div><div class="live"><span class="lv"></span>6 inside</div></div></a>
+    <a class="rc reveal" href="#"><div class="rico">🎯</div><div><div class="rt">Engineering Hub</div><div class="rcc">Code reviews & standups</div><div class="avs"><div class="av">RC</div><div class="av">TB</div></div><div class="live"><span class="lv"></span>2 inside</div></div></a>
+    <a class="rc reveal" href="#"><div class="rico">🎨</div><div><div class="rt">Design Studio</div><div class="rcc">Critiques & ideation sprints</div><div class="avs"><div class="av">PL</div><div class="av">ZW</div><div class="av">NY</div></div><div class="live"><span class="lv"></span>3 inside</div></div></a>
+    <a class="rc reveal" href="#"><div class="rico">🔇</div><div><div class="rt">Focus Zone</div><div class="rcc">Deep work, no interruptions</div><div class="avs"><div class="av">AH</div></div><div class="live"><span class="lv"></span>1 inside</div></div></a>
+  </div>
+</div></section>
 
-        function detectSadness(message) {
-            const lower = message.toLowerCase();
-            return sadKeywords.some(keyword => lower.includes(keyword));
-        }
+<!-- TESTIMONIALS -->
+<section class="tsec">
+  <div class="stag reveal">What teams say</div>
+  <h2 class="stitle reveal">Stories from the field</h2>
+  <div class="tgrid">
+    <div class="tcard reveal"><div class="tq">"Spring Office made our distributed team feel like we're actually in the same room."</div><div class="ta"><div class="tav" style="background:#3d6b4f">SR</div><div><div class="tn">Sarah Reyes</div><div class="tr">Engineering Lead, Linara</div></div></div></div>
+    <div class="tcard reveal"><div class="tq">"Nothing comes close to the UX and reliability. Our team actually uses it every day."</div><div class="ta"><div class="tav" style="background:#c8a96e">JK</div><div><div class="tn">James Kim</div><div class="tr">Head of Product, Velo</div></div></div></div>
+    <div class="tcard reveal"><div class="tq">"AI meeting notes saved us 3 hours a week. We didn't expect to love it this much."</div><div class="ta"><div class="tav" style="background:#d4547a">MP</div><div><div class="tn">Maya Patel</div><div class="tr">Chief of Staff, Archway</div></div></div></div>
+  </div>
+</section>
 
-        const aiResponses = {
-            greeting: [
-                "Hello! 🌿 Welcome to Spring Virtual Office. I'm here to help with any questions or concerns. How can I assist you today?",
-                "Hi there! I'm your AI assistant and I'm happy to help. What can I do for you?",
-                "Greetings! Welcome. I'm ready to assist you with anything you need."
-            ],
-            services: [
-                "We offer 24/7 AI-powered support, appointment scheduling, and business assistance. I can help answer questions, book appointments, or provide general support!",
-                "Our services include intelligent AI chat support, appointment scheduling, crisis detection for safety, and empathetic assistance.",
-                "I'm here to help with: answering questions, scheduling appointments, providing business support, and offering a listening ear when you need it."
-            ],
-            schedule: [
-                "I'd love to help you schedule an appointment! What date and time work best for you?",
-                "Let's book that appointment. When would you like to meet?",
-                "Sure! I can help with scheduling. What day and time are you thinking?"
-            ],
-            ticket: [
-                "You can submit a ticket by clicking the ticket button or by describing your issue here. Would you like to submit a formal ticket?",
-                "I can help you create a ticket! Just describe what you need and I'll make sure it gets to the right person."
-            ],
-            fallback: [
-                "That's interesting! Can you tell me more about what you need?",
-                "I understand. Let me see how I can best help. Could you provide more details?",
-                "Got it! I'm here to help. What specific aspect would you like assistance with?"
-            ]
-        };
+<footer>
+  <div class="flogo" id="flogo-el">Spring Office</div>
+  <p>© 2025 Spring Virtual Office &middot; <a href="#" style="color:var(--accent)">Privacy</a> &middot; <a href="#" style="color:var(--accent)">Terms</a></p>
+</footer>
 
-        function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text || state.isLoading) return;
+<!-- WIN95 TASKBAR -->
+<div class="w95tb">
+  <button class="w95start">🪟 Start</button>
+  <div class="w95tbitem">🌿 Spring Office</div>
+  <div class="w95tbitem" onclick="openChat()">💬 Sprout AI</div>
+  <div class="w95clk" id="w95clk">12:00 PM</div>
+</div>
 
-            state.isLoading = true;
-            addMessage(text, true);
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
+<!-- CHATBOT -->
+<div class="cwrap">
+  <div class="cbox hidden" id="chatBox">
+    <div class="chead">
+      <div class="chl">
+        <div class="cav">🌸</div>
+        <div>
+          <div class="cnm">Sprout AI</div>
+          <div class="cst"><span class="lv"></span>Powered by Claude</div>
+        </div>
+      </div>
+      <button class="ccl" onclick="closeChat()">✕</button>
+    </div>
+    <div class="cmsgs" id="chatMsgs">
+      <div class="msg bot">Hi! 👋 I'm Sprout, powered by Claude AI. I can actually think — ask me anything!</div>
+    </div>
+    <div class="csugg" id="suggBox">
+      <button class="sugg" onclick="doSugg(this)">What is Spring Office?</button>
+      <button class="sugg" onclick="doSugg(this)">Pricing plans?</button>
+      <button class="sugg" onclick="doSugg(this)">Write me a haiku</button>
+    </div>
+    <div class="api-bar"><div class="api-dot"></div>Claude AI · Real intelligence</div>
+    <div class="cinprow">
+      <input class="cinp" id="chatIn" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="csend" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+  <button class="ctog" onclick="toggleChat()" id="chatTog">🌸</button>
+</div>
 
-            if (detectCrisis(text)) {
-                showTypingIndicator();
-                setTimeout(() => {
-                    removeTypingIndicator();
-                    const crisisResponse = `❤️ I'm concerned about what you're saying. Please know that I'm not a licensed therapist, but I can connect you with professional help immediately.
-                    
-📞 <strong>If you're having thoughts of self-harm or harming others, please call <strong>988</strong> - the Suicide & Crisis Lifeline. It's available 24/7 and completely confidential.
+<script>
+/* ── THEME DATA ── */
+const TD = {
+  '':         {logo:'Spring Office', h1:'Your office,<br><em>beautifully</em> virtual', sub:'A living, breathing workspace where your team gathers, collaborates, and thrives.', btn:'Enter the Office →', btn2:'Watch Tour', tog:'🌸'},
+  't-midnight':{logo:'Spring Office', h1:'Your office,<br><em>beautifully</em> virtual', sub:'A living, breathing workspace where your team gathers, collaborates, and thrives.', btn:'Enter the Office →', btn2:'Watch Tour', tog:'🌸'},
+  't-blossom': {logo:'Spring Office', h1:'Your office,<br><em>beautifully</em> virtual', sub:'A living, breathing workspace where your team gathers, collaborates, and thrives.', btn:'Enter the Office →', btn2:'Watch Tour', tog:'🌸'},
+  't-ocean':   {logo:'Spring Office', h1:'Your office,<br><em>beautifully</em> virtual', sub:'A living, breathing workspace where your team gathers, collaborates, and thrives.', btn:'Enter the Office →', btn2:'Watch Tour', tog:'🌸'},
+  't-win95':   {logo:'Spring Office', h1:'', sub:'', btn:'OK', btn2:'Cancel', tog:'💬 Help'},
+  't-liquid':  {logo:'Spring Office', h1:'Your office,<br><em>beautifully</em> virtual', sub:'A living, breathing workspace where your team gathers, collaborates, and thrives.', btn:'Enter the Office →', btn2:'Watch Tour', tog:'Talk to Sprout'},
+  't-defi':    {logo:'Portals', h1:"Simplifying DeFi's<br><em>Most Complex</em><br>Transactions", sub:'Powering seamless Zaps and Historical Data APIs and AI integrations to make DeFi simpler and enable builders to ship faster.', btn:'Get started', btn2:'View docs', tog:'⬡'},
+  't-fode':    {logo:'Fode.', h1:'Italian Pasta<br><strong>With Special Sauce</strong>', sub:'Italian pasta with special sauce is a flavor you can find only in fode.', btn:'🛒 Buy Now', btn2:'See Menu →', tog:'🍽'},
+  't-neon':    {logo:'Spring Office', h1:'Your office,<br><em>beautifully</em> virtual', sub:'A living, breathing workspace where your team gathers, collaborates, and thrives.', btn:'Enter the Office →', btn2:'Watch Tour', tog:'🌸'},
+};
 
-You deserve professional support and care. Would you like me to provide information about mental health resources?`;
-                    addMessage(crisisResponse, false, true);
-                }, 800);
-                state.isLoading = false;
-                return;
-            }
+let curT = '';
 
-            if (detectSadness(text)) {
-                state.sadMessageCount++;
-                
-                if (state.sadMessageCount >= 5) {
-                    showTypingIndicator();
-                    setTimeout(() => {
-                        removeTypingIndicator();
-                        const betterHelpResponse = `💙 I notice you're going through a challenging time. While I'm here to listen and support, I want to connect you with licensed mental health professionals who can provide proper care.
+function setT(btn, t) {
+  document.body.className = t;
+  curT = t;
+  document.querySelectorAll('.topt').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
 
-<strong>BetterHelp</strong> offers:
-• Licensed therapists available 24/7
-• Affordable online therapy
-• Video, phone, or messaging options
-• Special offer: <strong><a href="https://www.betterhelp.com/get-started/?utm_content=134506249825&utm_source=AdWords&utm_medium=Search_PPC_m&utm_term=cbt+for+anxiety_b&network=g&placement=&target=&matchtype=b&utm_campaign=16718352460&ad_type=text&adposition=&kwd_id=kwd-261467293&gad_source=1&gad_campaignid=16718352460&gbraid=0AAAAADqBHiaITpvEDxJTP3ig8DwnnDu6H&not_found=1&gor=start-go" target="_blank" style="color: #00d9ff;">Get Started - Click Here</a></strong>
+  const d = TD[t] || TD[''];
+  const isWin = t === 't-win95';
+  const isDefi = t === 't-defi';
 
-Remember: You're not alone, and seeking help is a sign of strength. ❤️`;
-                        addMessage(betterHelpResponse, false, true);
-                        state.sadMessageCount = 0;
-                    }, 800);
-                    state.isLoading = false;
-                    return;
-                }
-            }
+  // Nav
+  document.getElementById('logo-el').style.display = isWin ? 'none' : 'flex';
+  document.getElementById('navlinks-el').style.display = isWin ? 'none' : 'flex';
+  document.getElementById('nav-btn-el').style.display = isWin ? 'none' : 'block';
+  document.querySelector('.w95nav-w').style.display = isWin ? 'block' : 'none';
 
-            showTypingIndicator();
-            setTimeout(() => {
-                removeTypingIndicator();
-                const response = getAIResponse(text);
-                addMessage(response, false);
-                state.isLoading = false;
-            }, 800);
-        }
+  // Hero
+  document.querySelector('.w95titlebar').style.display = isWin ? 'flex' : 'none';
+  document.querySelector('.w95body').style.display = isWin ? 'block' : 'none';
+  document.getElementById('std-hero').style.display = isWin ? 'none' : 'block';
+  document.querySelector('.w95-icons').style.display = isWin ? 'flex' : 'none';
+  document.getElementById('defi-rings').style.display = isDefi ? 'block' : 'none';
 
-        function getAIResponse(message) {
-            const lower = message.toLowerCase();
+  // Taskbar
+  document.querySelector('.w95tb').style.display = isWin ? 'flex' : 'none';
+  if (isWin) updateClock();
 
-            if (lower.match(/hello|hi|hey|greetings|start|help me/i)) {
-                return aiResponses.greeting[Math.floor(Math.random() * aiResponses.greeting.length)];
-            } else if (lower.match(/service|offer|what do you do|feature|can you/i)) {
-                return aiResponses.services[Math.floor(Math.random() * aiResponses.services.length)];
-            } else if (lower.match(/schedule|appointment|booking|meet|meeting|book/i)) {
-                return aiResponses.schedule[Math.floor(Math.random() * aiResponses.schedule.length)];
-            } else if (lower.match(/ticket|issue|problem|bug|report/i)) {
-                return aiResponses.ticket[Math.floor(Math.random() * aiResponses.ticket.length)];
-            } else {
-                return aiResponses.fallback[Math.floor(Math.random() * aiResponses.fallback.length)];
-            }
-        }
+  // Content
+  document.getElementById('logo-txt').innerHTML = d.logo;
+  document.getElementById('h1-el').innerHTML = d.h1;
+  document.getElementById('hsub-el').textContent = d.sub;
+  document.getElementById('btn-p-txt').innerHTML = d.btn;
+  document.getElementById('btn-g-el').textContent = d.btn2;
+  document.getElementById('chatTog').textContent = d.tog;
 
-        function addMessage(text, isUser = false, isHTML = false) {
-            if (state.isFirstMessage) {
-                messagesContainer.innerHTML = '';
-                state.isFirstMessage = false;
-            }
+  respawnPetals();
+}
 
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+/* ── WIN95 CLOCK ── */
+function updateClock() {
+  const n = new Date();
+  let h = n.getHours(), m = n.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  const el = document.getElementById('w95clk');
+  if (el) el.textContent = h + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+}
+setInterval(() => { if (curT === 't-win95') updateClock(); }, 15000);
 
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = isUser ? '👤' : '🤖';
+/* ── PARTICLES ── */
+const PALS = {
+  '': ['#e8c5c5','#c8a96e','#a8c8a8'],
+  't-midnight': ['#7ee787','#ffa657'],
+  't-blossom': ['#f4c0d1','#d4547a','#f9a8c9'],
+  't-ocean': ['#90e0ef','#0070b8','#caf0f8'],
+  't-liquid': ['#a0c4ff','#c8f7c5','#ffd6e0'],
+  't-defi': ['#a855f7','#7c3aed','#4c1d95'],
+  't-fode': ['#f5c842','#ff6b35','#ffd700'],
+  't-neon': ['#00d4ff','#7b00ff','#00ffaa'],
+};
 
-            const bubble = document.createElement('div');
-            bubble.className = 'message-bubble';
-            if (isHTML) {
-                bubble.innerHTML = text;
-            } else {
-                bubble.textContent = text;
-            }
+function spawnPetal() {
+  if (curT === 't-win95') return;
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.animationDuration = (7 + Math.random() * 10) + 's';
+  p.style.animationDelay = (Math.random() * 5) + 's';
+  const sz = 4 + Math.random() * 7;
+  p.style.width = sz + 'px';
+  p.style.height = (sz * 1.4) + 'px';
+  p.style.borderRadius = Math.random() > .5 ? '50% 0 50% 0' : '0 50% 0 50%';
+  const c = PALS[curT] || PALS[''];
+  p.style.background = c[Math.floor(Math.random() * c.length)];
+  document.getElementById('ptcls').appendChild(p);
+  setTimeout(() => p.remove(), 22000);
+}
+function respawnPetals() {
+  document.getElementById('ptcls').innerHTML = '';
+  for (let i = 0; i < 14; i++) setTimeout(spawnPetal, i * 300);
+}
+for (let i = 0; i < 14; i++) setTimeout(spawnPetal, i * 300);
+setInterval(spawnPetal, 2200);
 
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(bubble);
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+/* ── SCROLL REVEAL ── */
+const io = new IntersectionObserver(e => {
+  e.forEach(x => { if (x.isIntersecting) x.target.classList.add('vis'); });
+}, { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-            state.messages.push({ text, isUser, timestamp: new Date() });
-            saveMessages();
-        }
+/* ── COUNTER ANIMATION ── */
+function animCount(el) {
+  const tgt = parseFloat(el.dataset.cnt);
+  const isF = tgt % 1 !== 0;
+  const start = performance.now();
+  function u(now) {
+    const pr = Math.min((now - start) / 1800, 1);
+    const ease = 1 - Math.pow(1 - pr, 3);
+    el.textContent = isF ? (tgt * ease).toFixed(1) : Math.round(tgt * ease).toLocaleString();
+    if (pr < 1) requestAnimationFrame(u);
+  }
+  requestAnimationFrame(u);
+}
+const cio = new IntersectionObserver(e => {
+  e.forEach(x => { if (x.isIntersecting) { animCount(x.target); cio.unobserve(x.target); } });
+}, { threshold: .5 });
+document.querySelectorAll('[data-cnt]').forEach(el => cio.observe(el));
 
-        function showTypingIndicator() {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot';
-            messageDiv.id = 'typingIndicator';
+/* ══════════════════════════════════════
+   REAL AI CHATBOT — Claude API
+   ══════════════════════════════════════
+   IMPORTANT: Replace YOUR_API_KEY_HERE with your
+   actual Anthropic API key from console.anthropic.com
+   ══════════════════════════════════════ */
+const ANTHROPIC_API_KEY = 'YOUR_API_KEY_HERE';
 
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = '🤖';
+const SYSTEM_PROMPT = `You are Sprout, the friendly and genuinely intelligent AI assistant for Spring Virtual Office — a beautiful virtual workspace platform where remote teams gather, collaborate, and thrive. You are powered by Claude AI by Anthropic.
 
-            const indicator = document.createElement('div');
-            indicator.className = 'typing-indicator';
-            for (let i = 0; i < 3; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'typing-dot';
-                indicator.appendChild(dot);
-            }
+About Spring Office:
+- Virtual rooms: Morning Brew (casual lounge), Engineering Hub (code reviews), Design Studio (critiques), Focus Zone (deep work)
+- Features: AI meeting notes, ambient presence indicators, wellness reminders, focus metrics
+- Integrations: Slack, Notion, Jira, GitHub, and 340+ more
+- Security: SOC 2 Type II certified, end-to-end encryption, custom data residency
+- Stats: 12,400+ teams worldwide, 98% uptime SLA, 4.9 average rating
+- Pricing: Starter (free, up to 5 rooms), Growth ($12/user/month, unlimited rooms + AI notes + priority support), Enterprise (custom pricing + dedicated support + SLA guarantees)
 
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(indicator);
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+Your personality:
+- Warm, witty, and genuinely helpful
+- You can answer ANY question — not just about Spring Office
+- If asked for creative writing, coding help, math, general knowledge, opinions, or anything else — answer brilliantly
+- Be conversational and concise (2-4 sentences usually, unless more depth is needed)
+- Use emojis occasionally but not excessively
+- Never say you can't help with something — you're a full AI assistant`;
 
-        function removeTypingIndicator() {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) indicator.remove();
-        }
+let chatOpen = false;
+let chatHistory = [];
 
-        function saveMessages() {
-            localStorage.setItem('svo_messages', JSON.stringify(state.messages));
-        }
+function openChat() { chatOpen = true; document.getElementById('chatBox').classList.remove('hidden'); }
+function closeChat() { chatOpen = false; document.getElementById('chatBox').classList.add('hidden'); }
+function toggleChat() { chatOpen ? closeChat() : openChat(); }
 
-        function loadMessages() {
-            const saved = localStorage.getItem('svo_messages');
-            if (saved) {
-                state.messages = JSON.parse(saved);
-                state.isFirstMessage = true;
-                state.messages.forEach(msg => addMessage(msg.text, msg.isUser));
-            }
-        }
+function addMsg(txt, cls) {
+  const m = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.textContent = txt;
+  m.appendChild(d);
+  m.scrollTop = m.scrollHeight;
+  return d;
+}
 
-        submitTicketBtn.addEventListener('click', async () => {
-            const name = document.getElementById('ticketName').value.trim();
-            const email = document.getElementById('ticketEmail').value.trim();
-            const phone = document.getElementById('ticketPhone').value.trim();
-            const message = document.getElementById('ticketMessage').value.trim();
+function showTyping() {
+  const m = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = 'msg typing';
+  d.innerHTML = '<div class="tdots"><span></span><span></span><span></span></div>';
+  m.appendChild(d);
+  m.scrollTop = m.scrollHeight;
+  return d;
+}
 
-            if (!name || !email || !message) {
-                alert('Please fill in all required fields');
-                return;
-            }
+async function callClaude(userMsg) {
+  chatHistory.push({ role: 'user', content: userMsg });
+  const typing = showTyping();
 
-            submitTicketBtn.disabled = true;
-            submitTicketBtn.textContent = 'Submitting...';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory
+      })
+    });
 
-            try {
-                const response = await fetch('/api/submit-ticket', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, phone, message })
-                });
+    const data = await res.json();
+    typing.remove();
 
-                if (response.ok) {
-                    addMessage(`✅ Your ticket has been submitted! Our team will reach out to you at ${email} within 24 hours. Thank you!`, false);
-                    ticketModal.classList.remove('active');
-                    
-                    document.getElementById('ticketName').value = '';
-                    document.getElementById('ticketEmail').value = '';
-                    document.getElementById('ticketPhone').value = '';
-                    document.getElementById('ticketMessage').value = '';
-                } else {
-                    addMessage('❌ There was an error submitting your ticket. Please try again.', false);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                addMessage('❌ Error submitting ticket. Please check your connection and try again.', false);
-            }
+    if (data.error) {
+      const errMsg = data.error.message?.includes('API key')
+        ? '⚠️ Please add your Anthropic API key in the HTML file (search for YOUR_API_KEY_HERE).'
+        : 'Something went wrong: ' + (data.error.message || 'Unknown error');
+      addMsg(errMsg, 'bot');
+      chatHistory.push({ role: 'assistant', content: errMsg });
+      return;
+    }
 
-            submitTicketBtn.disabled = false;
-            submitTicketBtn.textContent = 'Submit Ticket';
-        });
+    const reply = data.content?.[0]?.text || 'Sorry, I had trouble thinking of a response. Try again!';
+    chatHistory.push({ role: 'assistant', content: reply });
+    addMsg(reply, 'bot');
 
-        cancelTicketBtn.addEventListener('click', () => {
-            ticketModal.classList.remove('active');
-        });
+  } catch (err) {
+    typing.remove();
+    const errMsg = '⚠️ Connection issue. Make sure you\'ve added your API key and are running from a server (not file://).';
+    addMsg(errMsg, 'bot');
+    chatHistory.push({ role: 'assistant', content: errMsg });
+  }
+}
 
-        function setTheme(themeName) {
-            document.body.className = `theme-${themeName}`;
-            state.currentTheme = themeName;
-            localStorage.setItem('svo_theme', themeName);
+async function sendMsg() {
+  const inp = document.getElementById('chatIn');
+  const v = inp.value.trim();
+  if (!v) return;
+  addMsg(v, 'usr');
+  inp.value = '';
+  document.getElementById('suggBox').style.display = 'none';
+  await callClaude(v);
+}
 
-            themeOptions.forEach(opt => {
-                opt.classList.remove('active');
-                if (opt.dataset.theme === themeName) {
-                    opt.classList.add('active');
-                }
-            });
-        }
+async function doSugg(btn) {
+  addMsg(btn.textContent, 'usr');
+  document.getElementById('suggBox').style.display = 'none';
+  await callClaude(btn.textContent);
+}
 
-        themeOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                setTheme(option.dataset.theme);
-                themeMenu.classList.remove('active');
-            });
-        });
-
-        messageInput.addEventListener('input', () => {
-            messageInput.style.height = 'auto';
-            messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
-        });
-
-        sendBtn.addEventListener('click', sendMessage);
-
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        clearBtn.addEventListener('click', () => {
-            if (confirm('Clear all messages?')) {
-                state.messages = [];
-                state.sadMessageCount = 0;
-                messagesContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🌿</div>
-                        <div class="empty-state-text">Welcome to Spring Virtual Office</div>
-                        <div class="empty-state-subtext">I'm your AI assistant. Ask me anything!</div>
-                    </div>
-                `;
-                state.isFirstMessage = true;
-                localStorage.removeItem('svo_messages');
-            }
-        });
-
-        themeBtn.addEventListener('click', () => {
-            themeMenu.classList.toggle('active');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.theme-dropdown')) {
-                themeMenu.classList.remove('active');
-            }
-        });
-
-        ticketModal.addEventListener('click', (e) => {
-            if (e.target === ticketModal) {
-                ticketModal.classList.remove('active');
-            }
-        });
-
-        function createParticles() {
-            const container = document.getElementById('particlesContainer');
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = '100%';
-                particle.style.animationDuration = (8 + Math.random() * 6) + 's';
-                particle.style.animationDelay = Math.random() * 2 + 's';
-                container.appendChild(particle);
-
-                setTimeout(() => {
-                    particle.style.animationDelay = (Math.random() * 20) + 's';
-                }, (8 + Math.random() * 6) * 1000);
-            }
-        }
-
-        createParticles();
-        setTheme(state.currentTheme);
-        loadMessages();
-
-        if (state.messages.length === 0) {
-            setTimeout(() => {
-                addMessage('Welcome to Spring Virtual Office! 🌿 I\'m your AI assistant. I\'m here to answer questions, help with appointments, and provide support. How can I help you today?', false);
-            }, 500);
-        }
-    </script>
+/* ── INIT ── */
+window.addEventListener('load', () => {
+  document.querySelector('.w95nav-w').style.display = 'none';
+  document.querySelector('.w95titlebar').style.display = 'none';
+  document.querySelector('.w95body').style.display = 'none';
+  document.querySelector('.w95-icons').style.display = 'none';
+  document.querySelector('.w95tb').style.display = 'none';
+  document.getElementById('defi-rings').style.display = 'none';
+  document.getElementById('logo-el').style.display = 'flex';
+  document.getElementById('navlinks-el').style.display = 'flex';
+});
+</script>
 </body>
 </html>
