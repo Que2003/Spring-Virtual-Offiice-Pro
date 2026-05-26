@@ -1,217 +1,108 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
-from app.chatbot_routes import router as chatbot_router
+import os
+from fastapi import APIRouter
+from pydantic import BaseModel
+from typing import List, Optional
 
-app = FastAPI(title="Spring Virtual Office")
+try:
+    import anthropic
+except ImportError:
+    anthropic = None
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+router = APIRouter()
 
-app.include_router(chatbot_router)
+# In-memory conversation history per session (keyed by session_id)
+conversation_store: dict = {}
+
+SYSTEM_PROMPT = """You are SpringBot, the intelligent AI assistant for Spring Virtual Office — a modern, professional virtual workspace platform.
+
+Your personality:
+- Smart, sharp, and genuinely helpful — never generic or robotic
+- Friendly and conversational, with a touch of wit when appropriate
+- Confident in your answers, but honest when you're uncertain
+- You remember the full conversation and build on prior context
+
+Your capabilities:
+- Answer questions about productivity, business, tech, and workplace topics
+- Help users draft emails, messages, reports, or plans
+- Brainstorm ideas, solve problems, and give actionable advice
+- Explain complex topics clearly and concisely
+
+Rules:
+- Never say "As an AI language model..." — just answer directly
+- Keep responses concise unless depth is needed
+- If asked who you are, say you're SpringBot, the Spring Virtual Office assistant
+- Always be helpful — never refuse reasonable requests"""
 
 
-@app.get("/", response_class=HTMLResponse)
-async def home():
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Spring Virtual Office</title>
-        <style>
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body {
-                font-family: 'Segoe UI', Arial, sans-serif;
-                background: #0f172a;
-                color: white;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-            }
-            .container {
-                width: 90%;
-                max-width: 720px;
-                background: #111827;
-                padding: 28px;
-                border-radius: 18px;
-                box-shadow: 0 0 40px rgba(0,0,0,0.5);
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-            }
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            h1 { color: #38bdf8; font-size: 22px; }
-            .reset-btn {
-                background: transparent;
-                border: 1px solid #334155;
-                color: #94a3b8;
-                padding: 6px 14px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 13px;
-                transition: all 0.2s;
-            }
-            .reset-btn:hover { border-color: #38bdf8; color: #38bdf8; }
+class ChatRequest(BaseModel):
+    message: str
+    session_id: Optional[str] = "default"
 
-            /* Chat history */
-            .chat-history {
-                background: #0f172a;
-                border-radius: 12px;
-                padding: 16px;
-                min-height: 260px;
-                max-height: 400px;
-                overflow-y: auto;
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-            .msg {
-                max-width: 85%;
-                padding: 12px 16px;
-                border-radius: 12px;
-                font-size: 15px;
-                line-height: 1.55;
-                white-space: pre-wrap;
-                word-break: break-word;
-            }
-            .msg.user {
-                background: #1e3a5f;
-                align-self: flex-end;
-                border-bottom-right-radius: 3px;
-            }
-            .msg.bot {
-                background: #1e293b;
-                align-self: flex-start;
-                border-bottom-left-radius: 3px;
-                color: #e2e8f0;
-            }
-            .msg.thinking {
-                color: #64748b;
-                font-style: italic;
-                background: transparent;
-            }
 
-            /* Input area */
-            .input-row {
-                display: flex;
-                gap: 10px;
-                align-items: flex-end;
-            }
-            textarea {
-                flex: 1;
-                height: 52px;
-                max-height: 120px;
-                border-radius: 10px;
-                border: 1px solid #1e293b;
-                background: #0f172a;
-                color: white;
-                padding: 14px;
-                font-size: 15px;
-                resize: none;
-                outline: none;
-                transition: border 0.2s;
-                font-family: inherit;
-            }
-            textarea:focus { border-color: #38bdf8; }
-            button.send-btn {
-                padding: 14px 22px;
-                background: #38bdf8;
-                color: #020617;
-                font-weight: bold;
-                border: none;
-                border-radius: 10px;
-                cursor: pointer;
-                font-size: 15px;
-                transition: background 0.2s;
-                white-space: nowrap;
-            }
-            button.send-btn:hover { background: #0ea5e9; }
-            button.send-btn:disabled { background: #1e3a5f; color: #475569; cursor: not-allowed; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>🌿 SpringBot</h1>
-                <button class="reset-btn" onclick="resetChat()">Clear Chat</button>
-            </div>
+class ChatResponse(BaseModel):
+    reply: str
+    session_id: str
 
-            <div class="chat-history" id="chatHistory">
-                <div class="msg bot">Hey! I'm SpringBot, your Spring Virtual Office assistant. What can I help you with today?</div>
-            </div>
 
-            <div class="input-row">
-                <textarea id="message" placeholder="Ask SpringBot anything..." onkeydown="handleKey(event)"></textarea>
-                <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
-            </div>
-        </div>
+@router.post("/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    user_message = request.message.strip()
+    session_id = request.session_id or "default"
 
-        <script>
-            const SESSION_ID = 'session_' + Math.random().toString(36).substr(2, 9);
+    if not user_message:
+        return ChatResponse(reply="Please send a message!", session_id=session_id)
 
-            function handleKey(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            }
+    if anthropic is None:
+        return ChatResponse(
+            reply="Anthropic package not installed. Add 'anthropic' to requirements.txt.",
+            session_id=session_id
+        )
 
-            function appendMessage(text, role) {
-                const history = document.getElementById('chatHistory');
-                const msg = document.createElement('div');
-                msg.className = 'msg ' + role;
-                msg.innerText = text;
-                history.appendChild(msg);
-                history.scrollTop = history.scrollHeight;
-                return msg;
-            }
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        return ChatResponse(
+            reply="ANTHROPIC_API_KEY is missing in Railway Variables.",
+            session_id=session_id
+        )
 
-            async function sendMessage() {
-                const input = document.getElementById('message');
-                const sendBtn = document.getElementById('sendBtn');
-                const message = input.value.trim();
-                if (!message) return;
+    # Get or create conversation history for this session
+    if session_id not in conversation_store:
+        conversation_store[session_id] = []
 
-                appendMessage(message, 'user');
-                input.value = '';
-                sendBtn.disabled = true;
+    history: List[dict] = conversation_store[session_id]
 
-                const thinking = appendMessage('SpringBot is thinking...', 'bot thinking');
+    # Add user message to history
+    history.append({"role": "user", "content": user_message})
 
-                try {
-                    const response = await fetch('/chat', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message, session_id: SESSION_ID })
-                    });
-                    const data = await response.json();
-                    thinking.className = 'msg bot';
-                    thinking.innerText = data.reply;
-                } catch (error) {
-                    thinking.className = 'msg bot';
-                    thinking.innerText = 'Connection error: ' + error.message;
-                } finally {
-                    sendBtn.disabled = false;
-                    input.focus();
-                }
-            }
+    # Keep last 20 messages to avoid token overflow
+    trimmed_history = history[-20:]
 
-            async function resetChat() {
-                await fetch('/chat/reset?session_id=' + SESSION_ID, { method: 'POST' });
-                const history = document.getElementById('chatHistory');
-                history.innerHTML = '<div class="msg bot">Chat cleared! What can I help you with?</div>';
-            }
-        </script>
-    </body>
-    </html>
-    """
+    client = anthropic.Anthropic(api_key=api_key)
+
+    try:
+        response = client.messages.create(
+            model="claude-3-5-sonnet-latest",
+            max_tokens=1024,
+            system=SYSTEM_PROMPT,
+            messages=trimmed_history
+        )
+
+        reply_text = response.content[0].text
+
+        # Save assistant reply to history
+        history.append({"role": "assistant", "content": reply_text})
+
+        # Trim stored history too
+        conversation_store[session_id] = history[-20:]
+
+        return ChatResponse(reply=reply_text, session_id=session_id)
+
+    except Exception as e:
+        return ChatResponse(reply=f"AI error: {str(e)}", session_id=session_id)
+
+
+@router.post("/chat/reset")
+async def reset_chat(session_id: str = "default"):
+    """Clear conversation history for a session."""
+    conversation_store.pop(session_id, None)
+    return {"status": "cleared", "session_id": session_id}
