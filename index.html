@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Spring Virtual Office workspace with shared rooms, presence, meeting notes, wellness tracking, integrations, and SpringBot.">
-  <title>Spring Virtual Office</title>
+  <meta name="description" content="Spring Office is a practical virtual workspace for small businesses: customer work, schedules, notes, focus time, and shared presence.">
+  <title>Spring Office for Small Businesses</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app">
     <aside class="panel sidebar">
-      <div class="brand"><div class="brand-mark">S</div><div><strong>Spring Office</strong><small>Virtual workspace</small></div></div>
+      <div class="brand"><div class="brand-mark">S</div><div><strong>Spring Office</strong><small>Small business workspace</small></div></div>
       <nav class="nav" aria-label="Workspace">
-        <button class="active" data-view="office"><span class="icon">O</span>Office</button>
-        <button data-view="notes"><span class="icon">N</span>Meeting notes</button>
-        <button data-view="wellness"><span class="icon">W</span>Wellness</button>
-        <button data-view="integrations"><span class="icon">I</span>Integrations</button>
+        <button class="active" data-view="office"><span class="icon">H</span>Daily HQ</button>
+        <button data-view="notes"><span class="icon">N</span>Client notes</button>
+        <button data-view="wellness"><span class="icon">T</span>Focus time</button>
+        <button data-view="integrations"><span class="icon">A</span>Business tools</button>
         <button data-view="bot"><span class="icon">B</span>SpringBot</button>
-        <button data-view="settings"><span class="icon">S</span>Settings</button>
+        <button data-view="settings"><span class="icon">S</span>Setup</button>
       </nav>
-      <p class="rooms-label">Smart rooms</p>
+      <p class="rooms-label">Work areas</p>
       <div class="room-links" id="roomLinks"></div>
       <div class="profile">
         <div class="profile-row"><div class="avatar" id="meAvatar">ME</div><div><strong id="meName">You</strong><div class="tiny" id="syncState">Local mode</div></div></div>
@@ -29,47 +29,47 @@
     </aside>
     <main class="main">
       <header class="panel topbar">
-        <div><h1 id="viewTitle">Office</h1><p id="viewDescription">Join a room and see who is working with you.</p></div>
-        <div class="top-actions"><div class="status"><span class="dot online"></span><span id="onlineCount">1 online</span></div><button class="button secondary" data-open-settings>Connect API</button></div>
+        <div><h1 id="viewTitle">Daily HQ</h1><p id="viewDescription">Keep your small team aligned on customers, jobs, and today's work.</p></div>
+        <div class="top-actions"><div class="status"><span class="dot online"></span><span id="onlineCount">1 online</span></div><button class="button secondary" data-open-settings>Connect team</button></div>
       </header>
       <section class="panel workspace">
         <div class="view active" id="view-office">
           <div class="office-grid">
             <div class="room-stage">
-              <div class="stage-header"><div><h2 id="activeRoomTitle">Engineering Hub</h2><p id="activeRoomDescription"></p></div><button class="button" id="joinButton">Join room</button></div>
+              <div class="stage-header"><div><h2 id="activeRoomTitle">Client Workroom</h2><p id="activeRoomDescription"></p></div><button class="button" id="joinButton">Join room</button></div>
               <div class="desk-board" id="deskBoard"></div>
             </div>
             <aside class="presence-panel">
-              <div class="panel-title"><h2>Team presence</h2><span class="tiny" id="presenceMode">Live when API connected</span></div>
+              <div class="panel-title"><h2>Team today</h2><span class="tiny" id="presenceMode">Live when connected</span></div>
               <div class="people" id="peopleList"></div><div class="event-log" id="eventLog"></div>
             </aside>
           </div>
         </div>
         <div class="view content-view" id="view-notes">
-          <h2>Meeting notes</h2><p>Paste a transcript or rough notes and produce an organized recap with action items.</p>
+          <h2>Client and team notes</h2><p>Paste a customer call, staff huddle, or job update and capture clear follow-ups.</p>
           <div class="notes-layout">
-            <div class="surface"><h3>Transcript or notes</h3><textarea id="notesInput" placeholder="Example: Quincy will prepare the launch checklist by Friday. We decided to move the review to Tuesday..."></textarea><button class="button" id="generateNotes">Generate recap</button></div>
-            <div class="surface"><span class="mode-note" id="notesMode">Local structured recap</span><h3>Summary and actions</h3><div class="result" id="notesResult">Your generated meeting recap appears here.</div></div>
+            <div class="surface"><h3>Call or huddle notes</h3><textarea id="notesInput" placeholder="Example: Ms. Rivera approved the estimate. Que will send an invoice by Friday. Schedule installation for Tuesday."></textarea><button class="button" id="generateNotes">Generate follow-ups</button></div>
+            <div class="surface"><span class="mode-note" id="notesMode">Local structured recap</span><h3>Summary and next steps</h3><div class="result" id="notesResult">Your recap and customer follow-ups appear here.</div></div>
           </div>
         </div>
         <div class="view content-view" id="view-wellness">
-          <h2>Wellness</h2><p>Your focus sessions and break habits are recorded in this browser.</p>
-          <div class="metric-grid"><div class="metric"><small>Focus today</small><strong id="focusMinutesMetric">0m</strong><small>Completed session time</small></div><div class="metric"><small>Sessions</small><strong id="sessionsMetric">0</strong><small>Finished focus blocks</small></div><div class="metric"><small>Breaks taken</small><strong id="breaksMetric">0</strong><small>Recovery reminders completed</small></div></div>
-          <div class="integrations-note" id="wellnessPrompt">Start a focus block from the timer to begin tracking your work rhythm.</div>
+          <h2>Focus time</h2><p>Track protected time for estimates, billing, scheduling, and customer follow-ups.</p>
+          <div class="metric-grid"><div class="metric"><small>Focus today</small><strong id="focusMinutesMetric">0m</strong><small>Completed work time</small></div><div class="metric"><small>Work blocks</small><strong id="sessionsMetric">0</strong><small>Finished focus sessions</small></div><div class="metric"><small>Breaks taken</small><strong id="breaksMetric">0</strong><small>Recovery reminders completed</small></div></div>
+          <div class="integrations-note" id="wellnessPrompt">Start a focus block to protect time for the work that keeps your business moving.</div>
         </div>
         <div class="view content-view" id="view-integrations">
-          <h2>Integrations</h2><p>Open your work tools from the office. Secure OAuth syncing needs backend credentials before it can be enabled.</p>
-          <div class="integration-grid" id="integrationGrid"></div><div class="integrations-note">These are real workspace shortcuts. Account syncing and reading external data remain disabled until OAuth credentials and callbacks are configured on your backend.</div>
+          <h2>Business tools</h2><p>Open accounting, payments, email, scheduling, files, and orders in one place.</p>
+          <div class="integration-grid" id="integrationGrid"></div><div class="integrations-note">These are real shortcuts to your services. Secure account syncing remains disabled until OAuth is configured.</div>
         </div>
         <div class="view content-view" id="view-bot">
-          <h2>SpringBot assistant</h2><p>Use SpringBot for planning and office questions. With an API URL and AI key configured, responses come from your backend assistant.</p>
-          <div class="surface" style="max-width:700px"><div class="assistant-messages" id="fullBotMessages" style="height:350px;max-height:none"></div><form class="assistant-form" id="fullBotForm"><input class="field" id="fullBotInput" placeholder="Ask SpringBot to draft a standup agenda..."><button class="send" type="submit" aria-label="Send">-&gt;</button></form></div>
+          <h2>SpringBot assistant</h2><p>Ask SpringBot for help with customer follow-ups, scheduling, billing focus blocks, or workspace setup.</p>
+          <div class="surface" style="max-width:700px"><div class="assistant-messages" id="fullBotMessages" style="height:350px;max-height:none"></div><form class="assistant-form" id="fullBotForm"><input class="field" id="fullBotInput" placeholder="Ask SpringBot to organize today's follow-ups..."><button class="send" type="submit" aria-label="Send">-&gt;</button></form></div>
         </div>
         <div class="view content-view" id="view-settings">
-          <h2>Settings</h2><p>Connect this office to your deployed backend for shared online presence and AI-backed tools.</p>
+          <h2>Set up your workspace</h2><p>Connect a backend URL when your team is ready for shared online rooms.</p>
           <form class="settings-form" id="settingsForm">
-            <div class="setting"><label for="displayName">Display name</label><input class="field" id="displayName" maxlength="40" placeholder="Your name"></div>
-            <div class="setting"><label for="apiUrl">Backend API URL</label><input class="field" id="apiUrl" type="url" placeholder="https://your-springbot-backend.onrender.com"><p>Leave blank for local-only mode. Once deployed, everyone using this same URL shares room presence.</p></div>
+            <div class="setting"><label for="displayName">Your name</label><input class="field" id="displayName" maxlength="40" placeholder="Your name"></div>
+            <div class="setting"><label for="apiUrl">Shared office backend URL</label><input class="field" id="apiUrl" type="url" placeholder="https://your-springbot-backend.onrender.com"><p>Leave blank for solo mode. Once deployed, your small team can see who is present in each work area.</p></div>
             <div><button class="button" type="submit">Save and connect</button></div>
           </form>
         </div>
@@ -81,15 +81,16 @@
         <div class="timer-display" id="timerDisplay">25:00</div><div class="progress"><span id="timerProgress"></span></div>
         <div class="pills"><button class="pill active" data-minutes="25" data-kind="focus">25m focus</button><button class="pill" data-minutes="45" data-kind="focus">45m</button><button class="pill" data-minutes="5" data-kind="break">5m break</button></div>
         <div class="timer-actions"><button class="button" id="timerToggle">Start</button><button class="button secondary" id="timerReset">Reset</button></div>
-        <div class="wellness" id="timerHint">A short break will be suggested after your focus session.</div>
+        <div class="wellness" id="timerHint">Protect time for billing, estimates, or customer replies.</div>
       </section>
       <section class="panel assistant">
         <div class="assistant-header"><h2>SpringBot</h2><span class="tiny" id="botMode">Local helper</span></div><div class="assistant-messages" id="quickBotMessages"></div>
-        <form class="assistant-form" id="quickBotForm"><input class="field" id="quickBotInput" placeholder="Ask SpringBot..."><button class="send" type="submit" aria-label="Send">-&gt;</button></form>
+        <form class="assistant-form" id="quickBotForm"><input class="field" id="quickBotInput" placeholder="Ask about today's work..."><button class="send" type="submit" aria-label="Send">-&gt;</button></form>
       </section>
     </aside>
   </div>
   <div class="notice" id="notice" role="status"></div>
   <script src="app.js"></script>
+  <script src="small-business.js"></script>
 </body>
 </html>
