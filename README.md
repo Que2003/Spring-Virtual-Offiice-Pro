@@ -3,7 +3,7 @@
 - Homepage: [Spring Office](https://que2003.github.io/Spring-Virtual-Offiice-Pro/)
 - Working workspace: [Open the office](https://que2003.github.io/Spring-Virtual-Offiice-Pro/office.html)
 
-Spring Office is a virtual workspace for teams to coordinate projects, schedules, follow-ups, and focused work. The homepage introduces the product and links into the interactive office.
+Spring Office is a virtual workspace for teams to coordinate projects, schedules, follow-ups, Discord communication, and focused work.
 
 ## Works immediately in the browser
 
@@ -13,18 +13,20 @@ Spring Office is a virtual workspace for teams to coordinate projects, schedules
 - Turn meeting notes and updates into structured follow-ups.
 - Run focus and break timers with saved work-time metrics.
 - Open everyday tools such as Gmail, Calendar, Drive, Notion, Slack, and GitHub.
+- Open the Discord Hub to see real SpringBot commands and Discord connection readiness.
 - Use SpringBot's local planning templates for agendas, drafts, brainstorming prompts, and daily plans.
 
-When no backend is connected, sample teammates are visibly labeled `Preview` and SpringBot reports `Local planning` rather than pretending to be a full AI assistant.
+When no backend is connected, sample teammates are visibly labeled `Preview`, SpringBot reports `Local planning`, and Discord reports setup is needed rather than presenting a fake connection.
 
-## Enable intelligent SpringBot and shared online features
+## Enable SpringBot, Discord, and shared online features
 
-Deploy [Que2003/springbot-backend](https://github.com/Que2003/springbot-backend) as a Render web service. Configure `OPENAI_API_KEY` and `OPENAI_MODEL` on that backend, then open **Setup** in Spring Office and enter its public URL.
+Deploy [Que2003/springbot-backend](https://github.com/Que2003/springbot-backend) as a Render web service, then enter its public URL in **Setup**.
 
-With an AI-enabled backend connected:
+With backend configuration enabled:
 
 - Current visitor presence and work-area membership synchronize for the team.
-- Notes can generate AI-assisted summaries and action items.
-- SpringBot switches to `AI ready`, remembers recent conversation turns, receives active workspace context, and can draft, brainstorm, plan, summarize, and answer open-ended work questions.
+- With `OPENAI_API_KEY` and `OPENAI_MODEL`, SpringBot can draft, brainstorm, plan, summarize, and answer open-ended work questions.
+- With `DISCORD_TOKEN` and `DISCORD_APPLICATION_ID`, the Discord Hub verifies your existing bot and provides an Add to Discord action.
+- With `DISCORD_CHANNEL_ID` and `OFFICE_ADMIN_KEY`, authorized users can post office updates into Discord as SpringBot.
 
-The Connected tools view provides honest outbound shortcuts. Connecting and reading account data will require secure OAuth integrations before it is offered as a feature.
+Bot tokens remain on the backend and are never placed in the public website files.
