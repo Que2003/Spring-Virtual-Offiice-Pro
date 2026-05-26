@@ -1,60 +1,86 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="spring">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Spring Office helps small businesses keep customer work, scheduling, follow-ups, and team presence organized in one virtual workspace.">
-  <title>Spring Office for Small Businesses</title>
+  <meta name="description" content="Spring Office is a virtual workspace for small businesses to organize customer work, schedules, notes, focus time, and team presence.">
+  <title>Spring Office | Small Business Virtual Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <header>
-    <nav class="container nav" aria-label="Primary">
-      <a class="brand" href="./"><span class="mark">S</span><span>Spring Office</span></a>
-      <div class="links"><a href="#how">How it works</a><a href="#features">Features</a><a href="#team">For your team</a></div>
-      <a class="btn" href="office.html">Open the office</a>
+  <div class="theme-bar" aria-label="Color theme">
+    <span>Theme</span>
+    <button class="theme active" type="button" data-theme="spring"><i></i>Spring</button>
+    <button class="theme" type="button" data-theme="midnight"><i></i>Midnight</button>
+    <button class="theme" type="button" data-theme="blossom"><i></i>Blossom</button>
+    <button class="theme" type="button" data-theme="ocean"><i></i>Ocean</button>
+    <button class="theme" type="button" data-theme="neon"><i></i>Neon Black</button>
+  </div>
+  <header class="site-header">
+    <nav class="nav shell" aria-label="Primary">
+      <a class="brand" href="./"><span class="brand-leaf"></span>Spring Office</a>
+      <div class="nav-links"><a href="#features">Features</a><a href="#rooms">Work areas</a><a href="#day">Your day</a></div>
+      <a class="nav-action" href="office.html">Open office</a>
     </nav>
   </header>
   <main>
     <section class="hero">
-      <div class="container">
-        <h1>Spring Office for Small Businesses</h1>
-        <p>Keep customer work, schedules, follow-ups, and team availability together in a simple virtual workspace built for the daily rhythm of a small team.</p>
-        <div class="actions"><a class="btn" href="office.html">Open the office</a><a class="btn secondary" href="#how">See how it works</a></div>
-      </div>
-      <div class="product-preview" aria-label="Live preview of Spring Office">
-        <iframe src="office.html" title="Spring Office workspace preview" tabindex="-1"></iframe>
-        <a class="product-link" href="office.html">Use this workspace &rarr;</a>
-      </div>
-    </section>
-    <section class="workflows" id="how">
-      <div class="container">
-        <div class="section-title"><h2>Keep the day moving</h2><p>Spring Office gives owners and small teams one place to check in, track next steps, and protect time for real work.</p></div>
-        <div class="flow-grid">
-          <article class="flow"><span class="number">01</span><h3>Customer follow-ups</h3><p>Turn calls, estimates, and job updates into clear action items so work does not slip through the cracks.</p></article>
-          <article class="flow"><span class="number">02</span><h3>Team availability</h3><p>Use work areas and status to see who is handling clients, operations, or uninterrupted admin time.</p></article>
-          <article class="flow"><span class="number">03</span><h3>Protected admin time</h3><p>Start a focus block for invoicing, scheduling, proposals, or customer replies and track completed time.</p></article>
+      <div class="petal petal-one"></div><div class="petal petal-two"></div><div class="petal petal-three"></div>
+      <div class="hero-inner shell">
+        <p class="status"><span></span>Built for small-business workdays</p>
+        <h1>Your business,<br><em>beautifully</em> organized</h1>
+        <p class="lead">A welcoming virtual workspace for client follow-ups, schedules, shared notes, and the focused time that keeps a small team moving.</p>
+        <div class="hero-actions">
+          <a class="primary" href="office.html">Enter the office <span aria-hidden="true">&rarr;</span></a>
+          <a class="secondary" href="#features">Explore features</a>
         </div>
       </div>
     </section>
-    <section class="use" id="features">
-      <div class="container split">
-        <div><h2>Useful on your first day</h2><p class="use-intro">No inflated platform promises. Open the workspace and use the tools that already function while your shared backend is configured.</p></div>
-        <div class="rows">
-          <div class="row"><strong>Work areas</strong><p>Front Desk, Client Workroom, Operations Desk, and Quiet Work organize the day's activity.</p></div>
-          <div class="row"><strong>Client notes</strong><p>Paste call or huddle notes and generate structured follow-ups in your browser.</p></div>
-          <div class="row"><strong>Business tools</strong><p>Launch QuickBooks, Square, Gmail, Calendar, Drive, and Shopify from one view.</p></div>
-          <div class="row"><strong>SpringBot</strong><p>Get guidance for customer follow-ups, appointments, invoice time, and setup.</p></div>
+    <section class="preview shell" aria-label="Spring Office workspace preview">
+      <div class="preview-bar"><span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span><strong>Spring Office workspace</strong><a href="office.html">Open full workspace &rarr;</a></div>
+      <iframe src="office.html" title="Interactive Spring Office preview" tabindex="-1"></iframe>
+    </section>
+    <section class="features section shell" id="features">
+      <p class="label">Made for a small team</p>
+      <h2>Everything needed for today's work</h2>
+      <div class="feature-grid">
+        <article><span class="icon">01</span><h3>Team presence</h3><p>See availability and work areas at a glance when your shared connection is configured.</p></article>
+        <article><span class="icon">02</span><h3>Client notes</h3><p>Paste meeting or call notes and organize follow-ups, decisions, and next steps.</p></article>
+        <article><span class="icon">03</span><h3>Focus timer</h3><p>Protect time for estimates, invoicing, scheduling, and customer replies.</p></article>
+        <article><span class="icon">04</span><h3>Business tools</h3><p>Open QuickBooks, Square, Gmail, Calendar, Drive, and Shopify in one place.</p></article>
+        <article><span class="icon">05</span><h3>Wellness rhythm</h3><p>Track focused sessions and take timely breaks during packed workdays.</p></article>
+        <article><span class="icon">06</span><h3>SpringBot</h3><p>Use the workspace assistant for customer follow-up and daily planning help.</p></article>
+      </div>
+    </section>
+    <section class="rooms" id="rooms">
+      <div class="section shell">
+        <p class="label">Work areas</p>
+        <h2>Set the room for the task</h2>
+        <div class="room-grid">
+          <a href="office.html"><span class="room-icon">FD</span><h3>Front Desk</h3><p>Customer requests and new work</p><small>Open in workspace &rarr;</small></a>
+          <a href="office.html"><span class="room-icon">CW</span><h3>Client Workroom</h3><p>Quotes, projects, and follow-ups</p><small>Open in workspace &rarr;</small></a>
+          <a href="office.html"><span class="room-icon">OD</span><h3>Operations Desk</h3><p>Schedules and business admin</p><small>Open in workspace &rarr;</small></a>
+          <a href="office.html"><span class="room-icon">QW</span><h3>Quiet Work</h3><p>Deep focus without interruption</p><small>Open in workspace &rarr;</small></a>
         </div>
       </div>
     </section>
-    <section class="connect" id="team">
-      <div class="container">
-        <div><h2>Start solo. Connect your team when you are ready.</h2><p>The workspace runs immediately. When the backend is deployed, your team can share live presence and enable AI-assisted notes and SpringBot responses.</p></div>
-        <a class="btn" href="office.html">Open Spring Office</a>
+    <section class="day section shell" id="day">
+      <div class="day-heading"><p class="label">Built for your day</p><h2>From the first call to closing out invoices</h2></div>
+      <div class="day-steps">
+        <article><strong>Morning</strong><h3>Check in</h3><p>Open Front Desk and get clear on customer needs and team availability.</p></article>
+        <article><strong>Midday</strong><h3>Move work forward</h3><p>Capture notes from calls and put each next step where it belongs.</p></article>
+        <article><strong>Afternoon</strong><h3>Finish focused</h3><p>Set a focus block for proposals, scheduling, invoices, or replies.</p></article>
       </div>
+    </section>
+    <section class="closing">
+      <div class="shell closing-inner"><div><h2>A real workspace, ready to open.</h2><p>Start with the tools available now, then connect shared presence and AI features when your backend is deployed.</p></div><a class="primary" href="office.html">Open Spring Office</a></div>
     </section>
   </main>
-  <footer><div class="container footer-content"><span class="footer-brand">Spring Office</span><span>Built for small-business workdays.</span><div class="footer-links"><a href="office.html">Workspace</a><a href="#features">Features</a></div></div></footer>
+  <footer><div class="shell footer-inner"><strong>Spring Office</strong><span>Built for small-business workdays.</span><a href="office.html">Workspace</a></div></footer>
+  <a class="assistant" href="office.html" aria-label="Open SpringBot in the office"><span></span>SpringBot</a>
+  <script src="home-theme.js"></script>
 </body>
 </html>
