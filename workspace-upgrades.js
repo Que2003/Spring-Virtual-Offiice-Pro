@@ -3,6 +3,7 @@
   const themeLabels = { spring: "Spring", midnight: "Midnight", blossom: "Blossom", ocean: "Ocean", neon: "Neon Black" };
   const storageKey = "spring-office-theme";
   const history = { quickBotMessages: [], fullBotMessages: [] };
+  let assistantMode = "local";
   const themePanel = document.createElement("section");
   themePanel.className = "workspace-themes";
   themePanel.innerHTML = `<span>Theme</span><div class="theme-swatches">${themeNames.map(theme => `<button class="theme-chip" data-theme="${theme}" type="button" title="${themeLabels[theme]}" aria-label="Use ${themeLabels[theme]} theme"><i></i></button>`).join("")}</div>`;
@@ -32,6 +33,7 @@
   assistantState.insertAdjacentElement("afterend", prompts);
 
   function setAssistantMode(mode) {
+    assistantMode = mode;
     const label = el("botMode");
     if (mode === "ai") {
       label.textContent = "AI ready";
@@ -44,6 +46,12 @@
       assistantState.innerHTML = "<strong>Local planning mode</strong>Connect your backend in Setup to activate full AI conversations.";
     }
   }
+
+  const baseRenderPresence = renderPresence;
+  renderPresence = function() {
+    baseRenderPresence();
+    setAssistantMode(assistantMode);
+  };
 
   async function checkAssistantMode() {
     if (!state.apiUrl) { setAssistantMode("local"); return; }
