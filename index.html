@@ -3,94 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Spring Office is a practical virtual workspace for small businesses: customer work, schedules, notes, focus time, and shared presence.">
+  <meta name="description" content="Spring Office helps small businesses keep customer work, scheduling, follow-ups, and team presence organized in one virtual workspace.">
   <title>Spring Office for Small Businesses</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <div class="app">
-    <aside class="panel sidebar">
-      <div class="brand"><div class="brand-mark">S</div><div><strong>Spring Office</strong><small>Small business workspace</small></div></div>
-      <nav class="nav" aria-label="Workspace">
-        <button class="active" data-view="office"><span class="icon">H</span>Daily HQ</button>
-        <button data-view="notes"><span class="icon">N</span>Client notes</button>
-        <button data-view="wellness"><span class="icon">T</span>Focus time</button>
-        <button data-view="integrations"><span class="icon">A</span>Business tools</button>
-        <button data-view="bot"><span class="icon">B</span>SpringBot</button>
-        <button data-view="settings"><span class="icon">S</span>Setup</button>
-      </nav>
-      <p class="rooms-label">Work areas</p>
-      <div class="room-links" id="roomLinks"></div>
-      <div class="profile">
-        <div class="profile-row"><div class="avatar" id="meAvatar">ME</div><div><strong id="meName">You</strong><div class="tiny" id="syncState">Local mode</div></div></div>
-        <label class="tiny" for="presenceStatus">Your status</label>
-        <select id="presenceStatus"><option value="available">Available</option><option value="focus">Focusing</option><option value="busy">Busy</option></select>
+  <header>
+    <nav class="container nav" aria-label="Primary">
+      <a class="brand" href="./"><span class="mark">S</span><span>Spring Office</span></a>
+      <div class="links"><a href="#how">How it works</a><a href="#features">Features</a><a href="#team">For your team</a></div>
+      <a class="btn" href="office.html">Open the office</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Spring Office for Small Businesses</h1>
+        <p>Keep customer work, schedules, follow-ups, and team availability together in a simple virtual workspace built for the daily rhythm of a small team.</p>
+        <div class="actions"><a class="btn" href="office.html">Open the office</a><a class="btn secondary" href="#how">See how it works</a></div>
       </div>
-    </aside>
-    <main class="main">
-      <header class="panel topbar">
-        <div><h1 id="viewTitle">Daily HQ</h1><p id="viewDescription">Keep your small team aligned on customers, jobs, and today's work.</p></div>
-        <div class="top-actions"><div class="status"><span class="dot online"></span><span id="onlineCount">1 online</span></div><button class="button secondary" data-open-settings>Connect team</button></div>
-      </header>
-      <section class="panel workspace">
-        <div class="view active" id="view-office">
-          <div class="office-grid">
-            <div class="room-stage">
-              <div class="stage-header"><div><h2 id="activeRoomTitle">Client Workroom</h2><p id="activeRoomDescription"></p></div><button class="button" id="joinButton">Join room</button></div>
-              <div class="desk-board" id="deskBoard"></div>
-            </div>
-            <aside class="presence-panel">
-              <div class="panel-title"><h2>Team today</h2><span class="tiny" id="presenceMode">Live when connected</span></div>
-              <div class="people" id="peopleList"></div><div class="event-log" id="eventLog"></div>
-            </aside>
-          </div>
+      <div class="product-preview" aria-label="Live preview of Spring Office">
+        <iframe src="office.html" title="Spring Office workspace preview" tabindex="-1"></iframe>
+        <a class="product-link" href="office.html">Use this workspace &rarr;</a>
+      </div>
+    </section>
+    <section class="workflows" id="how">
+      <div class="container">
+        <div class="section-title"><h2>Keep the day moving</h2><p>Spring Office gives owners and small teams one place to check in, track next steps, and protect time for real work.</p></div>
+        <div class="flow-grid">
+          <article class="flow"><span class="number">01</span><h3>Customer follow-ups</h3><p>Turn calls, estimates, and job updates into clear action items so work does not slip through the cracks.</p></article>
+          <article class="flow"><span class="number">02</span><h3>Team availability</h3><p>Use work areas and status to see who is handling clients, operations, or uninterrupted admin time.</p></article>
+          <article class="flow"><span class="number">03</span><h3>Protected admin time</h3><p>Start a focus block for invoicing, scheduling, proposals, or customer replies and track completed time.</p></article>
         </div>
-        <div class="view content-view" id="view-notes">
-          <h2>Client and team notes</h2><p>Paste a customer call, staff huddle, or job update and capture clear follow-ups.</p>
-          <div class="notes-layout">
-            <div class="surface"><h3>Call or huddle notes</h3><textarea id="notesInput" placeholder="Example: Ms. Rivera approved the estimate. Que will send an invoice by Friday. Schedule installation for Tuesday."></textarea><button class="button" id="generateNotes">Generate follow-ups</button></div>
-            <div class="surface"><span class="mode-note" id="notesMode">Local structured recap</span><h3>Summary and next steps</h3><div class="result" id="notesResult">Your recap and customer follow-ups appear here.</div></div>
-          </div>
+      </div>
+    </section>
+    <section class="use" id="features">
+      <div class="container split">
+        <div><h2>Useful on your first day</h2><p class="use-intro">No inflated platform promises. Open the workspace and use the tools that already function while your shared backend is configured.</p></div>
+        <div class="rows">
+          <div class="row"><strong>Work areas</strong><p>Front Desk, Client Workroom, Operations Desk, and Quiet Work organize the day's activity.</p></div>
+          <div class="row"><strong>Client notes</strong><p>Paste call or huddle notes and generate structured follow-ups in your browser.</p></div>
+          <div class="row"><strong>Business tools</strong><p>Launch QuickBooks, Square, Gmail, Calendar, Drive, and Shopify from one view.</p></div>
+          <div class="row"><strong>SpringBot</strong><p>Get guidance for customer follow-ups, appointments, invoice time, and setup.</p></div>
         </div>
-        <div class="view content-view" id="view-wellness">
-          <h2>Focus time</h2><p>Track protected time for estimates, billing, scheduling, and customer follow-ups.</p>
-          <div class="metric-grid"><div class="metric"><small>Focus today</small><strong id="focusMinutesMetric">0m</strong><small>Completed work time</small></div><div class="metric"><small>Work blocks</small><strong id="sessionsMetric">0</strong><small>Finished focus sessions</small></div><div class="metric"><small>Breaks taken</small><strong id="breaksMetric">0</strong><small>Recovery reminders completed</small></div></div>
-          <div class="integrations-note" id="wellnessPrompt">Start a focus block to protect time for the work that keeps your business moving.</div>
-        </div>
-        <div class="view content-view" id="view-integrations">
-          <h2>Business tools</h2><p>Open accounting, payments, email, scheduling, files, and orders in one place.</p>
-          <div class="integration-grid" id="integrationGrid"></div><div class="integrations-note">These are real shortcuts to your services. Secure account syncing remains disabled until OAuth is configured.</div>
-        </div>
-        <div class="view content-view" id="view-bot">
-          <h2>SpringBot assistant</h2><p>Ask SpringBot for help with customer follow-ups, scheduling, billing focus blocks, or workspace setup.</p>
-          <div class="surface" style="max-width:700px"><div class="assistant-messages" id="fullBotMessages" style="height:350px;max-height:none"></div><form class="assistant-form" id="fullBotForm"><input class="field" id="fullBotInput" placeholder="Ask SpringBot to organize today's follow-ups..."><button class="send" type="submit" aria-label="Send">-&gt;</button></form></div>
-        </div>
-        <div class="view content-view" id="view-settings">
-          <h2>Set up your workspace</h2><p>Connect a backend URL when your team is ready for shared online rooms.</p>
-          <form class="settings-form" id="settingsForm">
-            <div class="setting"><label for="displayName">Your name</label><input class="field" id="displayName" maxlength="40" placeholder="Your name"></div>
-            <div class="setting"><label for="apiUrl">Shared office backend URL</label><input class="field" id="apiUrl" type="url" placeholder="https://your-springbot-backend.onrender.com"><p>Leave blank for solo mode. Once deployed, your small team can see who is present in each work area.</p></div>
-            <div><button class="button" type="submit">Save and connect</button></div>
-          </form>
-        </div>
-      </section>
-    </main>
-    <aside class="rightbar">
-      <section class="panel right-card">
-        <div class="panel-title"><h2>Focus timer</h2><span class="tiny" id="timerModeLabel">Focus</span></div>
-        <div class="timer-display" id="timerDisplay">25:00</div><div class="progress"><span id="timerProgress"></span></div>
-        <div class="pills"><button class="pill active" data-minutes="25" data-kind="focus">25m focus</button><button class="pill" data-minutes="45" data-kind="focus">45m</button><button class="pill" data-minutes="5" data-kind="break">5m break</button></div>
-        <div class="timer-actions"><button class="button" id="timerToggle">Start</button><button class="button secondary" id="timerReset">Reset</button></div>
-        <div class="wellness" id="timerHint">Protect time for billing, estimates, or customer replies.</div>
-      </section>
-      <section class="panel assistant">
-        <div class="assistant-header"><h2>SpringBot</h2><span class="tiny" id="botMode">Local helper</span></div><div class="assistant-messages" id="quickBotMessages"></div>
-        <form class="assistant-form" id="quickBotForm"><input class="field" id="quickBotInput" placeholder="Ask about today's work..."><button class="send" type="submit" aria-label="Send">-&gt;</button></form>
-      </section>
-    </aside>
-  </div>
-  <div class="notice" id="notice" role="status"></div>
-  <script src="app.js"></script>
-  <script src="small-business.js"></script>
+      </div>
+    </section>
+    <section class="connect" id="team">
+      <div class="container">
+        <div><h2>Start solo. Connect your team when you are ready.</h2><p>The workspace runs immediately. When the backend is deployed, your team can share live presence and enable AI-assisted notes and SpringBot responses.</p></div>
+        <a class="btn" href="office.html">Open Spring Office</a>
+      </div>
+    </section>
+  </main>
+  <footer><div class="container footer-content"><span class="footer-brand">Spring Office</span><span>Built for small-business workdays.</span><div class="footer-links"><a href="office.html">Workspace</a><a href="#features">Features</a></div></div></footer>
 </body>
 </html>
