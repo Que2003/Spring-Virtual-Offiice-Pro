@@ -1,8 +1,9 @@
 # Spring Office for Small Businesses
 
-The working application is live at [Spring Office](https://que2003.github.io/Spring-Virtual-Offiice-Pro/).
+- Homepage: [Spring Office](https://que2003.github.io/Spring-Virtual-Offiice-Pro/)
+- Working workspace: [Open the office](https://que2003.github.io/Spring-Virtual-Offiice-Pro/office.html)
 
-Spring Office is built for small teams that need a simple daily workspace for customers, schedules, follow-ups, and focused admin time.
+Spring Office is built for small teams that need a simple daily workspace for customers, schedules, follow-ups, and focused admin time. The homepage explains the product and links into the fully interactive office rather than replacing it.
 
 ## Works immediately in the browser
 
